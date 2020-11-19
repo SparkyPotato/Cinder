@@ -1,11 +1,13 @@
 #include <iomanip>
 #include <Windows.h>
 
+#include "json/json.hpp"
 #define STBIW_WINDOWS_UTF8
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
 
 #include "Globals.h"
+#include "Scene.h"
 
 void ParseCommandLine(int argc, wchar_t** argv);
 
@@ -17,6 +19,14 @@ int wmain(int argc, wchar_t** argv)
 
 		std::wstring output = L"output.png";
 		if (CommandLine::Properties.count(L"output")) { output = CommandLine::Properties[L"output"]; }
+		std::wstring scenePath = L"scene.json";
+		if (CommandLine::Properties.count(L"scene")) { output = CommandLine::Properties[L"scene"]; }
+
+		nlohmann::json j;
+		try { std::ifstream(scenePath) >> j; }
+		catch (...) { Error("Failed to parse scene file '", scenePath, "'."); }
+
+		auto scene = j.get<Scene>();
 
 		// Framebuffer creation, and each pixel to black
 		uint64_t framebufferWidth = 1920;
