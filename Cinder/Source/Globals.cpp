@@ -53,7 +53,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 			}
 
 			if (VerifySwitch(switchArg)) { CommandLine::Switches.emplace_back(std::move(switchArg)); }
-			else { Warning("Ignoring unknown switch '", switchArg, "'."); }
+			else { Warning("Ignoring unknown switch '\x1b[35m", switchArg, "\x1b[33m'."); }
 		}
 		else
 		{
@@ -61,7 +61,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 
 			if (pos == arg.npos)
 			{
-				Error("Invalid property specifier: ", arg); // Invalid property if we don't find the '='
+				Error("Invalid property specifier '\x1b[35m", arg, "\x1b[31m'."); // Invalid property if we don't find the '='
 			}
 
 			// If the argument is "dir=Engine/"
@@ -76,7 +76,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 			// Values are not edited in any way, as they can be multi-byte UTF-8 characters (pathnames!)
 
 			if (VerifyProperty(name)) { CommandLine::Properties.emplace(std::move(name), std::move(value)); }
-			else { Warning("Ignoring unknown property '", name, "'."); }
+			else { Warning("Ignoring unknown property '\x1b[35m", name, "\x1b[33m'."); }
 		}
 	}
 }
