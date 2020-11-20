@@ -10,16 +10,21 @@
 #include "Raytracer.h"
 #include "Scene.h"
 
+void SetupConsole();
+
 int wmain(int argc, wchar_t** argv)
 {
 	try
 	{
+		SetupConsole();
+		printf("\x1b[?25l");
+
 		ParseCommandLine(argc, argv);
 
 		std::wstring output = L"output.png";
 		if (CommandLine::Properties.count(L"output")) { output = CommandLine::Properties[L"output"]; }
 		std::wstring scenePath = L"scene.json";
-		if (CommandLine::Properties.count(L"scene")) { output = CommandLine::Properties[L"scene"]; }
+		if (CommandLine::Properties.count(L"scene")) { scenePath = CommandLine::Properties[L"scene"]; }
 
 		nlohmann::json j;
 		try { std::ifstream(scenePath) >> j; }
@@ -37,7 +42,7 @@ int wmain(int argc, wchar_t** argv)
 
 		Raytracer raytracer(scene, framebuffer);
 
-		Output("Starting Render");
+		Output("Starting Render.");
 
 		LARGE_INTEGER frequency, start, end;
 		QueryPerformanceFrequency(&frequency);
@@ -58,6 +63,7 @@ int wmain(int argc, wchar_t** argv)
 
 		stbi_write_png(utf8, (int)framebuffer.Width, (int)framebuffer.Height, 3, framebuffer.Buffer, (int)framebuffer.Width * 3);
 
+		printf("\x1b[?25h");
 		return EXIT_SUCCESS;
 	}
 	catch (std::exception& e)
@@ -67,5 +73,30 @@ int wmain(int argc, wchar_t** argv)
 	catch (...)
 	{}
 
+	printf("\x1b[?25h");
 	return EXIT_FAILURE;
+}
+
+void SetupConsole()
+{
+	HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (output == INVALID_HANDLE_VALUE)
+	{
+		printf("Error: Failed to get console handle! Something is really wrong here... \n");
+		throw - 1;
+	}
+
+	DWORD outMode;
+	if (!GetConsoleMode(output, &outMode))
+	{
+		printf("Error: Could not get console mode! This should not be happening... \n");
+		throw -1;
+	}
+
+	outMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
+	if (!SetConsoleMode(output, outMode))
+	{
+		printf("Error: Failed to set console output mode! That was unexpected... \n");
+		throw - 1;
+	}
 }

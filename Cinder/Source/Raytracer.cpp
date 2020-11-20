@@ -15,6 +15,8 @@ void Raytracer::Run()
 	Vector left = direction + Vector::Cross(up, direction) * tan * (aspectRatio);
 	Vector right = direction - Vector::Cross(up, direction) * tan * (aspectRatio);
 
+	ProgressBar bar(0, 100, 2);
+
 	for (uint64_t y = 0; y < m_Framebuffer.Height; y++)
 	{
 		Vector verticalDirection = Vector::Lerp(top, bottom, (float)y / m_Framebuffer.Height);
@@ -24,8 +26,9 @@ void Raytracer::Run()
 
 			WritePixel(x, y, horizontalDirection + verticalDirection);
 		}
-		// Output("Completed ", y * 100 / m_Framebuffer.Height, "%.");
+		bar.Update(y * 100 / m_Framebuffer.Height);
 	}
+	bar.End();
 }
 
 void Raytracer::WritePixel(uint64_t x, uint64_t y, Vector rayDirection)

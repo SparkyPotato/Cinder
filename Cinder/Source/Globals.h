@@ -29,7 +29,7 @@ void Output(const T& arg, Args&&... args)
 template<typename... Args>
 void Error(Args&&... args)
 {
-	Output("Error: ", std::forward<Args>(args)...);
+	Output("\x1b[31m""Error: ", std::forward<Args>(args)..., "\x1b[0m");
 
 	throw -1;
 }
@@ -37,7 +37,7 @@ void Error(Args&&... args)
 template<typename... Args>
 void Warning(Args&&... args)
 {
-	Output("Warning: ", std::forward<Args>(args)...);
+	Output("\x1b[33m""Warning: ", std::forward<Args>(args)..., "\x1b[0m");
 }
 
 void ParseCommandLine(int argc, wchar_t** argv);
@@ -58,4 +58,15 @@ struct Framebuffer
 	Pixel* Buffer;
 	uint64_t Width;
 	uint64_t Height;
+};
+
+struct ProgressBar
+{
+	ProgressBar(uint64_t min, uint64_t max, uint64_t step);
+
+	void Update(uint64_t value);
+	void End();
+
+private:
+	uint64_t m_Min, m_Max, m_Step, m_BarValue, m_RealValue;
 };

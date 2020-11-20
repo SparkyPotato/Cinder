@@ -14,11 +14,13 @@ Framebuffer::Framebuffer(uint64_t width, uint64_t height)
 
 static std::vector<std::wstring> s_ValidSwitches =
 {
-	L"output"
+	
 };
 static std::vector<std::wstring> s_ValidProperties =
 {
-	L"w", L"h"
+	L"w", L"h",
+	L"output",
+	L"scene"
 };
 
 bool VerifySwitch(const std::wstring& switchArg)
@@ -77,4 +79,55 @@ void ParseCommandLine(int argc, wchar_t** argv)
 			else { Warning("Ignoring unknown property '", name, "'."); }
 		}
 	}
+}
+
+ProgressBar::ProgressBar(uint64_t min, uint64_t max, uint64_t step)
+	: m_Min(min), m_Max(max), m_BarValue(min), m_Step(step), m_RealValue(min)
+{
+	printf("%llu ", m_RealValue);
+}
+
+void ProgressBar::Update(uint64_t value)
+{
+	if (value > m_RealValue)
+	{
+		int64_t input = value;
+		int64_t realValue = m_RealValue;
+
+		printf("\x1b[1G\x1b[92m"); // Go to the first character
+
+		// Remove all the digits of the old value
+		int i = 0;
+		while (realValue > 0) { i++; realValue /= 10; }
+		printf("\x1b[%dP", i);
+
+		// Create space for the digits of the new value
+		i = 0;
+		while (input > 0) { i++;  input /= 10; }
+		printf("\x1b[%d@", i);
+
+		printf("%llu ", value); // Print the new value
+
+		// Add to the bar
+		if ((value - m_BarValue) >= m_Step)
+		{
+			input = value;
+			while (input > int64_t(m_BarValue))
+			{
+				printf("\x1b[1@");
+				printf("█");
+				input -= m_Step;
+			}
+			m_BarValue = value;
+		}
+		m_RealValue = value;
+
+		printf("\x1b[0m");
+	}
+}
+
+void ProgressBar::End()
+{
+	Update(m_Max);
+	printf("\n");
 }
