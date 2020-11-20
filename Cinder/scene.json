@@ -1,3 +1,16 @@
 {
-	
+	"Camera": {
+		"Position": { "X": 0.0, "Y": 0.0, "Z": -10.0 },
+		"Direction": { "X": 0.0, "Y": 0.0, "Z": 1.0 },
+		"Up": { "X": 0.0, "Y": 1.0, "Z": 0.0 },
+		"VerticalFOV": 60.0
+	},
+	"Objects": {
+		"Spheres": [
+			{
+				"Position": { "X": 0.0, "Y": 0.0, "Z": 0.0 },
+				"Radius": 1.0
+			}
+		]
+	}
 }
