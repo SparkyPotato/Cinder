@@ -48,7 +48,7 @@ void ParseCommandLine(int argc, wchar_t** argv);
 
 struct Pixel
 {
-	Pixel& operator=(const Color& color);
+	Pixel& operator=(const Vector& color);
 
 	uint8_t R;
 	uint8_t G;

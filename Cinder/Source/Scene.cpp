@@ -64,8 +64,15 @@ void from_json(const nlohmann::json& j, Sphere& sphere)
 
 void from_json(const nlohmann::json& j, Material& material)
 {
-	material.MatColor = j.at("Color").get<Color>();
+	material.Color = j.at("Color").get<Vector>();
 	material.Name = j.at("Name").get<std::string>();
+}
+
+void from_json(const nlohmann::json& j, Light& light)
+{
+	light.Position = j.at("Position").get<Vector>();
+	light.Color = j.at("Color").get<Vector>();
+	light.Intensity = j.at("Intensity").get<float>();
 }
 
 void from_json(const nlohmann::json& j, Scene& scene)
@@ -77,12 +84,15 @@ void from_json(const nlohmann::json& j, Scene& scene)
 	scene.Camera.Up.Normalize();
 	scene.Camera.VerticalFOV = ToRadians(j.at("Camera").at("VerticalFOV").get<float>());
 
+	scene.AmbientIntensity = j.at("Global").at("AmbientIntensity").get<float>();
+
 	if (Vector::Dot(scene.Camera.Direction, scene.Camera.Up) != 0)
 	{
 		Error("Camera up vector and direction vector are not perpendicular!");
 	}
 
 	scene.Materials = j.at("Materials").get<std::vector<Material>>();
+	scene.Lights = j.at("Lights").get<std::vector<Light>>();
 	scene.Spheres = j.at("Objects").at("Spheres").get<std::vector<Sphere>>();
 
 	for (auto& sphere : scene.Spheres)

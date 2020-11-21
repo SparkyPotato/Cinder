@@ -47,7 +47,5 @@ public:
 bool operator==(const Vector& first, const Vector& second);
 bool operator!=(const Vector& first, const Vector& second);
 
-using Color = Vector;
-
 void from_json(const nlohmann::json& j, Vector& vector);
 void to_json(nlohmann::json& j, const Vector& vector);

@@ -11,9 +11,6 @@ public:
 	const Vector& GetOrigin() const { return m_Origin; }
 	const Vector& GetDirection() const { return m_Direction; }
 
-	Vector& GetColor() { return m_Color; }
-
 private:
 	Vector m_Origin, m_Direction;
-	Color m_Color;
 };

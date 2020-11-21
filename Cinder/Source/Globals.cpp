@@ -132,11 +132,11 @@ void ProgressBar::End()
 	printf("\n");
 }
 
-Pixel& Pixel::operator=(const Color& color)
+Pixel& Pixel::operator=(const Vector& color)
 {
-	R = uint8_t(color.X * 255);
-	G = uint8_t(color.Y * 255);
-	B = uint8_t(color.Z * 255);
+	R = uint8_t(std::min(color.X * 255, 255.f));
+	G = uint8_t(std::min(color.Y * 255, 255.f));
+	B = uint8_t(std::min(color.Z * 255, 255.f));
 
 	return *this;
 }

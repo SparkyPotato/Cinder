@@ -34,13 +34,12 @@ int wmain(int argc, wchar_t** argv)
 		Output("Loaded scene.");
 		Output("Scene contains " COLOR, scene.Spheres.size(), "\x1b[0m spheres.");
 
-		// Framebuffer creation, and set each pixel to black
+		// Framebuffer creation
 		uint64_t framebufferWidth = 1920;
 		uint64_t framebufferHeight = 1080;
 		if (CommandLine::Properties.count(L"w")) { framebufferWidth = stoull(CommandLine::Properties[L"w"]); }
 		if (CommandLine::Properties.count(L"h")) { framebufferHeight = stoull(CommandLine::Properties[L"h"]); }
 		Framebuffer framebuffer(framebufferWidth, framebufferHeight);
-		memset(framebuffer.Buffer, 0, framebuffer.Width * framebuffer.Height * sizeof(Pixel));
 
 		Raytracer raytracer(scene, framebuffer);
 

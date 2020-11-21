@@ -37,7 +37,7 @@ void Raytracer::WritePixel(uint64_t x, uint64_t y, Vector rayDirection)
 	m_Framebuffer.GetPixel(x, y) = Raycast(cameraRay);
 }
 
-Color Raytracer::Raycast(const Ray& ray)
+Vector Raytracer::Raycast(const Ray& ray)
 {
 	float closestHit = std::numeric_limits<float>().max();
 	const Sphere* sphereHit = nullptr;
@@ -49,8 +49,32 @@ Color Raytracer::Raycast(const Ray& ray)
 
 	if (sphereHit)
 	{
-		return sphereHit->ObjMaterial->MatColor;
+		Vector hitPoint = ray.GetOrigin() + ray.GetDirection() * closestHit;
+		Vector normal = (hitPoint - sphereHit->Position).Normalize();
+		Vector objectColor = sphereHit->ObjMaterial->Color;
+		
+		float intensity = m_Scene.AmbientIntensity;
+		for (auto& light : m_Scene.Lights)
+		{
+			Vector lightDirection = (light.Position - hitPoint).Normalize();
+			if (ShadowTrace(Ray(hitPoint + normal * 0.01f, lightDirection)))
+			{
+				intensity += light.Intensity * std::max(0.f, Vector::Dot(lightDirection, normal));
+			}
+		}
+		return objectColor * intensity;
 	}
 
-	return { 0.f, 0.f, 0.f };
+	return { 0.f, 0.f, 0.f }; // Background
+}
+
+bool Raytracer::ShadowTrace(const Ray& ray)
+{
+	float notNeeded;
+	for (auto& sphere : m_Scene.Spheres)
+	{
+		if (sphere.Intersect(ray, notNeeded)) { return false; };
+	}
+
+	return true;
 }

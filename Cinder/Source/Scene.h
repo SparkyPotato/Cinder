@@ -13,7 +13,14 @@ struct Material
 {
 	std::string Name;
 
-	Color MatColor;
+	Vector Color;
+};
+
+struct Light
+{
+	Vector Position;
+	Vector Color;
+	float Intensity;
 };
 
 struct Sphere : SceneObject
@@ -34,6 +41,9 @@ struct Scene
 {
 	std::vector<Sphere> Spheres;
 	std::vector<Material> Materials;
+	std::vector<Light> Lights;
+
+	float AmbientIntensity;
 
 	struct
 	{
