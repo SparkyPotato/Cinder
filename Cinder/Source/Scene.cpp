@@ -4,20 +4,20 @@
 #include "Math/Math.h"
 
 Sphere::Sphere(const Vector& position, float radius)
-	: m_Position(position), m_Radius(radius)
+	: Position(position), Radius(radius)
 {
-	m_RadiusSquare = m_Radius * m_Radius;
+	RadiusSquare = Radius * Radius;
 }
 
 bool Sphere::Intersect(const Ray& ray, float& intersectionDistance) const
 {
 	float firstSolution, secondSolution;
 
-	Vector length = m_Position - ray.GetOrigin();
+	Vector length = Position - ray.GetOrigin();
 	float projectionDistance = Vector::Dot(length, ray.GetDirection());
 	float distanceSquare = Vector::Dot(length, length) - projectionDistance * projectionDistance;
-	if (distanceSquare > m_RadiusSquare) return false;
-	float chordLength = sqrt(m_RadiusSquare - distanceSquare);
+	if (distanceSquare > RadiusSquare) return false;
+	float chordLength = sqrt(RadiusSquare - distanceSquare);
 	firstSolution = projectionDistance - chordLength;
 	secondSolution = projectionDistance + chordLength;
 
@@ -33,16 +33,39 @@ bool Sphere::Intersect(const Ray& ray, float& intersectionDistance) const
 	return true;
 }
 
-void from_json(const nlohmann::json& j, Sphere& sphere)
+bool operator==(const Sphere& first, const Sphere& second)
 {
-	sphere.SetPosition(j.at("Position").get<Vector>());
-	sphere.SetRadius(j.at("Radius").get<float>());
+	return first.Position == second.Position &&
+		first.Radius == second.Radius;
 }
 
-void to_json(nlohmann::json& j, const Sphere& sphere)
+bool operator!=(const Sphere& first, const Sphere& second)
 {
-	j["Position"] = sphere.GetPosition();
-	j["Radius"] = sphere.GetRadius();
+	return !(first == second);
+}
+
+bool operator==(const Material& material, const std::string& name)
+{
+	return material.Name == name;
+}
+
+bool operator!=(const Material& material, const std::string& name)
+{
+	return material.Name != name;
+}
+
+void from_json(const nlohmann::json& j, Sphere& sphere)
+{
+	sphere.Position = j.at("Position").get<Vector>();
+	sphere.Radius = j.at("Radius").get<float>();
+	sphere.RadiusSquare = sphere.Radius * sphere.Radius;
+	sphere.MaterialName = j.at("Material").get<std::string>();
+}
+
+void from_json(const nlohmann::json& j, Material& material)
+{
+	material.MatColor = j.at("Color").get<Color>();
+	material.Name = j.at("Name").get<std::string>();
 }
 
 void from_json(const nlohmann::json& j, Scene& scene)
@@ -59,14 +82,13 @@ void from_json(const nlohmann::json& j, Scene& scene)
 		Error("Camera up vector and direction vector are not perpendicular!");
 	}
 
+	scene.Materials = j.at("Materials").get<std::vector<Material>>();
 	scene.Spheres = j.at("Objects").at("Spheres").get<std::vector<Sphere>>();
-}
 
-void to_json(nlohmann::json& j, const Scene& scene)
-{
-	j["Camera"]["Position"] = scene.Camera.Position;
-	j["Camera"]["Direction"] = scene.Camera.Direction;
-	j["Camera"]["VerticalFOV"] = ToDegrees(scene.Camera.VerticalFOV);
-
-	j["Objects"]["Spheres"] = scene.Spheres;
+	for (auto& sphere : scene.Spheres)
+	{
+		auto it = std::find(scene.Materials.begin(), scene.Materials.end(), sphere.MaterialName);
+		if (it != scene.Materials.end()) { sphere.ObjMaterial = &(*it); }
+		else { Error("Material '" COLOR, sphere.MaterialName.c_str(), "\x1b[31m' does not exist."); }
+	}
 }

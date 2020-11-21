@@ -9,6 +9,13 @@ struct SceneObject
 	virtual bool Intersect(const Ray& ray, float& intersectionDistance) const = 0;
 };
 
+struct Material
+{
+	std::string Name;
+
+	Color MatColor;
+};
+
 struct Sphere : SceneObject
 {
 	Sphere() = default;
@@ -16,20 +23,17 @@ struct Sphere : SceneObject
 
 	bool Intersect(const Ray& ray, float& intersectionDistance) const override;
 
-	inline void SetRadius(float radius) { m_Radius = radius; m_RadiusSquare = radius * radius; }
-	inline float GetRadius() const { return m_Radius; }
-	inline void SetPosition(const Vector& position) { m_Position = position; }
-	inline const Vector& GetPosition() const { return m_Position; }
-
-private:
-	Vector m_Position;
-	float m_Radius;
-	float m_RadiusSquare;
+	Vector Position;
+	float Radius;
+	float RadiusSquare;
+	Material* ObjMaterial;
+	std::string MaterialName;
 };
 
 struct Scene
 {
 	std::vector<Sphere> Spheres;
+	std::vector<Material> Materials;
 
 	struct
 	{
@@ -39,6 +43,11 @@ struct Scene
 		float VerticalFOV; // In radians
 	} Camera;
 };
+
+bool operator==(const Sphere& first, const Sphere& second);
+bool operator!=(const Sphere& first, const Sphere& second);
+bool operator==(const Material& material, const std::string& name);
+bool operator!=(const Material& material, const std::string& name);
 
 void from_json(const nlohmann::json& j, Scene& scene);
 void to_json(nlohmann::json& j, const Scene& scene);

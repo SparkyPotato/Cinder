@@ -86,6 +86,18 @@ Vector& Vector::operator/=(float scale)
 	return *this;
 }
 
+bool operator==(const Vector& first, const Vector& second)
+{
+	return first.X == second.X &&
+		first.Y == second.Y &&
+		first.Z == second.Z;
+}
+
+bool operator!=(const Vector& first, const Vector& second)
+{
+	return !(first == second);
+}
+
 Vector& Vector::Normalize()
 {
 	*this /= Length();
@@ -118,9 +130,18 @@ Vector Vector::Lerp(const Vector& first, const Vector& second, float factor)
 
 void from_json(const nlohmann::json& j, Vector& vector)
 {
-	vector.X = j.at("X").get<float>();
-	vector.Y = j.at("Y").get<float>();
-	vector.Z = j.at("Z").get<float>();
+	if (j.count("R"))
+	{
+		vector.X = j.at("R").get<float>();
+		vector.Y = j.at("G").get<float>();
+		vector.Z = j.at("B").get<float>();
+	}
+	else
+	{
+		vector.X = j.at("X").get<float>();
+		vector.Y = j.at("Y").get<float>();
+		vector.Z = j.at("Z").get<float>();
+	}
 }
 
 void to_json(nlohmann::json& j, const Vector& vector)

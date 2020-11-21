@@ -131,3 +131,12 @@ void ProgressBar::End()
 	Update(m_Max);
 	printf("\n");
 }
+
+Pixel& Pixel::operator=(const Color& color)
+{
+	R = uint8_t(color.X * 255);
+	G = uint8_t(color.Y * 255);
+	B = uint8_t(color.Z * 255);
+
+	return *this;
+}

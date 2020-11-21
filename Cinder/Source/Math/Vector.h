@@ -42,10 +42,10 @@ public:
 
 public:
 	float X = 0, Y = 0, Z = 0;
-	float& R = X;
-	float& G = Y;
-	float& B = Z;
 };
+
+bool operator==(const Vector& first, const Vector& second);
+bool operator!=(const Vector& first, const Vector& second);
 
 using Color = Vector;
 

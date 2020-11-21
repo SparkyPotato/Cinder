@@ -12,6 +12,7 @@ public:
 
 	void Run();
 	void WritePixel(uint64_t x, uint64_t y, Vector rayDirection);
+	Color Raycast(const Ray& ray);
 
 private:
 	const Scene& m_Scene;

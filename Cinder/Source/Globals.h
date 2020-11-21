@@ -1,10 +1,14 @@
 #pragma once
 
+#include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
+
+#include "Math/Vector.h"
 
 namespace CommandLine
 {
@@ -44,6 +48,8 @@ void ParseCommandLine(int argc, wchar_t** argv);
 
 struct Pixel
 {
+	Pixel& operator=(const Color& color);
+
 	uint8_t R;
 	uint8_t G;
 	uint8_t B;
@@ -71,4 +77,5 @@ private:
 	uint64_t m_Min, m_Max, m_Step, m_BarValue, m_RealValue;
 };
 
+namespace fs = std::filesystem;
 #define COLOR "\x1b[38;2;255;180;00m"

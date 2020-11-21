@@ -1,6 +1,6 @@
 {
 	"Camera": {
-		"Position": { "X": 0.0, "Y": 0.0, "Z": -10.0 },
+		"Position": { "X": 0.0, "Y": 0.0, "Z": -20.0 },
 		"Direction": { "X": 0.0, "Y": 0.0, "Z": 1.0 },
 		"Up": { "X": 0.0, "Y": 1.0, "Z": 0.0 },
 		"VerticalFOV": 60.0
@@ -8,9 +8,49 @@
 	"Objects": {
 		"Spheres": [
 			{
-				"Position": { "X": 0.0, "Y": 0.0, "Z": 0.0 },
-				"Radius": 1.0
+				"Position": { "X":-2.5, "Y": 0.0, "Z": 0.0 },
+				"Radius": 2.0,
+				"Material": "Green" 
+			},
+			{
+				"Position": { "X": 5.0, "Y": 5.0, "Z": 0.0 },
+				"Radius": 1.0,
+				"Material": "Red"
+			},
+			{
+				"Position": { "X": -5.0, "Y": 5.0, "Z": 0.0 },
+				"Radius": 1.0,
+				"Material": "Blue"
+			},
+			{
+				"Position": { "X": -5.0, "Y": -5.0, "Z": 0.0 },
+				"Radius": 1.0,
+				"Material": "Red"
+			},
+			{
+				"Position": { "X": 5.0, "Y": -5.0, "Z": 0.0 },
+				"Radius": 1.0,
+				"Material": "Green"
+			},
+			{
+				"Position": { "X": 5.0, "Y": 5.0, "Z": 15.0 },
+				"Radius": 3.0,
+				"Material": "Blue"
 			}
 		]
-	}
+	},
+	"Materials": [
+		{
+			"Name": "Red",
+			"Color": { "R": 1.0, "G": 0.0, "B": 0.0 }
+		},
+		{
+			"Name": "Blue",
+			"Color": { "R": 0.0, "G": 0.0, "B": 1.0 }
+		},
+		{
+			"Name": "Green",
+			"Color": { "R": 0.0, "G": 1.0, "B": 0.0 }
+		}
+	]
 }

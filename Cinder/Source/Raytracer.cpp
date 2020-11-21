@@ -12,10 +12,10 @@ void Raytracer::Run()
 
 	Vector top = direction + up * direction.Length() * tan;
 	Vector bottom = direction - up * direction.Length() * tan;
-	Vector left = direction + Vector::Cross(up, direction) * tan * (aspectRatio);
-	Vector right = direction - Vector::Cross(up, direction) * tan * (aspectRatio);
+	Vector left = direction - Vector::Cross(up, direction) * tan * (aspectRatio);
+	Vector right = direction + Vector::Cross(up, direction) * tan * (aspectRatio);
 
-	ProgressBar bar(0, 100, 2);
+	ProgressBar bar(0, 100, 1);
 
 	for (uint64_t y = 0; y < m_Framebuffer.Height; y++)
 	{
@@ -33,15 +33,24 @@ void Raytracer::Run()
 
 void Raytracer::WritePixel(uint64_t x, uint64_t y, Vector rayDirection)
 {
-	Pixel& pixel = m_Framebuffer.GetPixel(x, y);
 	Ray cameraRay(m_Scene.Camera.Position, rayDirection);
+	m_Framebuffer.GetPixel(x, y) = Raycast(cameraRay);
+}
 
-	for (auto& sphere : m_Scene.Spheres)
-	{
-		float t;
-		if (sphere.Intersect(cameraRay, t))
-		{
-			pixel = { 255, 0, 0 };
-		}
+Color Raytracer::Raycast(const Ray& ray)
+{
+	float closestHit = std::numeric_limits<float>().max();
+	const Sphere* sphereHit = nullptr;
+
+	for (auto& sphere : m_Scene.Spheres) 
+	{ 
+		if (sphere.Intersect(ray, closestHit)) { sphereHit = &sphere; };
 	}
+
+	if (sphereHit)
+	{
+		return sphereHit->ObjMaterial->MatColor;
+	}
+
+	return { 0.f, 0.f, 0.f };
 }

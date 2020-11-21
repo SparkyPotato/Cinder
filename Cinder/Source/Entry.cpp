@@ -1,5 +1,3 @@
-#include <filesystem>
-#include <iomanip>
 #include <Windows.h>
 
 #include "json/json.hpp"
@@ -28,11 +26,13 @@ int wmain(int argc, wchar_t** argv)
 		if (CommandLine::Properties.count(L"scene")) { scenePath = CommandLine::Properties[L"scene"]; }
 
 		nlohmann::json j;
-		if (!std::filesystem::exists(scenePath)) { Error("Could not find file '" COLOR, scenePath, "\x1b[31m'."); }
-		try { std::ifstream(scenePath) >> j; }
-		catch (std::exception& e) { Error("Failed to parse scene file '" COLOR, scenePath, "': ", e.what()); }
-
-		auto scene = j.get<Scene>();
+		if (!fs::exists(scenePath)) { Error("Could not find file '" COLOR, fs::absolute(scenePath).wstring(), "\x1b[31m'."); }
+		Output("Loading scene from file '" COLOR, fs::absolute(scenePath).wstring(), "\x1b[0m'.");
+		Scene scene;
+		try { std::ifstream(scenePath) >> j; scene = j.get<Scene>(); }
+		catch (std::exception& e) { Error("Failed to parse scene file: " COLOR, e.what(), "\x1b[31m."); }
+		Output("Loaded scene.");
+		Output("Scene contains " COLOR, scene.Spheres.size(), "\x1b[0m spheres.");
 
 		// Framebuffer creation, and set each pixel to black
 		uint64_t framebufferWidth = 1920;
