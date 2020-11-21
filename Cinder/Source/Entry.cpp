@@ -43,7 +43,7 @@ int wmain(int argc, wchar_t** argv)
 
 		Raytracer raytracer(scene, framebuffer);
 
-		Output("Starting Render.");
+		Output("Starting Render. \n");
 
 		LARGE_INTEGER frequency, start, end;
 		QueryPerformanceFrequency(&frequency);

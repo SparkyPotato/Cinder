@@ -1,5 +1,8 @@
 #pragma once
 
+#include <mutex>
+#include <thread>
+
 #include "Globals.h"
 #include "Scene.h"
 
@@ -11,11 +14,32 @@ public:
 	{}
 
 	void Run();
-	void WritePixel(uint64_t x, uint64_t y, Vector rayDirection);
 	Vector Raycast(const Ray& ray);
 	bool ShadowTrace(const Ray& ray);
+
+	void Thread(uint8_t id);
 
 private:
 	const Scene& m_Scene;
 	Framebuffer& m_Framebuffer;
+	
+	struct Job
+	{
+		Job(uint64_t xmin, uint64_t ymin, uint64_t xmax, uint64_t ymax)
+			: Xmin(xmin), Ymin(ymin), Xmax(xmax), Ymax(ymax)
+		{}
+
+		uint64_t Xmin = 0, Xmax = 0;
+		uint64_t Ymin = 0, Ymax = 0; // Will NOT be written to
+	};
+
+	Vector m_Top, m_Bottom, m_Left, m_Right;
+
+	ProgressBar* m_CompletionBar;
+	std::mutex m_BarMutex;
+	uint64_t m_JobCount = 0;
+	uint64_t m_DoneJobs = 0;
+
+	std::vector<Job>* m_Jobs;
+	std::vector<std::thread> m_Threads;
 };

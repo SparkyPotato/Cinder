@@ -20,7 +20,8 @@ static std::vector<std::wstring> s_ValidProperties =
 {
 	L"w", L"h",
 	L"output",
-	L"scene"
+	L"scene",
+	L"threads"
 };
 
 bool VerifySwitch(const std::wstring& switchArg)
