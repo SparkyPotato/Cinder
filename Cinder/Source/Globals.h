@@ -37,7 +37,7 @@ void Error(Args&&... args)
 template<typename... Args>
 void Warning(Args&&... args)
 {
-	Output("\x1b[33m""Warning: ", std::forward<Args>(args)..., "\x1b[0m");
+	Output("\x1b[93m""Warning: ", std::forward<Args>(args)..., "\x1b[0m");
 }
 
 void ParseCommandLine(int argc, wchar_t** argv);
@@ -70,3 +70,5 @@ struct ProgressBar
 private:
 	uint64_t m_Min, m_Max, m_Step, m_BarValue, m_RealValue;
 };
+
+#define COLOR "\x1b[38;2;255;180;00m"

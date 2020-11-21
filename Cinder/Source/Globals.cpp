@@ -53,7 +53,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 			}
 
 			if (VerifySwitch(switchArg)) { CommandLine::Switches.emplace_back(std::move(switchArg)); }
-			else { Warning("Ignoring unknown switch '\x1b[35m", switchArg, "\x1b[33m'."); }
+			else { Warning("Ignoring unknown switch '" COLOR, switchArg, "\x1b[93m'."); }
 		}
 		else
 		{
@@ -61,7 +61,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 
 			if (pos == arg.npos)
 			{
-				Error("Invalid property specifier '\x1b[35m", arg, "\x1b[31m'."); // Invalid property if we don't find the '='
+				Error("Invalid property specifier '" COLOR, arg, "\x1b[31m'."); // Invalid property if we don't find the '='
 			}
 
 			// If the argument is "dir=Engine/"
@@ -76,7 +76,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 			// Values are not edited in any way, as they can be multi-byte UTF-8 characters (pathnames!)
 
 			if (VerifyProperty(name)) { CommandLine::Properties.emplace(std::move(name), std::move(value)); }
-			else { Warning("Ignoring unknown property '\x1b[35m", name, "\x1b[33m'."); }
+			else { Warning("Ignoring unknown property '" COLOR, name, "\x1b[93m'."); }
 		}
 	}
 }
@@ -84,7 +84,7 @@ void ParseCommandLine(int argc, wchar_t** argv)
 ProgressBar::ProgressBar(uint64_t min, uint64_t max, uint64_t step)
 	: m_Min(min), m_Max(max), m_BarValue(min), m_Step(step), m_RealValue(min)
 {
-	printf("%llu ", m_RealValue);
+	printf(COLOR "%llu ", m_RealValue);
 }
 
 void ProgressBar::Update(uint64_t value)
@@ -94,7 +94,7 @@ void ProgressBar::Update(uint64_t value)
 		int64_t input = value;
 		int64_t realValue = m_RealValue;
 
-		printf("\x1b[1G\x1b[92m"); // Go to the first character
+		printf("\x1b[1G" COLOR); // Go to the first character
 
 		// Remove all the digits of the old value
 		int i = 0;

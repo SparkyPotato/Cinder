@@ -28,9 +28,9 @@ int wmain(int argc, wchar_t** argv)
 		if (CommandLine::Properties.count(L"scene")) { scenePath = CommandLine::Properties[L"scene"]; }
 
 		nlohmann::json j;
-		if (!std::filesystem::exists(scenePath)) { Error("Could not find file '\x1b[35m", scenePath, "\x1b[31m'."); }
+		if (!std::filesystem::exists(scenePath)) { Error("Could not find file '" COLOR, scenePath, "\x1b[31m'."); }
 		try { std::ifstream(scenePath) >> j; }
-		catch (std::exception& e) { Error("Failed to parse scene file '", scenePath, "': ", e.what()); }
+		catch (std::exception& e) { Error("Failed to parse scene file '" COLOR, scenePath, "': ", e.what()); }
 
 		auto scene = j.get<Scene>();
 
@@ -56,8 +56,8 @@ int wmain(int argc, wchar_t** argv)
 		auto time = float(end.QuadPart - start.QuadPart);
 		time /= frequency.QuadPart;
 
-		Output("\x1b[36mRender Complete. Took ", std::fixed, std::setprecision(2), time, "s.\x1b[0m");
-		Output("Writing to file '\x1b[35m", output, "\x1b[0m'.");
+		Output(COLOR "Render Complete. Took ", std::fixed, std::setprecision(2), time, "s.\x1b[0m");
+		Output("Writing to file '" COLOR, output, "\x1b[0m'.");
 
 		int size = WideCharToMultiByte(CP_UTF8, 0, output.c_str(), -1, nullptr, 0, nullptr, nullptr);
 		auto utf8 = new char[size];
