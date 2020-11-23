@@ -1,0 +1,6 @@
+[submodule "Cinder/Dependencies/yaml-cpp"]
+	path = Cinder/Dependencies/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp
+[submodule "Cinder/Dependencies/stb"]
+	path = Cinder/Dependencies/stb
+	url = https://github.com/nothings/stb
