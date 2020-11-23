@@ -1,51 +1,61 @@
 #pragma once
 
-#include <cmath>
+#include "yaml-cpp/yaml.h"
 
-#include "json/json.hpp"
+class Matrix;
 
 class Vector
 {
 public:
-	Vector() = default;
-
-	Vector(float x, float y, float z)
-		: X(x), Y(y), Z(z)
-	{}
-
+	Vector();
+	Vector(float all);
+	Vector(float x, float y, float z);
+	Vector(float x, float y, float z, float w);
+	Vector(float values[3]);
 	Vector(const Vector& other) = default;
 
-	Vector& operator=(const Vector& other);
-
-	Vector operator+(const Vector other) const;
-	Vector& operator+=(const Vector other);
+	Vector operator+(const Vector& other) const;
+	Vector operator+(float all) const;
+	Vector& operator+=(const Vector& other);
+	Vector& operator+=(float all);
 
 	Vector operator-() const;
+	Vector operator-(const Vector& other) const;
+	Vector operator-(float all) const;
+	Vector& operator-=(const Vector& other);
+	Vector& operator-=(float all);
 
-	Vector operator-(const Vector other) const;
-	Vector& operator-=(const Vector other);
+	Vector operator*(float scalar) const;
+	Vector& operator*=(float scalar);
+	Vector operator*(const Matrix& transform) const;
+	Vector& operator*=(const Matrix& transform);
 
-	Vector operator*(float scale) const;
-	Vector& operator*=(float scale);
+	Vector operator/(float scalar) const;
+	Vector& operator/=(float scalar);
 
-	Vector operator/(float scale) const;
-	Vector& operator/=(float scale);
-
-	inline float Length() const { return std::sqrt(X * X + Y * Y + Z * Z); }
+	float GetLength() const;
 
 	Vector& Normalize();
+	Vector GetNormalized() const;
 
-	static float Dot(const Vector& first, const Vector& second);
-	static Vector Cross(const Vector& first, const Vector& second);
+	static float Dot3D(const Vector& first, const Vector& second);
+	static Vector Cross3D(const Vector& first, const Vector& second);
+	static Vector Hadamard3D(const Vector& first, const Vector& second);
 
-	static Vector Lerp(const Vector& first, const Vector& second, float factor);
+	static float Dot4D(const Vector& first, const Vector& second);
+	static Vector Hadamard4D(const Vector& first, const Vector& second);
 
-public:
-	float X = 0, Y = 0, Z = 0;
+	float X;
+	float Y;
+	float Z;
+	float W;
 };
 
-bool operator==(const Vector& first, const Vector& second);
-bool operator!=(const Vector& first, const Vector& second);
-
-void from_json(const nlohmann::json& j, Vector& vector);
-void to_json(nlohmann::json& j, const Vector& vector);
+namespace YAML
+{
+template<>
+struct convert<Vector>
+{
+	static bool decode(const Node& node, Vector& vector);
+};
+}

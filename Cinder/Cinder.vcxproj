@@ -47,13 +47,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)Binaries\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Intermediate\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Binaries\$(Configuration)\Cinder\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(Configuration)\Cinder\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Binaries\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Intermediate\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Binaries\$(Configuration)\Cinder\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(Configuration)\Cinder\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -62,12 +62,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies; $(ProjectDir)Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies; $(ProjectDir)Source;$(ProjectDir)Dependencies\yaml-cpp\include </AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(SolutionDir)Binaries\$(Configuration)\yaml-cpp\yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -79,7 +80,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies; $(ProjectDir)Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Dependencies; $(ProjectDir)Source;$(ProjectDir)Dependencies\yaml-cpp\include </AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -87,24 +88,39 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(SolutionDir)Binaries\$(Configuration)\yaml-cpp\yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Entry.cpp" />
     <ClCompile Include="Source\Globals.cpp" />
+    <ClCompile Include="Source\Math\Color.cpp" />
+    <ClCompile Include="Source\Math\Matrix.cpp" />
     <ClCompile Include="Source\Math\Ray.cpp" />
+    <ClCompile Include="Source\Math\Transform.cpp" />
     <ClCompile Include="Source\Math\Vector.cpp" />
     <ClCompile Include="Source\Raytracer.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\Scene\Camera.cpp" />
+    <ClCompile Include="Source\Scene\Material.cpp" />
+    <ClCompile Include="Source\Scene\Object.cpp" />
+    <ClCompile Include="Source\Scene\RenderSettings.cpp" />
+    <ClCompile Include="Source\Scene\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\stb\stb_image_write.h" />
     <ClInclude Include="Source\Globals.h" />
+    <ClInclude Include="Source\Math\Color.h" />
     <ClInclude Include="Source\Math\Math.h" />
+    <ClInclude Include="Source\Math\Matrix.h" />
     <ClInclude Include="Source\Math\Ray.h" />
+    <ClInclude Include="Source\Math\Transform.h" />
     <ClInclude Include="Source\Math\Vector.h" />
     <ClInclude Include="Source\Raytracer.h" />
-    <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\Scene\Camera.h" />
+    <ClInclude Include="Source\Scene\Material.h" />
+    <ClInclude Include="Source\Scene\Object.h" />
+    <ClInclude Include="Source\Scene\RenderSettings.h" />
+    <ClInclude Include="Source\Scene\Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

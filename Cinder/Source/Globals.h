@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -8,12 +9,30 @@
 #include <string>
 #include <vector>
 
+#include "yaml-cpp/yaml.h"
+
 #include "Math/Vector.h"
 
 namespace CommandLine
 {
-	extern std::map <std::wstring, std::wstring> Properties;
-	extern std::vector<std::wstring> Switches;
+	extern std::map<std::string, std::string> Properties;
+	extern std::vector<std::string> Switches;
+}
+
+std::string ToUTF8(const wchar_t* string);
+std::wstring ToUTF16(const std::string& string);
+
+inline void Output(const std::string& arg)
+{
+	std::wcout << ToUTF16(arg) << L"\n";
+}
+
+template<typename... Args>
+void Output(const std::string& arg, Args&&... args)
+{
+	std::wcout << ToUTF16(arg);
+
+	Output(std::forward<Args>(args)...);
 }
 
 template<typename T>
@@ -48,8 +67,6 @@ void ParseCommandLine(int argc, wchar_t** argv);
 
 struct Pixel
 {
-	Pixel& operator=(const Vector& color);
-
 	uint8_t R;
 	uint8_t G;
 	uint8_t B;

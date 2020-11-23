@@ -1,13 +1,12 @@
 #include <Windows.h>
 
-#include "json/json.hpp"
 #define STBIW_WINDOWS_UTF8
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
 
 #include "Globals.h"
 #include "Raytracer.h"
-#include "Scene.h"
+#include "Scene/Scene.h"
 
 void SetupConsole();
 
@@ -20,25 +19,26 @@ int wmain(int argc, wchar_t** argv)
 
 		ParseCommandLine(argc, argv);
 
-		std::wstring output = L"output.png";
-		if (CommandLine::Properties.count(L"output")) { output = CommandLine::Properties[L"output"]; }
-		std::wstring scenePath = L"scene.json";
-		if (CommandLine::Properties.count(L"scene")) { scenePath = CommandLine::Properties[L"scene"]; }
+		std::string output = "output.png";
+		if (CommandLine::Properties.count("output")) { output = CommandLine::Properties["output"]; }
 
-		nlohmann::json j;
+		std::string scenePath = "scene.yaml";
+		if (CommandLine::Properties.count("scene")) { scenePath = CommandLine::Properties["scene"]; }
+
 		if (!fs::exists(scenePath)) { Error("Could not find file '" COLOR, fs::absolute(scenePath).wstring(), "\x1b[31m'."); }
 		Output("Loading scene from file '" COLOR, fs::absolute(scenePath).wstring(), "\x1b[0m'.");
+
 		Scene scene;
-		try { std::ifstream(scenePath) >> j; scene = j.get<Scene>(); }
-		catch (std::exception& e) { Error("Failed to parse scene file: " COLOR, e.what(), "\x1b[31m."); }
+		try { scene = Scene::FromFile(scenePath); }
+		catch (std::exception& e) { Error("Couldn't parse file: " COLOR, e.what(), "\x1b[31m."); }
+
 		Output("Loaded scene.");
-		Output("Scene contains " COLOR, scene.Spheres.size(), "\x1b[0m spheres.");
 
 		// Framebuffer creation
 		uint64_t framebufferWidth = 1920;
 		uint64_t framebufferHeight = 1080;
-		if (CommandLine::Properties.count(L"w")) { framebufferWidth = stoull(CommandLine::Properties[L"w"]); }
-		if (CommandLine::Properties.count(L"h")) { framebufferHeight = stoull(CommandLine::Properties[L"h"]); }
+		if (CommandLine::Properties.count("w")) { framebufferWidth = stoull(CommandLine::Properties["w"]); }
+		if (CommandLine::Properties.count("h")) { framebufferHeight = stoull(CommandLine::Properties["h"]); }
 		Framebuffer framebuffer(framebufferWidth, framebufferHeight);
 
 		Raytracer raytracer(scene, framebuffer);
@@ -58,11 +58,7 @@ int wmain(int argc, wchar_t** argv)
 		Output(COLOR "Render Complete. Took ", std::fixed, std::setprecision(2), time, "s.\x1b[0m");
 		Output("Writing to file '" COLOR, output, "\x1b[0m'.");
 
-		int size = WideCharToMultiByte(CP_UTF8, 0, output.c_str(), -1, nullptr, 0, nullptr, nullptr);
-		auto utf8 = new char[size];
-		WideCharToMultiByte(CP_UTF8, 0, output.c_str(), -1, utf8, size, nullptr, nullptr);
-
-		stbi_write_png(utf8, (int)framebuffer.Width, (int)framebuffer.Height, 3, framebuffer.Buffer, (int)framebuffer.Width * 3);
+		stbi_write_png(output.c_str(), (int)framebuffer.Width, (int)framebuffer.Height, 3, framebuffer.Buffer, (int)framebuffer.Width * 3);
 
 		printf("\x1b[?25h");
 		return EXIT_SUCCESS;

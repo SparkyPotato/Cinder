@@ -4,17 +4,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cinder", "Cinder\Cinder.vcxproj", "{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE} = {C6BF2C0F-0791-440E-BE75-6B346DA18BEE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "yaml-cpp", "Cinder\Dependencies\yaml-cpp\yaml-cpp.vcxproj", "{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}.Debug|x64.ActiveCfg = Debug|x64
 		{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}.Debug|x64.Build.0 = Debug|x64
+		{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}.Debug|x86.ActiveCfg = Debug|x64
 		{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}.Release|x64.ActiveCfg = Release|x64
 		{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}.Release|x64.Build.0 = Release|x64
+		{E5C25954-F1EE-4A7B-A150-5FC5BCC5583E}.Release|x86.ActiveCfg = Release|x64
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Debug|x64.ActiveCfg = Debug|x64
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Debug|x64.Build.0 = Debug|x64
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Debug|x86.ActiveCfg = Debug|Win32
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Debug|x86.Build.0 = Debug|Win32
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Release|x64.ActiveCfg = Release|x64
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Release|x64.Build.0 = Release|x64
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Release|x86.ActiveCfg = Release|Win32
+		{C6BF2C0F-0791-440E-BE75-6B346DA18BEE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

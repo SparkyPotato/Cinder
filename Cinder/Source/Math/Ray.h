@@ -5,12 +5,12 @@
 class Ray
 {
 public:
-	Ray() = default;
-	Ray(Vector origin, Vector direction);
+	Ray(const Vector& origin, const Vector& direction);
 
 	const Vector& GetOrigin() const { return m_Origin; }
 	const Vector& GetDirection() const { return m_Direction; }
 
 private:
-	Vector m_Origin, m_Direction;
+	Vector m_Origin;
+	Vector m_Direction;
 };

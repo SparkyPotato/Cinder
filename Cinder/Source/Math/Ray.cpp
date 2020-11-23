@@ -1,7 +1,5 @@
 #include "Ray.h"
 
-Ray::Ray(Vector origin, Vector direction)
-	: m_Origin(origin), m_Direction(direction)
-{
-	m_Direction.Normalize();
-}
+Ray::Ray(const Vector& origin, const Vector& direction)
+	: m_Origin(origin), m_Direction(direction.GetNormalized())
+{}

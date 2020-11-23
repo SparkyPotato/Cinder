@@ -4,7 +4,8 @@
 #include <thread>
 
 #include "Globals.h"
-#include "Scene.h"
+#include "Math/Ray.h"
+#include "Scene/Scene.h"
 
 class Raytracer
 {
@@ -15,7 +16,6 @@ public:
 
 	void Run();
 	Vector Raycast(const Ray& ray);
-	bool ShadowTrace(const Ray& ray);
 
 	void Thread(uint8_t id);
 
@@ -30,16 +30,16 @@ private:
 		{}
 
 		uint64_t Xmin = 0, Xmax = 0;
-		uint64_t Ymin = 0, Ymax = 0; // Will NOT be written to
+		uint64_t Ymin = 0, Ymax = 0;
 	};
 
 	Vector m_Top, m_Bottom, m_Left, m_Right;
 
-	ProgressBar* m_CompletionBar;
+	ProgressBar* m_CompletionBar = nullptr;
 	std::mutex m_BarMutex;
 	uint64_t m_JobCount = 0;
 	uint64_t m_DoneJobs = 0;
 
-	std::vector<Job>* m_Jobs;
+	std::vector<Job>* m_Jobs = nullptr;
 	std::vector<std::thread> m_Threads;
 };
