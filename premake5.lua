@@ -60,7 +60,7 @@ project "Cinder"
 		optimize "on"
 
 project "yaml-cpp"
-	location "Dependencies/yaml-cpp"
+	location "Cinder/Dependencies/yaml-cpp"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++11"
