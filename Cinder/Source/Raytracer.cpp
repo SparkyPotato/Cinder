@@ -3,17 +3,10 @@
 void Raytracer::Run()
 {
 	float aspectRatio = (float)m_Framebuffer.Width / m_Framebuffer.Height;
+	m_AspectX = tan(m_Scene.GetCamera().GetFOV() / 2) * aspectRatio;
+	m_AspectY = tan(m_Scene.GetCamera().GetFOV() / 2);
 
-// 	Vector origin = m_Scene.MainCamera.Position;
-// 	Vector direction = m_Scene.MainCamera.Direction;
-// 	Vector up = m_Scene.MainCamera.Up;
-// 	float vFOV = m_Scene.MainCamera.VerticalFOV;
-// 	float tan = std::tan(vFOV / 2);
-// 
-// 	m_Top = direction + up * direction.Length() * tan;
-// 	m_Bottom = direction - up * direction.Length() * tan;
-// 	m_Left = direction - Vector::Cross(up, direction) * tan * (aspectRatio);
-// 	m_Right = direction + Vector::Cross(up, direction) * tan * (aspectRatio);
+	m_CameraPosition = Vector() * m_Scene.GetCamera().GetCameraToWorldMatrix();
 
 	auto threadCount = std::thread::hardware_concurrency();
 	if (CommandLine::Properties.count("threads")) { threadCount = std::stoi(CommandLine::Properties["threads"]); }
@@ -63,51 +56,41 @@ void Raytracer::Run()
 	delete[] m_Jobs;
 }
 
-Vector Raytracer::Raycast(const Ray& ray)
-{
-// 	float closestHit = std::numeric_limits<float>().max();
-// 	const SceneObject* objectHit = nullptr;
-// 
-// 	for (auto object : m_Scene.Objects) 
-// 	{ 
-// 		if (object->Intersect(ray, closestHit)) { objectHit = object; };
-// 	}
-// 
-// 	if (objectHit)
-// 	{
-// 		Vector hitPoint = ray.GetOrigin() + ray.GetDirection() * closestHit;
-// 		Vector normal = objectHit->GetNormal(hitPoint);
-// 		Vector objectColor = objectHit->ObjMaterial->Color;
-// 
-// 
-// 
-// 		return objectColor;
-// 	}
-// 
-// 	return { 0.f, 0.f, 0.f }; // Background
-
-	return { 0.f, 0.f, 0.f };
-}
-
 void Raytracer::Thread(uint8_t id)
 {
-// 	for (auto& job : m_Jobs[id])
-// 	{
-// 		for (uint64_t y = job.Ymin; y < job.Ymax; y++)
-// 		{
-// 			Vector verticalDirection = Vector::Lerp(m_Top, m_Bottom, (float)y / m_Framebuffer.Height);
-// 			for (uint64_t x = job.Xmin; x < job.Xmax; x++)
-// 			{
-// 				Vector horizontalDirection = Vector::Lerp(m_Left, m_Right, (float)x / m_Framebuffer.Width);
-// 
-// 				Ray cameraRay(m_Scene.MainCamera.Position, horizontalDirection + verticalDirection);
-// 				m_Framebuffer.GetPixel(x, y) = Raycast(cameraRay);
-// 			}
-// 		}
-// 
-// 		m_BarMutex.lock();
-// 		m_DoneJobs++;
-// 		m_CompletionBar->Update(m_DoneJobs * 100 / m_JobCount);
-// 		m_BarMutex.unlock();
-// 	}
+	for (auto& job : m_Jobs[id])
+	{
+		for (uint64_t y = job.Ymin; y < job.Ymax; y++)
+		{
+			float Py = (1.f - 2.f * ((y + 0.5f) / m_Framebuffer.Height)) * m_AspectY;
+
+			for (uint64_t x = job.Xmin; x < job.Xmax; x++)
+			{
+				float Px = (2.f * ((x + 0.5f) / m_Framebuffer.Width) - 1.f) * m_AspectX;
+				Vector rayDirection = Vector(Px, Py, 1.f) * m_Scene.GetCamera().GetCameraToWorldMatrix()
+					- m_CameraPosition;
+				
+				m_Framebuffer.GetPixel(x, y) = Raycast(Ray(m_CameraPosition, rayDirection));
+			}
+		}
+
+		m_BarMutex.lock();
+		m_DoneJobs++;
+		m_CompletionBar->Update(m_DoneJobs * 100 / m_JobCount);
+		m_BarMutex.unlock();
+ 	}
+}
+
+Color Raytracer::Raycast(Ray ray)
+{
+	for (auto object : m_Scene.GetObjects())
+	{
+		object->Intersect(ray);
+	}
+
+	if (ray.GetObject())
+	{
+		return ray.GetObject()->GetMaterial()->GetAlbedo();
+	}
+	return Color(0.f, 0.f, 0.f);
 }

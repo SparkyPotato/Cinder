@@ -9,6 +9,8 @@ public:
 	Material() = default;
 	Material(const Color& albedo);
 
+	const Color& GetAlbedo() const { return m_Albedo; }
+
 private:
 	Color m_Albedo;
 };

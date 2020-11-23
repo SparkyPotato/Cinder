@@ -103,6 +103,7 @@
     <ClCompile Include="Source\Scene\Camera.cpp" />
     <ClCompile Include="Source\Scene\Material.cpp" />
     <ClCompile Include="Source\Scene\Object.cpp" />
+    <ClCompile Include="Source\Scene\Objects\Sphere.cpp" />
     <ClCompile Include="Source\Scene\RenderSettings.cpp" />
     <ClCompile Include="Source\Scene\Scene.cpp" />
   </ItemGroup>
@@ -119,6 +120,7 @@
     <ClInclude Include="Source\Scene\Camera.h" />
     <ClInclude Include="Source\Scene\Material.h" />
     <ClInclude Include="Source\Scene\Object.h" />
+    <ClInclude Include="Source\Scene\Objects\Sphere.h" />
     <ClInclude Include="Source\Scene\RenderSettings.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
   </ItemGroup>

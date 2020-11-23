@@ -9,9 +9,9 @@ public:
 	Transform() = default;
 	Transform(const Vector& position, const Vector& rotation, const Vector& scale);
 
-	const Matrix& GetTransform() { return m_Transform; }
-	const Matrix& GetTransformInverse() { return m_TransformInverse; }
-	const Matrix& GetRotation() { return m_Rotation; }
+	const Matrix& GetTransform() const { return m_Transform; }
+	const Matrix& GetTransformInverse() const { return m_TransformInverse; }
+	const Matrix& GetRotation() const { return m_Rotation; }
 
 private:
 	Matrix m_Transform;

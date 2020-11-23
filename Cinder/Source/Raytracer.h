@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "Globals.h"
+#include "Math/Color.h"
 #include "Math/Ray.h"
 #include "Scene/Scene.h"
 
@@ -15,7 +16,7 @@ public:
 	{}
 
 	void Run();
-	Vector Raycast(const Ray& ray);
+	Color Raycast(Ray ray);
 
 	void Thread(uint8_t id);
 
@@ -33,8 +34,6 @@ private:
 		uint64_t Ymin = 0, Ymax = 0;
 	};
 
-	Vector m_Top, m_Bottom, m_Left, m_Right;
-
 	ProgressBar* m_CompletionBar = nullptr;
 	std::mutex m_BarMutex;
 	uint64_t m_JobCount = 0;
@@ -42,4 +41,7 @@ private:
 
 	std::vector<Job>* m_Jobs = nullptr;
 	std::vector<std::thread> m_Threads;
+
+	float m_AspectX = 0.f, m_AspectY = 0.f;
+	Vector m_CameraPosition;
 };

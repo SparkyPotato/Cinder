@@ -13,6 +13,9 @@ public:
 
 	static Scene FromFile(std::string file);
 
+	const Camera& GetCamera() const { return m_Camera; }
+	const std::vector<Object*>& GetObjects() const { return m_Objects; }
+
 private:
 	friend YAML::convert<Scene>;
 	void Setup();

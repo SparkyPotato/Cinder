@@ -44,7 +44,8 @@ Vector Vector::operator+(const Vector& other) const
 	return Vector(
 		X + other.X, 
 		Y + other.Y, 
-		Z + other.Z
+		Z + other.Z,
+		W + other.W
 	);
 }
 
@@ -53,7 +54,8 @@ Vector Vector::operator+(float all) const
 	return Vector(
 		X + all, 
 		Y + all, 
-		Z + all
+		Z + all,
+		W + all
 	);
 }
 
@@ -62,6 +64,7 @@ Vector& Vector::operator+=(const Vector& other)
 	X += other.X;
 	Y += other.Y;
 	Z += other.Z;
+	W += other.W;
 
 	return *this;
 }
@@ -71,13 +74,14 @@ Vector& Vector::operator+=(float all)
 	X += all;
 	Y += all;
 	Z += all;
+	W += all;
 
 	return *this;
 }
 
 Vector Vector::operator-() const
 {
-	return Vector(-X, -Y, -Z);
+	return Vector(-X, -Y, -Z, -W);
 }
 
 Vector Vector::operator-(const Vector& other) const
@@ -85,7 +89,8 @@ Vector Vector::operator-(const Vector& other) const
 	return Vector(
 		X - other.X, 
 		Y - other.Y, 
-		Z - other.Z
+		Z - other.Z,
+		W - other.W
 	);
 }
 
@@ -94,7 +99,8 @@ Vector Vector::operator-(float all) const
 	return Vector(
 		X - all, 
 		Y - all, 
-		Z - all
+		Z - all,
+		W - all
 	);
 }
 
@@ -103,6 +109,7 @@ Vector& Vector::operator-=(const Vector& other)
 	X -= other.X;
 	Y -= other.Y;
 	Z -= other.Z;
+	W -= other.W;
 
 	return *this;
 }
@@ -112,13 +119,14 @@ Vector& Vector::operator-=(float all)
 	X -= all;
 	Y -= all;
 	Z -= all;
+	W -= all;
 
 	return *this;
 }
 
 Vector Vector::operator*(float scalar) const
 {
-	return Vector(X * scalar, Y * scalar, Z * scalar);
+	return Vector(X * scalar, Y * scalar, Z * scalar, W * scalar);
 }
 
 Vector& Vector::operator*=(float scalar)
@@ -126,6 +134,7 @@ Vector& Vector::operator*=(float scalar)
 	X *= scalar;
 	Y *= scalar;
 	Z *= scalar;
+	W *= scalar;
 
 	return *this;
 }
@@ -151,7 +160,7 @@ Vector& Vector::operator*=(const Matrix& transform)
 
 Vector Vector::operator/(float scalar) const
 {
-	return Vector(X / scalar, Y / scalar, Z / scalar);
+	return Vector(X / scalar, Y / scalar, Z / scalar, W / scalar);
 }
 
 Vector& Vector::operator/=(float scalar)
@@ -159,13 +168,14 @@ Vector& Vector::operator/=(float scalar)
 	X /= scalar;
 	Y /= scalar;
 	Z /= scalar;
+	W /= scalar;
 
 	return *this;
 }
 
 float Vector::GetLength() const
 {
-	float square = X * X + Y * Y + Z * Z;
+	float square = X * X + Y * Y + Z * Z + W * W;
 	return std::sqrt(square);
 }
 
@@ -235,6 +245,13 @@ Vector Vector::Hadamard4D(const Vector& first, const Vector& second)
 	vec.W = first.W * second.W;
 
 	return vec;
+}
+
+Vector Vector::Lerp(const Vector& from, const Vector& to, float value)
+{
+	return Vector(
+		(from - to) * value + from
+	);
 }
 
 namespace YAML

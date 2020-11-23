@@ -9,6 +9,9 @@ public:
 	Camera() = default;
 	Camera(const Transform& transform, float verticalFOV);
 
+	const Matrix& GetCameraToWorldMatrix() const { return m_Transform.GetTransform(); }
+	float GetFOV() const { return m_FOV; }
+
 private:
 	Transform m_Transform;
 	float m_FOV;

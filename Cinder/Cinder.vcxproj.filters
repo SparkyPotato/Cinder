@@ -54,6 +54,9 @@
     <ClCompile Include="Source\Math\Color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\Objects\Sphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Globals.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Math\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Objects\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

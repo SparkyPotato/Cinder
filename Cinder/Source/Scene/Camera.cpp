@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include "Math/Math.h"
+
 Camera::Camera(const Transform& transform, float verticalFOV)
 	: m_Transform(transform), m_FOV(verticalFOV)
 {}
@@ -21,7 +23,7 @@ bool convert<Camera>::decode(const Node& node, Camera& camera)
 
 	camera = Camera(
 		node["Transform"].as<Transform>(),
-		node["Vertical FOV"].as<float>()
+		ToRadians(node["Vertical FOV"].as<float>())
 	);
 
 	return true;

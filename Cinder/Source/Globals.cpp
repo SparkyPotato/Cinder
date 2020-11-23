@@ -2,6 +2,8 @@
 
 #include <Windows.h>
 
+#include "Math/Color.h"
+
 #undef min
 
 namespace CommandLine
@@ -35,6 +37,17 @@ Framebuffer::Framebuffer(uint64_t width, uint64_t height)
 	: Width(width), Height(height)
 {
 	Buffer = new Pixel[Width * Height];
+}
+
+Pixel& Pixel::operator=(const Color& color)
+{
+	// Gamma correction and HDR goes in here
+
+	R = uint8_t(std::min(color.R, 1.f) * 255.f);
+	G = uint8_t(std::min(color.G, 1.f) * 255.f);
+	B = uint8_t(std::min(color.B, 1.f) * 255.f);
+
+	return *this;
 }
 
 static std::vector<std::string> s_ValidSwitches =

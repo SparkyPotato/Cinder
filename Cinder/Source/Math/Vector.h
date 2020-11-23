@@ -45,6 +45,8 @@ public:
 	static float Dot4D(const Vector& first, const Vector& second);
 	static Vector Hadamard4D(const Vector& first, const Vector& second);
 
+	static Vector Lerp(const Vector& from, const Vector& to, float value);
+
 	float X;
 	float Y;
 	float Z;

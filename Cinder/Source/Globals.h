@@ -11,7 +11,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "Math/Vector.h"
+class Color;
 
 namespace CommandLine
 {
@@ -67,6 +67,8 @@ void ParseCommandLine(int argc, wchar_t** argv);
 
 struct Pixel
 {
+	Pixel& operator=(const Color& color);
+
 	uint8_t R;
 	uint8_t G;
 	uint8_t B;
