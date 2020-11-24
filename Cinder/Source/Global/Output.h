@@ -27,71 +27,71 @@ void Console(const char* format, Args&&... args)
 	if (GQuiet) { return; }
 
 	printf(OUT_CONSOLE);
-	printf(format, std::forward<Args...>(args...));
+	printf(format, std::forward<Args>(args)...);
 	printf(OUT_RESET "\n");
 }
 
 inline void Verbose(const char* format)
 {
-	if (GQuiet || GLogLevel > LogLevel::Verbose) { return; }
+	if (GLogLevel > LogLevel::Verbose) { return; }
 
 	printf(OUT_VERBOSE "Verbose: %s\n" OUT_RESET, format);
 }
 template<typename... Args>
 void Verbose(const char* format, Args&&... args)
 {
-	if (GQuiet || GLogLevel > LogLevel::Verbose) { return; }
+	if (GLogLevel > LogLevel::Verbose) { return; }
 
 	printf(OUT_VERBOSE "Verbose: ");
-	printf(format, std::forward<Args...>(args...));
+	printf(format, std::forward<Args>(args)...);
 	printf(OUT_RESET "\n");
 }
 
 inline void Log(const char* format)
 {
-	if (GQuiet || GLogLevel > LogLevel::Log) { return; }
+	if (GLogLevel > LogLevel::Log) { return; }
 
 	printf(OUT_LOG "Log: %s\n" OUT_RESET, format);
 }
 template<typename... Args>
 void Log(const char* format, Args&&... args)
 {
-	if (GQuiet || GLogLevel > LogLevel::Log) { return; }
+	if (GLogLevel > LogLevel::Log) { return; }
 
 	printf(OUT_LOG "Log: ");
-	printf(format, std::forward<Args...>(args...));
+	printf(format, std::forward<Args>(args)...);
 	printf(OUT_RESET "\n");
 }
 
 inline void Warning(const char* format)
 {
-	if (GQuiet || GLogLevel > LogLevel::Warning) { return; }
+	if (GLogLevel > LogLevel::Warning) { return; }
 
 	printf(OUT_WARNING "Warning: %s\n" OUT_RESET, format);
 }
 template<typename... Args>
 void Warning(const char* format, Args&&... args)
 {
-	if (GQuiet || GLogLevel > LogLevel::Warning) { return; }
+	if (GLogLevel > LogLevel::Warning) { return; }
 
 	printf(OUT_WARNING "Warning: ");
-	printf(format, std::forward<Args...>(args...));
+	printf(format, std::forward<Args>(args)...);
 	printf(OUT_RESET "\n");
 }
 
 inline void Error(const char* format)
 {
-	if (GQuiet || GLogLevel > LogLevel::Error) { return; }
+	if (GLogLevel > LogLevel::Error) { return; }
 
 	printf(OUT_ERROR "Error: %s\n" OUT_RESET, format);
 }
 template<typename... Args>
 void Error(const char* format, Args&&... args)
 {
-	if (GQuiet || GLogLevel > LogLevel::Error) { return; }
+	if (GLogLevel > LogLevel::Error) { return; }
 
 	printf(OUT_ERROR "Error: ");
-	printf(format, std::forward<Args...>(args...));
+	printf(format, std::forward<Args>(args)...);
 	printf(OUT_RESET "\n");
 }
 
@@ -104,8 +104,8 @@ inline void Fatal(const char* format)
 template<typename... Args>
 void Fatal(const char* format, Args&&... args)
 {
-	printf(OUT_WAFATAL "Fatal: ");
-	printf(format, std::forward<Args...>(args...));
+	printf(OUT_FATAL "Fatal: ");
+	printf(format, std::forward<Args>(args)...);
 	printf(OUT_RESET "\n");
 
 	throw - 1;

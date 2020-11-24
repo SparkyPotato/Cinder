@@ -27,8 +27,8 @@ int Entry(int argc, char** argv)
 
 		if (logo)
 		{
-			Console(OUT_COLOR "The Cinder Raytracer");
-			Console(OUT_COLOR "Copyright ©2020 SparkyPotato (under the MIT License). \n" OUT_RESET);
+			Console(OUT_COLOR "Cinder (built %s, %s)", __TIME__, __DATE__);
+			Console(OUT_COLOR "Copyright 2020 SparkyPotato (under the MIT License). \n" OUT_RESET);
 		}
 		auto options = GenerateOptions(optionsInput);
 		

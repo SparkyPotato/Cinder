@@ -78,6 +78,7 @@ Options GenerateOptions(const std::vector<std::string>& options)
 			else if (option == "-quiet" || option == "-q")
 			{
 				GQuiet = true;
+				GLogLevel = LogLevel::Fatal;
 			}
 		}
 	}
