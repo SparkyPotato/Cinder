@@ -25,6 +25,7 @@
 #	error Unknown platform!
 #endif
 
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <thread>
