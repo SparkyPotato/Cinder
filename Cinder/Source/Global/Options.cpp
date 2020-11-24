@@ -53,6 +53,7 @@ Options GenerateOptions(const std::vector<std::string>& options)
 void ShowHelp()
 {
 	Output(OUT_COLOR "The Cinder Raytracer");
-	Output("Cinder is a modular, and easy to extend raytracer.");
+	Output("Cinder is a modular and easy to extend raytracer.");
+	Output("Usage: coming soon!");
 	Output(OUT_RESET);
 }

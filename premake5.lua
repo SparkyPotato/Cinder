@@ -20,8 +20,6 @@ project "Cinder"
 	cppdialect "C++17"
 	staticruntime "on"
 	
-	pchsource "Source/PCH.cpp"
-	
 	characterset  "Unicode"
 	
 	targetdir "Binaries/%{cfg.buildcfg}/Cinder"
@@ -47,6 +45,7 @@ project "Cinder"
 	
 	filter "system:windows"
 		pchheader "PCH.h"
+		pchsource "Cinder/Source/PCH.cpp"
 		systemversion "latest"
 	
 	filter "system:osx"
