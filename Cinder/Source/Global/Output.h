@@ -1,98 +1,112 @@
-#define OUT_RED "\x1b[31m"
-#define OUT_YELLOW "\x1b[93m"
+#include "Options.h"
+
+#define OUT_CONSOLE "\x1b[97m"
+#define OUT_VERBOSE "\x1b[37m"
+#define OUT_LOG "\x1b[92m"
+#define OUT_WARNING "\x1b[93m"
+#define OUT_ERROR "\x1b[91m"
+#define OUT_FATAL "\x1b[31m"
 #define OUT_COLOR "\x1b[38;2;255;140;0m"
 #define OUT_RESET "\x1b[0m"
 
-#ifndef PLATFORM_WINDOWS
-
-inline void Output(const char* format)
-{
-	printf("%s\n", format);
-}
-template<typename... Args>
-void Output(const char* format, Args&&... args)
-{
-	printf(format, std::forward<Args...>(args...));
-	printf("\n");
-}
-
-inline void Error(const char* format)
-{
-	printf(OUT_RED "Error: ");
-	Output(format);
-	printf(OUT_RESET);
-	
-	throw -1;
-}
-template<typename... Args>
-void Error(const char* format, Args&&... args)
-{
-	printf(OUT_RED "Error: ");
-	Output(format, std::forward<Args...>(args...));
-	printf(OUT_RESET);
-	
-	throw -1;
-}
-
-inline void Warning(const char* format)
-{
-	printf(OUT_YELLOW "Warning: ");
-	Output(format);
-	printf(OUT_RESET);
-}
-template<typename... Args>
-void Warning(const char* format, Args&&... args)
-{
-	printf(OUT_YELLOW "Warning: ");
-	Output(format, std::forward<Args...>(args...));
-	printf(OUT_RESET);
-}
-
-#else
+#ifdef PLATFORM_WINDOWS
 
 std::string ToUTF8(const wchar_t* utf16);
 
-inline void Output(const char* format)
+#endif
+
+inline void Console(const char* format)
 {
-	printf("%s\n", format);
+	if (GQuiet) { return; }
+
+	printf(OUT_CONSOLE "%s\n" OUT_RESET, format);
 }
 template<typename... Args>
-void Output(const char* format, Args&&... args)
+void Console(const char* format, Args&&... args)
 {
+	if (GQuiet) { return; }
+
+	printf(OUT_CONSOLE);
 	printf(format, std::forward<Args...>(args...));
-	printf("\n");
+	printf(OUT_RESET "\n");
 }
 
-inline void Error(const char* format)
+inline void Verbose(const char* format)
 {
-	printf(OUT_RED "Error: ");
-	Output(format);
-	printf(OUT_RESET);
+	if (GQuiet || GLogLevel > LogLevel::Verbose) { return; }
 
-	throw - 1;
+	printf(OUT_VERBOSE "Verbose: %s\n" OUT_RESET, format);
 }
 template<typename... Args>
-void Error(const char* format, Args&&... args)
+void Verbose(const char* format, Args&&... args)
 {
-	printf(OUT_RED "Error: ");
-	Output(format, std::forward<Args...>(args...));
-	printf(OUT_RESET);
+	if (GQuiet || GLogLevel > LogLevel::Verbose) { return; }
 
-	throw - 1;
+	printf(OUT_VERBOSE "Verbose: ");
+	printf(format, std::forward<Args...>(args...));
+	printf(OUT_RESET "\n");
+}
+
+inline void Log(const char* format)
+{
+	if (GQuiet || GLogLevel > LogLevel::Log) { return; }
+
+	printf(OUT_LOG "Log: %s\n" OUT_RESET, format);
+}
+template<typename... Args>
+void Log(const char* format, Args&&... args)
+{
+	if (GQuiet || GLogLevel > LogLevel::Log) { return; }
+
+	printf(OUT_LOG "Log: ");
+	printf(format, std::forward<Args...>(args...));
+	printf(OUT_RESET "\n");
 }
 
 inline void Warning(const char* format)
 {
-	printf(OUT_YELLOW "Warning: ");
-	Output(format);
-	printf(OUT_RESET);
+	if (GQuiet || GLogLevel > LogLevel::Warning) { return; }
+
+	printf(OUT_WARNING "Warning: %s\n" OUT_RESET, format);
 }
 template<typename... Args>
 void Warning(const char* format, Args&&... args)
 {
-	printf(OUT_YELLOW "Warning: ");
-	Output(format, std::forward<Args...>(args...));
-	printf(OUT_RESET);
+	if (GQuiet || GLogLevel > LogLevel::Warning) { return; }
+
+	printf(OUT_WARNING "Warning: ");
+	printf(format, std::forward<Args...>(args...));
+	printf(OUT_RESET "\n");
 }
 
-#endif
+inline void Error(const char* format)
+{
+	if (GQuiet || GLogLevel > LogLevel::Error) { return; }
+
+	printf(OUT_ERROR "Error: %s\n" OUT_RESET, format);
+}
+template<typename... Args>
+void Error(const char* format, Args&&... args)
+{
+	if (GQuiet || GLogLevel > LogLevel::Error) { return; }
+
+	printf(OUT_ERROR "Error: ");
+	printf(format, std::forward<Args...>(args...));
+	printf(OUT_RESET "\n");
+}
+
+inline void Fatal(const char* format)
+{
+	printf(OUT_FATAL "Fatal: %s\n" OUT_RESET, format);
+
+	throw - 1;
+}
+template<typename... Args>
+void Fatal(const char* format, Args&&... args)
+{
+	printf(OUT_WAFATAL "Fatal: ");
+	printf(format, std::forward<Args...>(args...));
+	printf(OUT_RESET "\n");
+
+	throw - 1;
+}

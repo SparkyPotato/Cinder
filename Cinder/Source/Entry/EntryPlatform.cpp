@@ -31,21 +31,21 @@ int wmain(int argc, wchar_t** argv)
 	if (output == INVALID_HANDLE_VALUE)
 	{
 		wprintf(L"Error: Failed to get console handle! Something is really wrong here. \n");
-		throw - 1;
+		return EXIT_FAILURE;
 	}
 
 	DWORD outMode;
 	if (!GetConsoleMode(output, &outMode))
 	{
 		wprintf(L"Error: Could not get console mode! This should not be happening. \n");
-		throw - 1;
+		return EXIT_FAILURE;
 	}
 
 	outMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
 	if (!SetConsoleMode(output, outMode))
 	{
 		wprintf(L"Error: Failed to set console output mode! That was unexpected. \n");
-		throw - 1;
+		return EXIT_FAILURE;
 	}
 
 	auto uArgv = new char* [argc];
