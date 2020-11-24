@@ -25,4 +25,10 @@
 #	error Unknown platform!
 #endif
 
+#include <iostream>
+#include <string>
+#include <thread>
 #include <vector>
+
+#include "Global/Options.h"
+#include "Global/Output.h"
