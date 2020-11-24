@@ -2,3 +2,14 @@
 .vs/*
 *.sln
 *.vcxproj*
+
+# Mac files
+*.DS_Store
+*.Trashes
+*.xcworkspace
+*.xcodeproj
+
+# Build results
+Binaries/*
+Intermediate/*
+

@@ -20,13 +20,12 @@ project "Cinder"
 	cppdialect "C++17"
 	staticruntime "on"
 	
-	pchheader "PCH.h"
 	pchsource "Source/PCH.cpp"
 	
 	characterset  "Unicode"
 	
-	targetdir("Binaries/%{cfg.buildcfg}/Cinder")
-	objdir("Intermediate/%{cfg.buildcfg}/Cinder")
+	targetdir "Binaries/%{cfg.buildcfg}/Cinder"
+	objdir "Intermediate/%{cfg.buildcfg}/Cinder"
 	
 	links
 	{
@@ -42,12 +41,17 @@ project "Cinder"
 	includedirs
 	{
 		"Cinder/Source",
-		"Cinder/Dependencies/yaml-cpp",
+		"Cinder/Dependencies/yaml-cpp/include",
 		"Cinder/Dependencies/stb"
 	}
 	
 	filter "system:windows"
+		pchheader "PCH.h"
 		systemversion "latest"
+	
+	filter "system:osx"
+		pchheader "Source/PCH.h"
+		
 		
 	filter "configurations:Debug"
 		defines "CFG_DEBUG"
@@ -73,12 +77,13 @@ project "yaml-cpp"
 	
 	files
 	{
-		"Cinder/Dependencies/yaml-cpp/**.h",
-		"Cinder/Dependencies/yaml-cpp/**.cpp"
+		"Cinder/Dependencies/yaml-cpp/src/**.h",
+		"Cinder/Dependencies/yaml-cpp/src/**.cpp"
 	}
 	
 	includedirs
 	{
+		"Cinder/Dependencies/yaml-cpp/include",
 		"Cinder/Dependencies/yaml-cpp"
 	}
 	

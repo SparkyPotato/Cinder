@@ -13,7 +13,7 @@
 #	elif TARGET_OS_IPHONE == 1
 #		error iOS is not supported!
 #	elif TARGET_OS_MAC == 1
-#		error macOS is not supported yet!
+#		define PLATFORM_MAC
 #	else
 #		error Unknown Apple platform!
 #	endif
@@ -24,3 +24,5 @@
 #else
 #	error Unknown platform!
 #endif
+
+#include <vector>
