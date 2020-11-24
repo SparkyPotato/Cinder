@@ -20,7 +20,7 @@
 #elif defined(__ANDROID__)
 #	error Android is not supported!
 #elif defined(__linux__)
-#	error Linus is not supported yet
+#	define PLATFORM_LINUX
 #else
 #	error Unknown platform!
 #endif

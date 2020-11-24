@@ -9,6 +9,9 @@
 *.xcworkspace
 *.xcodeproj
 
+# Makefiles
+*Makefile
+
 # Build results
 Binaries/*
 Intermediate/*
