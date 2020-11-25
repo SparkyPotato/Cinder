@@ -164,15 +164,18 @@ struct fmt::formatter<Direction>
 {
 	std::string ParseString;
 
-	constexpr auto parse(format_parse_context& context)
+	auto parse(format_parse_context& context)
 	{
 		// C++ 20 required for constexpr find
 		auto end = std::find(context.begin(), context.end(), '}');
 
 		if (end != context.end())
 		{
-			ParseString = std::string_view(context.begin(), end);
+			ParseString = std::string(context.begin(), end);
 		}
+
+		ParseString =
+			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
 
 		return end;
 	}
@@ -180,9 +183,6 @@ struct fmt::formatter<Direction>
 	template<typename FormatContext>
 	auto format(const Direction& direction, FormatContext& context)
 	{
-		ParseString =
-			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
-
 		return format_to(
 			context.out(),
 			ParseString,
@@ -196,15 +196,18 @@ struct fmt::formatter<Point>
 {
 	std::string ParseString;
 
-	constexpr auto parse(format_parse_context& context)
+	auto parse(format_parse_context& context)
 	{
 		// C++ 20 required for constexpr find
 		auto end = std::find(context.begin(), context.end(), '}');
 
 		if (end != context.end())
 		{
-			ParseString = std::string_view(context.begin(), end);
+			ParseString = std::string(context.begin(), end);
 		}
+
+		ParseString =
+			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
 
 		return end;
 	}
@@ -212,9 +215,6 @@ struct fmt::formatter<Point>
 	template<typename FormatContext>
 	auto format(const Point& direction, FormatContext& context)
 	{
-		ParseString =
-			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
-
 		return format_to(
 			context.out(),
 			ParseString,
@@ -228,15 +228,18 @@ struct fmt::formatter<Normal>
 {
 	std::string ParseString;
 
-	constexpr auto parse(format_parse_context& context)
+	auto parse(format_parse_context& context)
 	{
 		// C++ 20 required for constexpr find
 		auto end = std::find(context.begin(), context.end(), '}');
 
 		if (end != context.end())
 		{
-			ParseString = std::string_view(context.begin(), end);
+			ParseString = std::string(context.begin(), end);
 		}
+
+		ParseString =
+			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
 
 		return end;
 	}
@@ -244,9 +247,6 @@ struct fmt::formatter<Normal>
 	template<typename FormatContext>
 	auto format(const Normal& direction, FormatContext& context)
 	{
-		ParseString =
-			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
-
 		return format_to(
 			context.out(),
 			ParseString,

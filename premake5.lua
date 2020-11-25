@@ -51,7 +51,7 @@ project "Cinder"
 		systemversion "latest"
 	
 	filter "not system:windows"
-		pchheader "Source/PCH.h"
+		pchheader "Cinder/Source/PCH.h"
 		
 	filter "system:"
 		
