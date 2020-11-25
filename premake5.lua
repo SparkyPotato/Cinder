@@ -17,7 +17,7 @@ project "Cinder"
 	location "Cinder"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 	staticruntime "on"
 	
 	characterset  "Unicode"
@@ -27,6 +27,7 @@ project "Cinder"
 	
 	links
 	{
+		"fmt",
 		"yaml-cpp"
 	}
 	
@@ -39,8 +40,9 @@ project "Cinder"
 	includedirs
 	{
 		"Cinder/Source",
-		"Cinder/Dependencies/yaml-cpp/include",
-		"Cinder/Dependencies/stb"
+		"Cinder/Dependencies/fmt/include",
+		"Cinder/Dependencies/stb",
+		"Cinder/Dependencies/yaml-cpp/include"
 	}
 	
 	filter "system:windows"
@@ -48,9 +50,10 @@ project "Cinder"
 		pchsource "Cinder/Source/PCH.cpp"
 		systemversion "latest"
 	
-	filter "system:osx"
+	filter "not system:windows"
 		pchheader "Source/PCH.h"
 		
+	filter "system:"
 		
 	filter "configurations:Debug"
 		defines "CFG_DEBUG"
@@ -62,6 +65,41 @@ project "Cinder"
 		runtime "Release"
 		optimize "on"
 
+group "Dependencies"
+project "fmt"
+	location "Cinder/Dependencies/ProjectFiles"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	
+	characterset  "Unicode"
+	
+	targetdir("Binaries/%{cfg.buildcfg}/fmt")
+	objdir("Intermediate/%{cfg.buildcfg}/fmt")
+	
+	files
+	{
+		"Cinder/Dependencies/fmt/src/**.cc"
+	}
+	
+	includedirs
+	{
+		"Cinder/Dependencies/fmt/include",
+		"Cinder/Dependencies/fmt"
+	}
+	
+	filter "system:windows"
+		systemversion "latest"
+		
+	filter "configurations:Debug"
+		defines "CFG_DEBUG"
+		symbols "on"
+		
+	filter "configurations:Release"
+		defines "CFG_RELEASE"
+		optimize "on"
+		
 project "yaml-cpp"
 	location "Cinder/Dependencies/ProjectFiles"
 	kind "StaticLib"
@@ -95,4 +133,4 @@ project "yaml-cpp"
 		
 	filter "configurations:Release"
 		defines "CFG_RELEASE"
-		optimize "on"
+		optimize "on"	

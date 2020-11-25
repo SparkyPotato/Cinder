@@ -28,12 +28,12 @@ Options GenerateOptions(const std::vector<std::string>& options)
 		bool isOption = std::find(s_ValidOptions.begin(), s_ValidOptions.end(), name) != s_ValidOptions.end();
 		bool isSwitch = std::find(s_ValidSwitches.begin(), s_ValidSwitches.end(), name) != s_ValidSwitches.end();
 
-		if (!isOption && !isSwitch) { Warning("Ignoring unknown option '%s'.", option.c_str()); }
+		if (!isOption && !isSwitch) { Warning("Ignoring unknown option '{}'.", option.c_str()); }
 
 		if (isOption)
 		{
 			auto value = option.substr(i + 1);
-			if (value.empty()) { Error("Value of option '%s' cannot be empty.", name.c_str()); }
+			if (value.empty()) { Error("Value of option '{}' cannot be empty.", name.c_str()); }
 			
 			if (name == "-threads" || name == "-t")
 			{
@@ -48,7 +48,8 @@ Options GenerateOptions(const std::vector<std::string>& options)
 					output.ThreadCount = count;
 					if (std::thread::hardware_concurrency() > 0 && output.ThreadCount > std::thread::hardware_concurrency() * 2)
 					{
-						Warning("%s is much greater than the maximum concurrent threads supported, you might lose some performance.", name.c_str());
+						Warning("Thread count is much greater than the maximum concurrent threads supported ({}), you might lose some performance.",
+							std::thread::hardware_concurrency());
 					}
 				}
 				catch (std::exception) { Error("Thread count must be an integer. Auto-detecting."); }
@@ -60,7 +61,7 @@ Options GenerateOptions(const std::vector<std::string>& options)
 					int level = stoi(value);
 					if (level < 0 || level > 4)
 					{
-						Error("Log level must be between 0 and 4 (inclusive).", name.c_str());
+						Error("Log level must be between 0 and 4 (inclusive).");
 						level = LogLevel::Warning;
 					}
 					GLogLevel = level;
@@ -88,7 +89,7 @@ Options GenerateOptions(const std::vector<std::string>& options)
 
 void ShowHelp()
 {
-	Console(OUT_COLOR R"(Cinder is a modular and easy to extend raytracer.
+	CinderColored(R"(Cinder is a modular and easy to extend raytracer.
 
 Usage: Cinder [option/filename] [option/filename]...
 Options: 
@@ -103,5 +104,5 @@ Options:
                          2 - Warning
                          3 - Error
                          4 - Fatal
-)" OUT_RESET);
+)");
 }

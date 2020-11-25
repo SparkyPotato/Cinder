@@ -4,3 +4,6 @@
 [submodule "Cinder/Dependencies/stb"]
 	path = Cinder/Dependencies/stb
 	url = https://github.com/nothings/stb
+[submodule "Cinder/Dependencies/fmt"]
+	path = Cinder/Dependencies/fmt
+	url = https://github.com/fmtlib/fmt

@@ -29,14 +29,14 @@ int Entry(int argc, char** argv)
 
 		if (logo)
 		{
-			Console(OUT_COLOR "Cinder (built %s, %s)", __TIME__, __DATE__);
-			Console(OUT_COLOR "Copyright 2020 SparkyPotato (under the MIT License). \n" OUT_RESET);
+			CinderColored("Cinder (built {}, {})", __TIME__, __DATE__);
+			CinderColored("Copyright 2020 SparkyPotato (under the MIT License). \n");
 		}
 		auto options = GenerateOptions(optionsInput);
 
 		if (configFiles.empty())
 		{
-			Fatal("No config files passed. \nRun with '-help' or '-h' for help.");
+			Fatal("No config files passed. \r\nRun with '-help' or '-h' for help.");
 		}
 		
 		if (options.ThreadCount == 0)
@@ -50,7 +50,7 @@ int Entry(int argc, char** argv)
 			}
 		}
 		
-		Log("Rendering with %u threads.", options.ThreadCount);
+		Log("Rendering with {} threads.", options.ThreadCount);
 		
 		return EXIT_SUCCESS;
 	}

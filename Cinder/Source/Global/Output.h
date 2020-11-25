@@ -1,3 +1,6 @@
+#include "fmt/color.h"
+#include "fmt/core.h"
+
 #include "Options.h"
 
 #define OUT_CONSOLE "\x1b[97m"
@@ -7,7 +10,6 @@
 #define OUT_ERROR "\x1b[91m"
 #define OUT_FATAL "\x1b[31m"
 #define OUT_COLOR "\x1b[38;2;255;140;0m"
-#define OUT_RESET "\x1b[0m"
 
 #ifdef PLATFORM_WINDOWS
 
@@ -15,98 +17,65 @@ std::string ToUTF8(const wchar_t* utf16);
 
 #endif
 
-inline void Console(const char* format)
+template<typename... Args>
+void Console(std::string format, Args&&... args)
 {
 	if (GQuiet) { return; }
 
-	printf(OUT_CONSOLE "%s\n" OUT_RESET, format);
+	fmt::print(fg(fmt::color::floral_white),
+		format + "\n", std::forward<Args>(args)...);
 }
+
 template<typename... Args>
-void Console(const char* format, Args&&... args)
+void CinderColored(std::string format, Args&&... args)
 {
 	if (GQuiet) { return; }
 
-	printf(OUT_CONSOLE);
-	printf(format, std::forward<Args>(args)...);
-	printf(OUT_RESET "\n");
+	fmt::print(fg(fmt::color::dark_orange),
+		format + "\n", std::forward<Args>(args)...);
 }
 
-inline void Verbose(const char* format)
+template<typename... Args>
+void Verbose(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Verbose) { return; }
 
-	printf(OUT_VERBOSE "Verbose: %s\n" OUT_RESET, format);
+	fmt::print(fg(fmt::color::light_gray),
+		"Verbose: " + format + "\n", std::forward<Args>(args)...);
 }
+
 template<typename... Args>
-void Verbose(const char* format, Args&&... args)
-{
-	if (GLogLevel > LogLevel::Verbose) { return; }
-
-	printf(OUT_VERBOSE "Verbose: ");
-	printf(format, std::forward<Args>(args)...);
-	printf(OUT_RESET "\n");
-}
-
-inline void Log(const char* format)
+void Log(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Log) { return; }
 
-	printf(OUT_LOG "Log: %s\n" OUT_RESET, format);
+	fmt::print(fg(fmt::color::light_green),
+		"Log: " + format + "\n", std::forward<Args>(args)...);
 }
+
 template<typename... Args>
-void Log(const char* format, Args&&... args)
-{
-	if (GLogLevel > LogLevel::Log) { return; }
-
-	printf(OUT_LOG "Log: ");
-	printf(format, std::forward<Args>(args)...);
-	printf(OUT_RESET "\n");
-}
-
-inline void Warning(const char* format)
+void Warning(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Warning) { return; }
 
-	printf(OUT_WARNING "Warning: %s\n" OUT_RESET, format);
+	fmt::print(fg(fmt::color::yellow),
+		"Warning: " + format + "\n", std::forward<Args>(args)...);
 }
+
 template<typename... Args>
-void Warning(const char* format, Args&&... args)
-{
-	if (GLogLevel > LogLevel::Warning) { return; }
-
-	printf(OUT_WARNING "Warning: ");
-	printf(format, std::forward<Args>(args)...);
-	printf(OUT_RESET "\n");
-}
-
-inline void Error(const char* format)
+void Error(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Error) { return; }
 
-	printf(OUT_ERROR "Error: %s\n" OUT_RESET, format);
+	fmt::print(fg(fmt::color::red),
+		"Error: " + format + "\n", std::forward<Args>(args)...);
 }
+
 template<typename... Args>
-void Error(const char* format, Args&&... args)
+void Fatal(std::string format, Args&&... args)
 {
-	if (GLogLevel > LogLevel::Error) { return; }
-
-	printf(OUT_ERROR "Error: ");
-	printf(format, std::forward<Args>(args)...);
-	printf(OUT_RESET "\n");
-}
-
-inline void Fatal(const char* format)
-{
-	printf(OUT_FATAL "Fatal: %s\n" OUT_RESET, format);
-
-	throw - 1;
-}
-template<typename... Args>
-void Fatal(const char* format, Args&&... args)
-{
-	printf(OUT_FATAL "Fatal: ");
-	printf(format, std::forward<Args>(args)...);
-	printf(OUT_RESET "\n");
+	fmt::print(fg(fmt::color::dark_red),
+		"Fatal: " + format + "\n", std::forward<Args>(args)...);
 
 	throw - 1;
 }
