@@ -18,7 +18,7 @@ std::string ToUTF8(const wchar_t* utf16);
 #endif
 
 template<typename... Args>
-void Console(std::string format, Args&&... args)
+inline void Console(std::string format, Args&&... args)
 {
 	if (GQuiet) { return; }
 
@@ -27,7 +27,7 @@ void Console(std::string format, Args&&... args)
 }
 
 template<typename... Args>
-void CinderColored(std::string format, Args&&... args)
+inline void CinderColored(std::string format, Args&&... args)
 {
 	if (GQuiet) { return; }
 
@@ -36,7 +36,7 @@ void CinderColored(std::string format, Args&&... args)
 }
 
 template<typename... Args>
-void Verbose(std::string format, Args&&... args)
+inline void Verbose(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Verbose) { return; }
 
@@ -45,7 +45,7 @@ void Verbose(std::string format, Args&&... args)
 }
 
 template<typename... Args>
-void Log(std::string format, Args&&... args)
+inline void Log(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Log) { return; }
 
@@ -54,7 +54,7 @@ void Log(std::string format, Args&&... args)
 }
 
 template<typename... Args>
-void Warning(std::string format, Args&&... args)
+inline void Warning(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Warning) { return; }
 
@@ -63,7 +63,7 @@ void Warning(std::string format, Args&&... args)
 }
 
 template<typename... Args>
-void Error(std::string format, Args&&... args)
+inline void Error(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Error) { return; }
 
@@ -72,7 +72,7 @@ void Error(std::string format, Args&&... args)
 }
 
 template<typename... Args>
-void Fatal(std::string format, Args&&... args)
+inline void Fatal(std::string format, Args&&... args)
 {
 	fmt::print(fg(fmt::color::dark_red),
 		"Fatal: " + format + "\n", std::forward<Args>(args)...);

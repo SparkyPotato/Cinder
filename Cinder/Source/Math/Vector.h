@@ -166,7 +166,6 @@ struct fmt::formatter<Direction>
 
 	auto parse(format_parse_context& context)
 	{
-		// C++ 20 required for constexpr find
 		auto end = std::find(context.begin(), context.end(), '}');
 
 		if (end != context.end())
@@ -198,7 +197,6 @@ struct fmt::formatter<Point>
 
 	auto parse(format_parse_context& context)
 	{
-		// C++ 20 required for constexpr find
 		auto end = std::find(context.begin(), context.end(), '}');
 
 		if (end != context.end())
@@ -230,7 +228,6 @@ struct fmt::formatter<Normal>
 
 	auto parse(format_parse_context& context)
 	{
-		// C++ 20 required for constexpr find
 		auto end = std::find(context.begin(), context.end(), '}');
 
 		if (end != context.end())

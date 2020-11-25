@@ -16,3 +16,5 @@
 Binaries/*
 Intermediate/*
 
+# Dependencies Project files
+Cinder/Dependencies/ProjectFiles/*

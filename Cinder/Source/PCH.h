@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef _WIN32
 #	ifdef _WIN64
 #		define PLATFORM_WINDOWS
@@ -23,6 +25,7 @@
 #	error Unknown platform!
 #endif
 
+#include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <string>
