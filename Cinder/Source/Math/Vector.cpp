@@ -2,7 +2,7 @@
 
 #include "Vector.h"
 
-Direction::Direction(float x, float y, float z)
+Vector::Vector(float x, float y, float z)
 {
 	// Reverse because it flips the order around:
 	// Actually stored in memory as x|y|z|0.f
@@ -11,85 +11,85 @@ Direction::Direction(float x, float y, float z)
 	ASSERT(!IsNAN(), "Constructed direction is NaN!");
 }
 
-Direction::Direction(__m128 vector)
+Vector::Vector(__m128 vector)
 	: m_Vector(vector)
 {
 	ASSERT(!IsNAN(), "Constructed direction is NaN!");
 }
 
-Direction::operator Normal()
+Vector::operator Normal()
 {
 	return Normal(X, Y, Z);
 }
 
-Direction& Direction::operator=(const Direction& other)
+Vector& Vector::operator=(const Vector& other)
 {
 	m_Vector = other.m_Vector;
 
 	return *this;
 }
 
-float Direction::operator[](uint8_t index) const
+float Vector::operator[](uint8_t index) const
 {
 	ASSERT(index < 3, "Direction index out of range!");
 
 	return reinterpret_cast<const float*>(&m_Vector)[index];
 }
 
-float& Direction::operator[](uint8_t index)
+float& Vector::operator[](uint8_t index)
 {
 	ASSERT(index < 3, "Direction index out of range!");
 
 	return reinterpret_cast<float*>(&m_Vector)[index];
 }
 
-Direction Direction::operator+(const Direction& other) const
+Vector Vector::operator+(const Vector& other) const
 {
-	return Direction(
+	return Vector(
 		_mm_add_ps(m_Vector, other.m_Vector)
 	);
 }
 
-Direction& Direction::operator+=(const Direction& other)
+Vector& Vector::operator+=(const Vector& other)
 {
 	m_Vector = _mm_add_ps(m_Vector, other.m_Vector);
 
 	return *this;
 }
 
-Direction Direction::operator-() const
+Vector Vector::operator-() const
 {
-	return Direction(-X, -Y, -Z);
+	return Vector(-X, -Y, -Z);
 }
 
-Direction Direction::operator-(const Direction& other) const
+Vector Vector::operator-(const Vector& other) const
 {
-	return Direction(
+	return Vector(
 		_mm_sub_ps(m_Vector, other.m_Vector)
 	);
 }
 
-Direction& Direction::operator-=(const Direction& other)
+Vector& Vector::operator-=(const Vector& other)
 {
 	m_Vector = _mm_sub_ps(m_Vector, other.m_Vector);
 
 	return *this;
 }
 
-Direction Direction::operator*(float scalar) const
+Vector Vector::operator*(float scalar) const
 {
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
-	return Direction(
+	return Vector(
 		_mm_mul_ps(m_Vector, scale)
 	);
 }
 
-Direction operator*(float scale, const Direction& direction)
+Vector operator*(float scale, const Vector& direction)
 {
 	return direction * scale;
 }
 
-Direction& Direction::operator*=(float scalar)
+Vector& Vector::operator*=(float scalar)
 { 
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
 	m_Vector = _mm_mul_ps(m_Vector, scale);
@@ -97,15 +97,15 @@ Direction& Direction::operator*=(float scalar)
 	return *this;
 }
 
-Direction Direction::operator/(float scalar) const
+Vector Vector::operator/(float scalar) const
 {
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
-	return Direction(
+	return Vector(
 		_mm_div_ps(m_Vector, scale)
 	);
 }
 
-Direction& Direction::operator/=(float scalar)
+Vector& Vector::operator/=(float scalar)
 {
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
 	m_Vector = _mm_div_ps(m_Vector, scale);
@@ -113,34 +113,34 @@ Direction& Direction::operator/=(float scalar)
 	return *this;
 }
 
-float Direction::GetLengthSquare() const
+float Vector::GetLengthSquare() const
 {
 	return Dot(*this, *this);
 }
 
-float Direction::GetLength() const
+float Vector::GetLength() const
 {
 	return std::sqrt(Dot(*this, *this));
 }
 
-Direction Direction::GetNormalized() const
+Vector Vector::GetNormalized() const
 {
 	return *this / GetLength();
 }
 
-Direction& Direction::Normalize()
+Vector& Vector::Normalize()
 {
 	*this /= GetLength();
 	
 	return *this;
 }
 
-bool Direction::IsNAN()
+bool Vector::IsNAN() const
 {
 	return std::isnan(X) || std::isnan(Y) || std::isnan(Z);
 }
 
-float Dot(const Direction& first, const Direction& second)
+float Dot(const Vector& first, const Vector& second)
 {
 	// _mm_dot_ps is not used to retain support for all x64 processors.
 	// It is also slower on Ryzen.
@@ -152,34 +152,34 @@ float Dot(const Direction& first, const Direction& second)
 	return _mm_cvtss_f32(sums);
 }
 
-Direction Cross(const Direction& first, const Direction& second)
+Vector Cross(const Vector& first, const Vector& second)
 {
 	__m128 result = _mm_sub_ps(
 		_mm_mul_ps(second.m_Vector, _mm_shuffle_ps(first.m_Vector, first.m_Vector, _MM_SHUFFLE(3, 0, 2, 1))),
 		_mm_mul_ps(first.m_Vector, _mm_shuffle_ps(second.m_Vector, second.m_Vector, _MM_SHUFFLE(3, 0, 2, 1)))
 	);
 
-	return Direction(_mm_shuffle_ps(result, result, _MM_SHUFFLE(3, 0, 2, 1)));
+	return Vector(_mm_shuffle_ps(result, result, _MM_SHUFFLE(3, 0, 2, 1)));
 }
 
-void GenerateCoordinateSystem(const Direction& normalized, Direction& outFirst, Direction& outSecond)
+void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector& outSecond)
 {
 	if (std::abs(normalized.X) > std::abs(normalized.Y))
 	{
-		outFirst = Direction(-normalized.Z, 0, normalized.X) /
+		outFirst = Vector(-normalized.Z, 0, normalized.X) /
 			std::sqrt(normalized.X * normalized.X + normalized.Z * normalized.Z);
 	}
 	else
 	{
-		outSecond = Direction(0, normalized.Z, -normalized.Y) /
+		outSecond = Vector(0, normalized.Z, -normalized.Y) /
 			std::sqrt(normalized.Y * normalized.Y + normalized.Z * normalized.Z);
 	}
 	outSecond = Cross(normalized, outFirst);
 }
 
-Direction Shuffle(const Direction& direction, uint8_t x, uint8_t y, uint8_t z)
+Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z)
 {
-	return Direction(direction[x], direction[y], direction[z]);
+	return Vector(direction[x], direction[y], direction[z]);
 }
 
 Point::Point(float x, float y, float z)
@@ -216,35 +216,35 @@ float& Point::operator[](uint8_t index)
 	return reinterpret_cast<float*>(&m_Vector)[index];
 }
 
-Point Point::operator+(const Direction& direction) const
+Point Point::operator+(const Vector& direction) const
 {
 	return Point(
 		_mm_add_ps(m_Vector, direction.m_Vector)
 	);
 }
 
-Point& Point::operator+=(const Direction& direction)
+Point& Point::operator+=(const Vector& direction)
 {
 	m_Vector = _mm_add_ps(m_Vector, direction.m_Vector);
 
 	return *this;
 }
 
-Direction Point::operator-(const Point& other) const
+Vector Point::operator-(const Point& other) const
 {
-	return Direction(
+	return Vector(
 		_mm_sub_ps(m_Vector, other.m_Vector)
 	);
 }
 
-Point Point::operator-(const Direction& direction) const
+Point Point::operator-(const Vector& direction) const
 {
 	return Point(
 		_mm_sub_ps(m_Vector, direction.m_Vector)
 	);
 }
 
-Point& Point::operator-=(const Direction& direction)
+Point& Point::operator-=(const Vector& direction)
 {
 	m_Vector = _mm_sub_ps(m_Vector, direction.m_Vector);
 
@@ -286,7 +286,7 @@ Point Max(const Point& first, const Point& second)
 	);
 }
 
-bool Point::IsNAN()
+bool Point::IsNAN() const
 {
 	return std::isnan(X) || std::isnan(Y) || std::isnan(Z);
 }
@@ -309,9 +309,9 @@ Normal::Normal(__m128 vector)
 	ASSERT(!IsNAN(), "Constructed normal is NaN!");
 }
 
-Normal::operator Direction()
+Normal::operator Vector()
 {
-	return Direction(X, Y, Z);
+	return Vector(X, Y, Z);
 }
 
 Normal& Normal::operator=(const Normal& other)
@@ -422,7 +422,7 @@ Normal& Normal::Normalize()
 	return *this;
 }
 
-bool Normal::IsNAN()
+bool Normal::IsNAN() const
 {
 	return std::isnan(X) || std::isnan(Y) || std::isnan(Z);
 }
@@ -437,7 +437,7 @@ float Dot(const Normal& first, const Normal& second)
 	return _mm_cvtss_f32(sums);
 }
 
-float Dot(const Normal& first, const Direction& second)
+float Dot(const Normal& first, const Vector& second)
 {
 	__m128 mul = _mm_mul_ps(first.m_Vector, second.m_Vector);
 	__m128 shuffle = _mm_shuffle_ps(mul, mul, _MM_SHUFFLE(2, 3, 0, 1));
@@ -447,7 +447,7 @@ float Dot(const Normal& first, const Direction& second)
 	return _mm_cvtss_f32(sums);
 }
 
-float Dot(const Direction& first, const Normal& second)
+float Dot(const Vector& first, const Normal& second)
 {
 	__m128 mul = _mm_mul_ps(first.m_Vector, second.m_Vector);
 	__m128 shuffle = _mm_shuffle_ps(mul, mul, _MM_SHUFFLE(2, 3, 0, 1));
@@ -457,7 +457,7 @@ float Dot(const Direction& first, const Normal& second)
 	return _mm_cvtss_f32(sums);
 }
 
-Normal FlipAlong(const Normal& normal, const Direction& along)
+Normal FlipAlong(const Normal& normal, const Vector& along)
 {
 	return (Dot(normal, along) < 0.f) ? -normal : normal;
 }

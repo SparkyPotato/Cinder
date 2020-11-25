@@ -2,10 +2,10 @@
 
 float ToDegrees(float radians)
 {
-	return radians * 180.f / PI;
+	return radians * 180.f / Pi;
 }
 
 float ToRadians(float degrees)
 {
-	return degrees * PI / 180.f;
+	return degrees * Pi / 180.f;
 }

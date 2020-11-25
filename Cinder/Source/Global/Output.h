@@ -45,6 +45,17 @@ inline void Verbose(std::string format, Args&&... args)
 }
 
 template<typename... Args>
+inline void Debug(std::string format, Args&&... args)
+{
+#ifdef CFG_DEBUG
+	if (GLogLevel > LogLevel::Verbose) { return; }
+
+	fmt::print(fg(fmt::color::cyan),
+		"Debug: " + format + "\n", std::forward<Args>(args)...);
+#endif
+}
+
+template<typename... Args>
 inline void Log(std::string format, Args&&... args)
 {
 	if (GLogLevel > LogLevel::Log) { return; }

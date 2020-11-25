@@ -6,39 +6,39 @@
 class Normal;
 
 // Direction in 3D space, has a W coordinate of 0
-class Direction
+class Vector
 {
 public:
-	Direction() = default;
-	Direction(float x, float y, float z);
-	Direction(const Direction& other) = default;
+	Vector() = default;
+	Vector(float x, float y, float z);
+	Vector(const Vector& other) = default;
 	explicit operator Normal();
 
-	Direction& operator=(const Direction& other);
+	Vector& operator=(const Vector& other);
 
 	float operator[](uint8_t index) const;
 	float& operator[](uint8_t index);
 
-	Direction operator+(const Direction& other) const;
-	Direction& operator+=(const Direction& other);
+	Vector operator+(const Vector& other) const;
+	Vector& operator+=(const Vector& other);
 
-	Direction operator-() const;
-	Direction operator-(const Direction& other) const;
-	Direction& operator-=(const Direction& other);
+	Vector operator-() const;
+	Vector operator-(const Vector& other) const;
+	Vector& operator-=(const Vector& other);
 
-	Direction operator*(float scalar) const;
-	Direction& operator*=(float scalar);
+	Vector operator*(float scalar) const;
+	Vector& operator*=(float scalar);
 	
-	Direction operator/(float scalar) const;
-	Direction& operator/=(float scalar);
+	Vector operator/(float scalar) const;
+	Vector& operator/=(float scalar);
 	
 	float GetLengthSquare() const;
 	float GetLength() const;
 	
-	Direction GetNormalized() const;
-	Direction& Normalize();
+	Vector GetNormalized() const;
+	Vector& Normalize();
 
-	bool IsNAN();
+	bool IsNAN() const;
 
 	// Whether this should be done or not is debatable
 	float& X = reinterpret_cast<float*>(&m_Vector)[0];
@@ -47,22 +47,22 @@ public:
 
 private:
 	friend class Point;
-	friend float Dot(const Direction& first, const Direction& second);
-	friend float Dot(const Normal& first, const Direction& second);
-	friend float Dot(const Direction& first, const Normal& second);
-	friend Direction Cross(const Direction& first, const Direction& second);
+	friend float Dot(const Vector& first, const Vector& second);
+	friend float Dot(const Normal& first, const Vector& second);
+	friend float Dot(const Vector& first, const Normal& second);
+	friend Vector Cross(const Vector& first, const Vector& second);
 
-	Direction(__m128 vector);
+	Vector(__m128 vector);
 
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };
 
-Direction operator*(float scale, const Direction& direction);
-float Dot(const Direction& first, const Direction& second);
+Vector operator*(float scale, const Vector& direction);
+float Dot(const Vector& first, const Vector& second);
 // Only calculates a 3D cross product
-Direction Cross(const Direction& first, const Direction& second);
-void GenerateCoordinateSystem(const Direction& normalized, Direction& outFirst, Direction& outSecond);
-Direction Shuffle(const Direction& direction, uint8_t x, uint8_t y, uint8_t z);
+Vector Cross(const Vector& first, const Vector& second);
+void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector& outSecond);
+Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z);
 
 // Point in 3D space, with W coordinate of 1
 class Point
@@ -77,14 +77,14 @@ public:
 	float operator[](uint8_t index) const;
 	float& operator[](uint8_t index);
 
-	Point operator+(const Direction& direction) const;
-	Point& operator+=(const Direction& direction);
+	Point operator+(const Vector& direction) const;
+	Point& operator+=(const Vector& direction);
 
-	Direction operator-(const Point& other) const;
-	Point operator-(const Direction& direction) const;
-	Point& operator-=(const Direction& direction);
+	Vector operator-(const Point& other) const;
+	Point operator-(const Vector& direction) const;
+	Point& operator-=(const Vector& direction);
 
-	bool IsNAN();
+	bool IsNAN() const;
 
 	// Whether this should be done or not is debatable
 	float& X = reinterpret_cast<float*>(&m_Vector)[0];
@@ -111,7 +111,7 @@ public:
 	Normal() = default;
 	Normal(float x, float y, float z);
 	Normal(const Normal & other) = default;
-	explicit operator Direction();
+	explicit operator Vector();
 
 	Normal& operator=(const Normal& other);
 
@@ -137,7 +137,7 @@ public:
 	Normal GetNormalized() const;
 	Normal& Normalize();
 
-	bool IsNAN();
+	bool IsNAN() const;
 
 	// Whether this should be done or not is debatable
 	float& X = reinterpret_cast<float*>(&m_Vector)[0];
@@ -146,8 +146,8 @@ public:
 
 private:
 	friend float Dot(const Normal& first, const Normal& second);
-	friend float Dot(const Normal& first, const Direction& second);
-	friend float Dot(const Direction& first, const Normal& second);
+	friend float Dot(const Normal& first, const Vector& second);
+	friend float Dot(const Vector& first, const Normal& second);
 
 	Normal(__m128 vector);
 
@@ -155,12 +155,12 @@ private:
 };
 
 float Dot(const Normal& first, const Normal& second);
-float Dot(const Normal& first, const Direction& second);
-float Dot(const Direction& first, const Normal& second);
-Normal FlipAlong(const Normal& normal, const Direction& along);
+float Dot(const Normal& first, const Vector& second);
+float Dot(const Vector& first, const Normal& second);
+Normal FlipAlong(const Normal& normal, const Vector& along);
 
 template<>
-struct fmt::formatter<Direction>
+struct fmt::formatter<Vector>
 {
 	std::string ParseString;
 
@@ -180,7 +180,7 @@ struct fmt::formatter<Direction>
 	}
 
 	template<typename FormatContext>
-	auto format(const Direction& direction, FormatContext& context)
+	auto format(const Vector& direction, FormatContext& context)
 	{
 		return format_to(
 			context.out(),
