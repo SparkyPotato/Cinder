@@ -31,6 +31,7 @@
 #include <thread>
 #include <vector>
 
+#include "Global/Assert.h"
 #include "Global/Options.h"
 #include "Global/Output.h"
 #include "Math/Math.h"
