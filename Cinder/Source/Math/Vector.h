@@ -19,6 +19,20 @@ public:
 	Vector& operator-=(const Vector& other);
 
 	Vector operator*(float scalar) const;
+	Vector& operator*=(float scalar);
+	
+	Vector operator/(float scalar) const;
+	Vector& operator/=(float scalar);
+	
+	static float Dot(const Vector& first, const Vector& second);
+	// Only calculates a 3D cross product
+	static Vector Cross(const Vector& first, const Vector& second);
+	
+	float GetLengthSquare() const;
+	float GetLength() const;
+	
+	Vector GetNormalized() const;
+	Vector& Normalize();
 
 	// Whether this should be done or not is debatable
 	float& X = reinterpret_cast<float*>(&m_Vector)[0];

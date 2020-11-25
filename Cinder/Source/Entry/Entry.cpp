@@ -2,6 +2,8 @@
 
 #include "Global/Options.h"
 
+#include "Math/Vector.h"
+
 int Entry(int argc, char** argv)
 {
 	try
