@@ -2,87 +2,82 @@
 
 #include "Vector.h"
 
-Vector::Vector(float x, float y, float z, float w)
+Direction::Direction(float x, float y, float z)
 {
 	// Reverse because it flips the order around:
-	// Actually stored in memory as x|y|z|w
-	m_Vector = _mm_set_ps(w, z, y, x);
+	// Actually stored in memory as x|y|z|0.f
+	m_Vector = _mm_set_ps(0.f, z, y, x);
 
-	ASSERT(!IsNAN(), "Constructed vector is NaN!");
+	ASSERT(!IsNAN(), "Constructed direction is NaN!");
 }
 
-Vector::Vector(__m128 vector)
+Direction::Direction(__m128 vector)
 	: m_Vector(vector)
 {}
 
-Vector::Vector(const Direction& direction)
+float Direction::operator[](uint8_t index) const
 {
-
-}
-
-const float& Vector::operator[](uint8_t index) const
-{
-	ASSERT(index < 4, "Vector index out of range!");
+	ASSERT(index < 3, "Direction index out of range!");
 
 	return reinterpret_cast<const float*>(&m_Vector)[index];
 }
 
-float& Vector::operator[](uint8_t index)
+float& Direction::operator[](uint8_t index)
 {
-	ASSERT(index < 4, "Vector index out of range!");
+	ASSERT(index < 3, "Direction index out of range!");
 
 	return reinterpret_cast<float*>(&m_Vector)[index];
 }
 
-Vector& Vector::operator=(const Vector& other)
+Direction& Direction::operator=(const Direction& other)
 {
 	m_Vector = other.m_Vector;
 
 	return *this;
 }
 
-Vector Vector::operator+(const Vector& other) const
+Direction Direction::operator+(const Direction& other) const
 {
-	return Vector(
+	return Direction(
 		_mm_add_ps(m_Vector, other.m_Vector)
 	);
 }
 
-Vector& Vector::operator+=(const Vector& other)
+Direction& Direction::operator+=(const Direction& other)
 {
 	m_Vector = _mm_add_ps(m_Vector, other.m_Vector);
 
 	return *this;
 }
 
-Vector Vector::operator-() const
+Direction Direction::operator-() const
 {
-	return Vector(-X, -Y, -Z, -W);
+	return Direction(-X, -Y, -Z);
 }
 
-Vector Vector::operator-(const Vector& other) const
+Direction Direction::operator-(const Direction& other) const
 {
-	return Vector(
+	return Direction(
 		_mm_sub_ps(m_Vector, other.m_Vector)
 	);
 }
 
-Vector& Vector::operator-=(const Vector& other)
+Direction& Direction::operator-=(const Direction& other)
 {
 	m_Vector = _mm_sub_ps(m_Vector, other.m_Vector);
 
 	return *this;
 }
 
-Vector Vector::operator*(float scalar) const
+Direction Direction::operator*(float scalar) const
 {
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
-	return Vector(
+	return Direction(
 		_mm_mul_ps(m_Vector, scale)
 	);
 }
 
-Vector& Vector::operator*=(float scalar)
+Direction& Direction::operator*=(float scalar)
 { 
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
 	m_Vector = _mm_mul_ps(m_Vector, scale);
@@ -90,15 +85,15 @@ Vector& Vector::operator*=(float scalar)
 	return *this;
 }
 
-Vector Vector::operator/(float scalar) const
+Direction Direction::operator/(float scalar) const
 {
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
-	return Vector(
+	return Direction(
 		_mm_div_ps(m_Vector, scale)
 	);
 }
 
-Vector& Vector::operator/=(float scalar)
+Direction& Direction::operator/=(float scalar)
 {
 	__m128 scale = _mm_set_ps(scalar, scalar, scalar, scalar);
 	m_Vector = _mm_div_ps(m_Vector, scale);
@@ -106,7 +101,7 @@ Vector& Vector::operator/=(float scalar)
 	return *this;
 }
 
-float Vector::Dot(const Vector& first, const Vector& second)
+float Direction::Dot(const Direction& first, const Direction& second)
 {
 	// _mm_dot_ps is not used to retain support for all x64 processors.
 	// It is also slower on Ryzen.
@@ -118,120 +113,39 @@ float Vector::Dot(const Vector& first, const Vector& second)
 	return _mm_cvtss_f32(sums);
 }
 
-Vector Vector::Cross(const Vector &first, const Vector &second)
+Direction Direction::Cross(const Direction& first, const Direction& second)
 {
 	__m128 result = _mm_sub_ps(
 		_mm_mul_ps(second.m_Vector, _mm_shuffle_ps(first.m_Vector, first.m_Vector, _MM_SHUFFLE(3, 0, 2, 1))),
 		_mm_mul_ps(first.m_Vector, _mm_shuffle_ps(second.m_Vector, second.m_Vector, _MM_SHUFFLE(3, 0, 2, 1)))
 	);
 	
-	return Vector(_mm_shuffle_ps(result, result, _MM_SHUFFLE(3, 0, 2, 1 )));
+	return Direction(_mm_shuffle_ps(result, result, _MM_SHUFFLE(3, 0, 2, 1 )));
 }
 
-float Vector::GetLengthSquare() const
+float Direction::GetLengthSquare() const
 {
-	return Vector::Dot(*this, *this);
+	return Direction::Dot(*this, *this);
 }
 
-float Vector::GetLength() const
+float Direction::GetLength() const
 {
-	return sqrt(Vector::Dot(*this, *this));
+	return sqrt(Direction::Dot(*this, *this));
 }
 
-Vector Vector::GetNormalized() const
+Direction Direction::GetNormalized() const
 {
 	return *this / GetLength();
 }
 
-Vector& Vector::Normalize()
+Direction& Direction::Normalize()
 {
 	*this /= GetLength();
 	
 	return *this;
 }
 
-bool Vector::IsNAN()
+bool Direction::IsNAN()
 {
-	return std::isnan(X) || std::isnan(Y) ||
-		std::isnan(Z) || std::isnan(W);
-}
-
-Direction::Direction(float x, float y, float z)
-	: m_Vector(x, y, z, 0.f)
-{
-	m_Vector.Normalize();
-}
-
-Direction::Direction(const Vector& vector)
-	: m_Vector(vector)
-{
-	ASSERT(m_Vector.W == 0.f, "W coordinate of a direction must be 0!");
-}
-
-Direction Direction::operator+(const Direction& other) const
-{
-	Direction direction;
-	direction.m_Vector = m_Vector + other.m_Vector;
-	direction.m_Vector.Normalize();
-
-	return direction;
-}
-
-Direction& Direction::operator+=(const Direction& other)
-{
-	m_Vector += other.m_Vector;
-	m_Vector.Normalize();
-
-	return *this;
-}
-
-Direction Direction::operator-() const
-{
-
-}
-
-Direction Direction::operator-(const Direction& other) const
-{
-
-}
-
-Direction& Direction::operator-=(const Direction& other)
-{
-
-}
-
-const float& Direction::operator[](uint8_t index) const
-{
-	ASSERT(index < 3, "Direction only has 3 dimensions!");
-
-	return m_Vector[index];
-}
-
-float& Direction::operator[](uint8_t index)
-{
-	ASSERT(index < 3, "Direction only has 3 dimensions!");
-
-	return m_Vector[index];
-}
-
-Point::Point()
-	: m_Vector(0.f, 0.f, 0.f, 1.f)
-{}
-
-Point::Point(float x, float y, float z)
-	: m_Vector(x, y, z, 1.f)
-{}
-
-const float& Point::operator[](uint8_t index) const
-{
-	ASSERT(index < 3, "Point only has 3 dimensions!");
-
-	return m_Vector[index];
-}
-
-float& Point::operator[](uint8_t index)
-{
-	ASSERT(index < 3, "Point only has 3 dimensions!");
-
-	return m_Vector[index];
+	return std::isnan(X) || std::isnan(Y) || std::isnan(Z);
 }

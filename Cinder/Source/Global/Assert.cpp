@@ -2,7 +2,7 @@
 
 #include "Assert.h"
 
-void Assert(bool condition, char* message, char* file, int line)
+void Assert(bool condition, const char* message, const char* file, int line)
 {
 	if (!condition)
 	{

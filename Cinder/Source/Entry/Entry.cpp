@@ -33,7 +33,7 @@ int Entry(int argc, char** argv)
 			Console(OUT_COLOR "Copyright 2020 SparkyPotato (under the MIT License). \n" OUT_RESET);
 		}
 		auto options = GenerateOptions(optionsInput);
-
+		
 		if (configFiles.empty())
 		{
 			Fatal("No config files passed. \nRun with '-help' or '-h' for help.");
