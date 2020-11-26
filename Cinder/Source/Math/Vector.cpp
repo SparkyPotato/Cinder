@@ -2,6 +2,8 @@
 
 #include "Vector.h"
 
+#include "Matrix.h"
+
 Vector::Vector(float x, float y, float z)
 {
 	// Reverse because it flips the order around:
@@ -82,6 +84,16 @@ Vector Vector::operator*(float scalar) const
 	return Vector(
 		_mm_mul_ps(m_Vector, scale)
 	);
+}
+
+Vector Vector::operator*(const Matrix& matrix) const
+{
+
+}
+
+Vector& Vector::operator*=(const Matrix& matrix)
+{
+
 }
 
 Vector operator*(float scale, const Vector& direction)
@@ -263,6 +275,16 @@ Point& Point::operator-=(const Vector& direction)
 	return *this;
 }
 
+Point Point::operator*(const Matrix& matrix) const
+{
+
+}
+
+Point& Point::operator*=(const Matrix& matrix)
+{
+
+}
+
 bool operator==(const Point& first, const Point& second)
 {
 	return first.X == second.X &&
@@ -390,6 +412,16 @@ Normal& Normal::operator-=(const Normal& other)
 	m_Vector = _mm_sub_ps(m_Vector, other.m_Vector);
 
 	return *this;
+}
+
+Normal Normal::operator*(const Matrix& matrix) const
+{
+
+}
+
+Normal& Normal::operator*=(const Matrix& matrix)
+{
+
 }
 
 Normal Normal::operator*(float scalar) const

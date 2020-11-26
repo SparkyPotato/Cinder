@@ -1,75 +1,48 @@
 #pragma once
 
+#include "Bound.h"
+#include "Matrix.h"
+#include "Ray.h"
 #include "Vector.h"
 
-class Matrix
+class Transform
 {
 public:
-	Matrix();
-	Matrix(float rows[4][4]);
-	Matrix(float e00, float e01, float e02, float e03,
-		   float e10, float e11, float e12, float e13,
-		   float e20, float e21, float e22, float e23,
-		   float e30, float e31, float e32, float e33);
+	Transform() = default;
+	Transform(float matrix[4][4]);
+	Transform(const Matrix& matrix);
+	Transform(const Matrix& matrix, const Matrix& inverse);
 
-	Matrix operator*(const Matrix& matrix) const;
-	Matrix& operator*=(const Matrix& matrix);
+	Transform GetInverse() const;
+	Transform GetTranspose() const;
 
-	Matrix Transpose() const;
-	Matrix Inverse() const;
+	bool IsIdentity() const;
+
+	const Matrix& GetMatrix() const { return m_Matrix; }
+	const Matrix& GetInverseMatrix() const { return m_Inverse; }
+
+	bool HasScale() const;
+
+	Point operator()(const Point& point) const;
+	Vector operator()(const Vector& vector) const;
+	Normal operator()(const Normal& normal) const;
+	Ray operator()(const Ray& ray) const;
+	RayDifferential operator()(const RayDifferential& ray) const;
+	Bound operator()(const Bound& bound) const;
+	Transform operator*(const Transform& transform) const;
 
 private:
-	Matrix(__m128 rows[4]);
+	friend bool operator==(const Transform& first, const Transform& second);
 
-	friend fmt::formatter<Matrix>;
-
-	friend bool operator==(const Matrix& first, const Matrix& second);
-	friend bool operator!=(const Matrix& first, const Matrix& second);
-
-	__m128 m_Rows[4];
+	Matrix m_Matrix, m_Inverse;
 };
 
-bool operator==(const Matrix& first, const Matrix& second);
-bool operator!=(const Matrix& first, const Matrix& second);
+bool operator==(const Transform& first, const Transform& second);
+bool operator!=(const Transform& first, const Transform& second);
 
-template<>
-struct fmt::formatter<Matrix>
-{
-	std::string ParseString;
-
-	auto parse(format_parse_context& context)
-	{
-		auto end = std::find(context.begin(), context.end(), '}');
-
-		if (end != context.end())
-		{
-			ParseString = std::string(context.begin(), end);
-		}
-
-		ParseString =
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}";
-
-		return end;
-	}
-
-	template<typename FormatContext>
-	auto format(const Matrix& direction, FormatContext& context)
-	{
-		auto row0 = reinterpret_cast<const float*>(&m_Rows[0]);
-		auto row1 = reinterpret_cast<const float*>(&m_Rows[1]);
-		auto row2 = reinterpret_cast<const float*>(&m_Rows[2]);
-		auto row3 = reinterpret_cast<const float*>(&m_Rows[3]);
-
-		return format_to(
-			context.out(),
-			ParseString,
-			row0[0], row0[1], row0[2], row0[3],
-			row1[0], row1[1], row1[2], row1[3],
-			row2[0], row2[1], row2[2], row2[3],
-			row3[0], row3[1], row3[2], row3[3],
-		);
-	}
-};
+Transform Translate(const Vector& delta);
+Transform Scale(float scale);
+Transform Scale(const Vector& scale);
+Transform Rotate(const Vector& eulerDegrees);
+Transform Rotate(const Vector& axis, float degreeAngle);
+Transform LookAt(const Point& location, const Point& focus, const Vector& up);

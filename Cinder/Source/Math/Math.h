@@ -12,3 +12,5 @@ constexpr float ToDegrees(float radians);
 constexpr float ToRadians(float degrees);
 
 float Lerp(float from, float to, float ratio);
+
+float IsNearlyEqual(float value, float equalTo, float tolerance = 0.001f);

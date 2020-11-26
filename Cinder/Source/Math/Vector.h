@@ -4,6 +4,7 @@
 #include <immintrin.h>
 
 class Normal;
+class Matrix;
 
 // Direction in 3D space, has a W coordinate of 0
 class Vector
@@ -26,6 +27,8 @@ public:
 	Vector operator-(const Vector& other) const;
 	Vector& operator-=(const Vector& other);
 
+	Vector operator*(const Matrix& matrix) const;
+	Vector& operator*=(const Matrix& matrix);
 	Vector operator*(float scalar) const;
 	Vector& operator*=(float scalar);
 	
@@ -47,6 +50,7 @@ public:
 
 private:
 	friend class Point;
+
 	friend float Dot(const Vector& first, const Vector& second);
 	friend float Dot(const Normal& first, const Vector& second);
 	friend float Dot(const Vector& first, const Normal& second);
@@ -86,6 +90,9 @@ public:
 	Vector operator-(const Point& other) const;
 	Point operator-(const Vector& direction) const;
 	Point& operator-=(const Vector& direction);
+
+	Point operator*(const Matrix& matrix) const;
+	Point& operator*=(const Matrix& matrix);
 
 	bool IsNAN() const;
 
@@ -131,6 +138,8 @@ public:
 	Normal operator-(const Normal& other) const;
 	Normal& operator-=(const Normal& other);
 
+	Normal operator*(const Matrix& matrix) const;
+	Normal& operator*=(const Matrix& matrix);
 	Normal operator*(float scalar) const;
 	Normal& operator*=(float scalar);
 
