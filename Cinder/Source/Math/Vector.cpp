@@ -140,6 +140,18 @@ bool Vector::IsNAN() const
 	return std::isnan(X) || std::isnan(Y) || std::isnan(Z);
 }
 
+bool operator==(const Vector& first, const Vector& second)
+{
+	return first.X == second.X &&
+		first.Y == second.Y &&
+		first.Z == second.Z;
+}
+
+bool operator!=(const Vector& first, const Vector& second)
+{
+	return !(first == second);
+}
+
 float Dot(const Vector& first, const Vector& second)
 {
 	// _mm_dot_ps is not used to retain support for all x64 processors.
@@ -249,6 +261,18 @@ Point& Point::operator-=(const Vector& direction)
 	m_Vector = _mm_sub_ps(m_Vector, direction.m_Vector);
 
 	return *this;
+}
+
+bool operator==(const Point& first, const Point& second)
+{
+	return first.X == second.X &&
+		first.Y == second.Y &&
+		first.Z == second.Z;
+}
+
+bool operator!=(const Point& first, const Point& second)
+{
+	return !(first == second);
 }
 
 float Distance(const Point& first, const Point& second)
@@ -425,6 +449,18 @@ Normal& Normal::Normalize()
 bool Normal::IsNAN() const
 {
 	return std::isnan(X) || std::isnan(Y) || std::isnan(Z);
+}
+
+bool operator==(const Normal& first, const Normal& second)
+{
+	return first.X == second.X &&
+		first.Y == second.Y &&
+		first.Z == second.Z;
+}
+
+bool operator!=(const Normal& first, const Normal& second)
+{
+	return !(first == second);
 }
 
 float Dot(const Normal& first, const Normal& second)

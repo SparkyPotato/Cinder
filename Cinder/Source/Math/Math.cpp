@@ -12,5 +12,5 @@ constexpr float ToRadians(float degrees)
 
 float Lerp(float from, float to, float ratio)
 {
-	return from + (to - from) * value;
+	return from + (to - from) * ratio;
 }

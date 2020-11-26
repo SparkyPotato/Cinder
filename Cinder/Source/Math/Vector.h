@@ -57,6 +57,9 @@ private:
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };
 
+bool operator==(const Vector& first, const Vector& second);
+bool operator!=(const Vector& first, const Vector& second);
+
 Vector operator*(float scale, const Vector& direction);
 float Dot(const Vector& first, const Vector& second);
 // Only calculates a 3D cross product
@@ -96,6 +99,9 @@ private:
 
 	__m128 m_Vector = _mm_set_ps(1.f, 0.f, 0.f, 0.f);
 };
+
+bool operator==(const Point& first, const Point& second);
+bool operator!=(const Point& first, const Point& second);
 
 float Distance(const Point& first, const Point& second);
 float DistanceSquare(const Point& first, const Point& second);
@@ -154,6 +160,10 @@ private:
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };
 
+
+bool operator==(const Normal& first, const Normal& second);
+bool operator!=(const Normal& first, const Normal& second);
+
 float Dot(const Normal& first, const Normal& second);
 float Dot(const Normal& first, const Vector& second);
 float Dot(const Vector& first, const Normal& second);
@@ -174,7 +184,7 @@ struct fmt::formatter<Vector>
 		}
 
 		ParseString =
-			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
+			"(X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "})";
 
 		return end;
 	}
@@ -205,7 +215,7 @@ struct fmt::formatter<Point>
 		}
 
 		ParseString =
-			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
+			"(X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "})";
 
 		return end;
 	}
@@ -236,7 +246,7 @@ struct fmt::formatter<Normal>
 		}
 
 		ParseString =
-			"[X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "}]";
+			"(X: {:" + ParseString + "}, Y: {:" + ParseString + "}, Z: {:" + ParseString + "})";
 
 		return end;
 	}

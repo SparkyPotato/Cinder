@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstdint>
 
 inline constexpr float Pi = 3.14159265359f;
 inline constexpr float InversePi = 0.31830988618f;

@@ -54,7 +54,7 @@ struct fmt::formatter<Ray>
 		}
 
 		ParseString =
-			"Origin: {" + ParseString + "}" + ", Direction: {" + ParseString + "}";
+			"Origin: {" + ParseString + "}" + ", Direction: {" + ParseString + "}, Extent: {" + ParseString + "}";
 
 		return end;
 	}
@@ -65,7 +65,7 @@ struct fmt::formatter<Ray>
 		return format_to(
 			context.out(),
 			ParseString,
-			ray.Origin, ray.Direction
+			ray.Origin, ray.Direction, ray.Extent
 		);
 	}
 };

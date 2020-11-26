@@ -45,16 +45,11 @@ project "Cinder"
 		"Cinder/Dependencies/yaml-cpp/include"
 	}
 	
-	filter "system:windows"
-		pchheader "PCH.h"
-		pchsource "Cinder/Source/PCH.cpp"
-		systemversion "latest"
+	pchheader "PCH.h"
+	pchsource "Cinder/Source/PCH.cpp"
 	
-	filter "system:macosx"
-		pchheader "Source/PCH.h"
-		
-	filter "not system:macosx or windows"
-		pchheader "Cinder/Source/PCH.h"
+	filter "system:windows"
+		systemversion "latest"
 		
 	filter "system:"
 		
