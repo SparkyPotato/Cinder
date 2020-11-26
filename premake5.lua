@@ -50,7 +50,10 @@ project "Cinder"
 		pchsource "Cinder/Source/PCH.cpp"
 		systemversion "latest"
 	
-	filter "not system:windows"
+	filter "system:macosx"
+		pchheader "Source/PCH.h"
+		
+	filter "not system:macosx or windows"
 		pchheader "Cinder/Source/PCH.h"
 		
 	filter "system:"

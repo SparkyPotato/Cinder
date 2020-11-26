@@ -10,7 +10,7 @@ class Ray
 {
 public:
 	Ray() = default;
-	Ray(const Point& origin, const Vector& direction, float extent = Infinity, const Medium* medium = nullptr);
+	Ray(const Point& origin, const Vector& direction, float extent = FloatMax, const Medium* medium = nullptr);
 	Ray(const Ray& other) = default;
 
 	Point operator()(float distanceAlong) const;
@@ -19,7 +19,7 @@ public:
 
 	Point Origin;
 	Vector Direction;
-	float Extent = Infinity;
+	float Extent = FloatMax;
 	uint64_t Frame = 0;
 	const Medium* CurrentMedium = nullptr;
 };
@@ -31,7 +31,7 @@ class RayDifferential : public Ray
 public:
 	RayDifferential() = default;
 	RayDifferential(const Ray& ray);
-	RayDifferential(const Point& origin, const Vector& direction, float extent = Infinity, const Medium* medium = nullptr);
+	RayDifferential(const Point& origin, const Vector& direction, float extent = FloatMax, const Medium* medium = nullptr);
 	RayDifferential(const RayDifferential& other) = default;
 
 	bool IsNAN() const;

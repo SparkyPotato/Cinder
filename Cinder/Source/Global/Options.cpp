@@ -1,15 +1,28 @@
 #include "PCH.h"
+
 #include "Options.h"
 
 void ShowHelp();
 
 int GLogLevel = LogLevel::Warning;
 bool GQuiet = false;
+FILE* GLogFile = nullptr;
+fmt::memory_buffer GFormatBuffer;
+
+const char* GNewLineStart = "\n\0";
+const char* GNewLineEnd = GNewLineStart + 2;
+std::string GDebug = "Debug: ";
+std::string GVerbose = "Verbose: ";
+std::string GLog = "Log: ";
+std::string GWarning = "Warning: ";
+std::string GError = "Error: ";
+std::string GFatal = "Fatal: ";
 
 static std::vector<std::string> s_ValidOptions =
 {
 	"-threads", "-t",
-	"-loglevel", "-l"
+	"-loglevel", "-ll",
+	"-log", "-l"
 };
 static std::vector<std::string> s_ValidSwitches =
 {
@@ -20,7 +33,9 @@ static std::vector<std::string> s_ValidSwitches =
 Options GenerateOptions(const std::vector<std::string>& options)
 {
 	Options output;
-
+	
+	std::filesystem::path logFile = "Log.txt";
+	
 	for (const auto& option : options)
 	{
 		size_t i = option.find('=');
@@ -54,7 +69,7 @@ Options GenerateOptions(const std::vector<std::string>& options)
 				}
 				catch (std::exception) { Error("Thread count must be an integer. Auto-detecting."); }
 			}
-			else if (name == "-loglevel" || name == "-l")
+			else if (name == "-loglevel" || name == "-ll")
 			{
 				try
 				{
@@ -67,6 +82,15 @@ Options GenerateOptions(const std::vector<std::string>& options)
 					GLogLevel = level;
 				}
 				catch (std::exception) { Error("Log level must be an integer."); }
+			}
+			else if (name == "-log" || name == "-l")
+			{
+				logFile = value;
+				try { std::filesystem::create_directories(logFile); }
+				catch (...)
+				{
+					Fatal("Could not create log file '{}'", value);
+				}
 			}
 		}
 		else
@@ -84,6 +108,8 @@ Options GenerateOptions(const std::vector<std::string>& options)
 		}
 	}
 	
+	GLogFile = fopen(logFile.string().c_str(), "w");
+
 	return output;
 }
 
@@ -98,7 +124,9 @@ Options:
                          Do not specify to auto-detect from the number of cores available.
   -nologo                Suppress the banner on startup.
   -quiet/-q              Suppress everything except fatal errors. Implies -nologo.
-  -loglevel/-l=<n>       <n> must be from 0 - 4:
+  -log/-l                Location of the log file. If left blank, the file will be called
+				         'Log.txt' in the current working directory.
+  -loglevel/-ll=<n>      <n> must be from 0 - 4:
                          0 - Verbose
                          1 - Log
                          2 - Warning

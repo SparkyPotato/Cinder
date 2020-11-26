@@ -6,6 +6,6 @@ void Assert(bool condition, const char* message, const char* file, int line)
 {
 	if (!condition)
 	{
-		Fatal("Assertion Failed - %s \nAt line: %d, file: %s", message, line, file);
+		Fatal("Assertion Failed - {} \nAt line: {}, file: {}", message, line, file);
 	}
 }

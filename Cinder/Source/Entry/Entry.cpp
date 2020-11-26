@@ -26,7 +26,13 @@ int Entry(int argc, char** argv)
 			else if (*argv[i] != '-') { configFiles.emplace_back(argv[i]); }
 			else { optionsInput.emplace_back(argv[i]); }
 		}
-
+		
+#ifdef CFG_DEBUG
+		CinderColored(R"(** DEBUG BUILD **
+Will be slow, set log level to 0 to see debug information.
+			)");
+#endif
+		
 		if (logo)
 		{
 			CinderColored("Cinder (built {}, {})", __TIME__, __DATE__);
@@ -52,15 +58,18 @@ int Entry(int argc, char** argv)
 		
 		Log("Rendering with {} threads.", options.ThreadCount);
 		
+		fclose(GLogFile);
 		return EXIT_SUCCESS;
 	}
 	catch (std::exception& e)
 	{
 		Console(e.what());
+		fclose(GLogFile);
 		return EXIT_FAILURE;
 	}
 	catch (...)
 	{
+		fclose(GLogFile);
 		return EXIT_FAILURE;
 	}
 }

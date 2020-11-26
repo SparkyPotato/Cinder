@@ -1,5 +1,7 @@
 #pragma once
 
+#include "fmt/os.h"
+
 // Command line options for Cinder
 struct Options
 {
@@ -17,5 +19,6 @@ namespace LogLevel
 
 extern int GLogLevel;
 extern bool GQuiet;
+extern FILE* GLogFile;
 
 Options GenerateOptions(const std::vector<std::string>& options);
