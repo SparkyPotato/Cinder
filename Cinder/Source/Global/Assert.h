@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef CFG_DEBUG
 #	define ASSERT(condition, message) Assert(condition, message, __FILE__, __LINE__)
 #else

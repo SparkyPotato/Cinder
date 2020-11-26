@@ -99,7 +99,7 @@ private:
 
 float Distance(const Point& first, const Point& second);
 float DistanceSquare(const Point& first, const Point& second);
-Point Lerp(const Point& from, const Point& to, float value);
+Point Lerp(const Point& from, const Point& to, float ratio);
 Point Min(const Point& first, const Point& second);
 Point Max(const Point& first, const Point& second);
 Point Shuffle(const Point& point, uint8_t x, uint8_t y, uint8_t z);
