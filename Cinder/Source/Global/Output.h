@@ -3,12 +3,6 @@
 
 #include "Options.h"
 
-#ifdef PLATFORM_WINDOWS
-
-std::string ToUTF8(const wchar_t* utf16);
-
-#endif
-
 extern fmt::memory_buffer GFormatBuffer;
 
 extern const char* GNewLineStart;
@@ -51,7 +45,7 @@ inline void Debug(std::string format, Args&&... args)
 	GFormatBuffer.append(GDebug);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
-	fmt::print(GLogFile, GFormatBuffer.data());
+	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
 	if (GLogLevel > LogLevel::Verbose) { GFormatBuffer.clear(); return; }
 	
@@ -66,7 +60,7 @@ inline void Verbose(std::string format, Args&&... args)
 	GFormatBuffer.append(GVerbose);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
-	fmt::print(GLogFile, GFormatBuffer.data());
+	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
 	if (GLogLevel > LogLevel::Verbose) { GFormatBuffer.clear(); return; }
 	
@@ -80,7 +74,7 @@ inline void Log(std::string format, Args&&... args)
 	GFormatBuffer.append(GLog);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
-	fmt::print(GLogFile, GFormatBuffer.data());
+	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
 	if (GLogLevel > LogLevel::Log) { GFormatBuffer.clear(); return; }
 	
@@ -94,7 +88,7 @@ inline void Warning(std::string format, Args&&... args)
 	GFormatBuffer.append(GWarning);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
-	fmt::print(GLogFile, GFormatBuffer.data());
+	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
 	if (GLogLevel > LogLevel::Warning) { GFormatBuffer.clear(); return; }
 	
@@ -108,7 +102,7 @@ inline void Error(std::string format, Args&&... args)
 	GFormatBuffer.append(GError);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
-	fmt::print(GLogFile, GFormatBuffer.data());
+	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
 	if (GLogLevel > LogLevel::Error) { GFormatBuffer.clear(); return; }
 	
@@ -122,7 +116,7 @@ inline void Fatal(std::string format, Args&&... args)
 	GFormatBuffer.append(GFatal);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
-	fmt::print(GLogFile, GFormatBuffer.data());
+	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
 	fmt::print(fg(fmt::color::dark_red), GFormatBuffer.data());
 

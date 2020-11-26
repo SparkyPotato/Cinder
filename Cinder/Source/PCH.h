@@ -35,5 +35,7 @@
 
 #include "Global/Assert.h"
 #include "Global/Options.h"
+#include "Global/OSAL.h"
 #include "Global/Output.h"
+
 #include "Math/Math.h"

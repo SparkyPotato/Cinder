@@ -86,7 +86,12 @@ Options GenerateOptions(const std::vector<std::string>& options)
 			else if (name == "-log" || name == "-l")
 			{
 				logFile = value;
-				try { std::filesystem::create_directories(logFile); }
+				if (!logFile.has_filename())
+				{
+					Fatal("Log file must be a file, not directory!");
+				}
+
+				try { std::filesystem::create_directories(logFile.root_path()); }
 				catch (...)
 				{
 					Fatal("Could not create log file '{}'", value);
@@ -108,7 +113,11 @@ Options GenerateOptions(const std::vector<std::string>& options)
 		}
 	}
 	
-	GLogFile = fopen(logFile.string().c_str(), "w");
+	GLogFile = FileOpen(logFile.string().c_str(), "w");
+	if (!GLogFile)
+	{
+		Error("Could not open log file. File logging is disabled.");
+	}
 
 	return output;
 }
