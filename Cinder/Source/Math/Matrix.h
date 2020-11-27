@@ -57,10 +57,10 @@ struct fmt::formatter<Matrix>
 		}
 
 		ParseString =
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
-			"\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}";
+			"\r\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
+			"\r\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
+			"\r\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}"
+			"\r\n{" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}, {" + ParseString + "}";
 
 		return end;
 	}

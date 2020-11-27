@@ -35,11 +35,7 @@ bool Transform::IsIdentity() const
 
 bool Transform::HasScale() const
 {
-	float lengthX = m_Matrix.GetValue(0, 0);
-	float lengthY = m_Matrix.GetValue(1, 1);
-	float lengthZ = m_Matrix.GetValue(2, 2);
-
-	return !(IsNearlyEqual(lengthX, 1.f) || IsNearlyEqual(lengthY, 1.f) || IsNearlyEqual(lengthZ, 1.f));
+	
 }
 
 Point Transform::operator()(const Point& point) const
@@ -76,7 +72,7 @@ Bound Transform::operator()(const Bound& bound) const
 
 Transform Transform::operator*(const Transform& transform) const
 {
-	return Transform(transform.m_Matrix * m_Matrix, transform.m_Inverse * m_Inverse);
+	
 }
 
 bool operator==(const Transform& first, const Transform& second)

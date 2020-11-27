@@ -106,6 +106,7 @@ Matrix Matrix::Transpose() const
 	return Matrix(rows);
 }
 
+// https://stackoverflow.com/a/44446912
 Matrix Matrix::Inverse() const
 {
 	const float* columns[4];
@@ -114,53 +115,53 @@ Matrix Matrix::Inverse() const
 	columns[2] = reinterpret_cast<const float*>(&m_Columns[2]);
 	columns[3] = reinterpret_cast<const float*>(&m_Columns[3]);
 
-	float A2323 = columns[2][2] * columns[3][3] - columns[3][2] * columns[2][3];
-	float A1323 = columns[1][2] * columns[3][3] - columns[3][2] * columns[1][3];
-	float A1223 = columns[1][2] * columns[2][3] - columns[2][2] * columns[1][3];
-	float A0323 = columns[0][2] * columns[3][3] - columns[3][2] * columns[0][3];
-	float A0223 = columns[0][2] * columns[2][3] - columns[2][2] * columns[0][3];
-	float A0123 = columns[0][2] * columns[1][3] - columns[1][2] * columns[0][3];
-	float A2313 = columns[2][1] * columns[3][3] - columns[3][1] * columns[2][3];
-	float A1313 = columns[1][1] * columns[3][3] - columns[3][1] * columns[1][3];
-	float A1213 = columns[1][1] * columns[2][3] - columns[2][1] * columns[1][3];
-	float A2312 = columns[2][1] * columns[3][2] - columns[3][1] * columns[2][2];
-	float A1312 = columns[1][1] * columns[3][2] - columns[3][1] * columns[1][2];
-	float A1212 = columns[1][1] * columns[2][2] - columns[2][1] * columns[1][2];
-	float A0313 = columns[0][1] * columns[3][3] - columns[3][1] * columns[0][3];
-	float A0213 = columns[0][1] * columns[2][3] - columns[2][1] * columns[0][3];
-	float A0312 = columns[0][1] * columns[3][2] - columns[3][1] * columns[0][2];
-	float A0212 = columns[0][1] * columns[2][2] - columns[2][1] * columns[0][2];
-	float A0113 = columns[0][1] * columns[1][3] - columns[1][1] * columns[0][3];
-	float A0112 = columns[0][1] * columns[1][2] - columns[1][1] * columns[0][2];
+	float A2323 = columns[2][2] * columns[3][3] - columns[2][3] * columns[3][2];
+	float A1323 = columns[2][1] * columns[3][3] - columns[2][3] * columns[3][1];
+	float A1223 = columns[2][1] * columns[3][2] - columns[2][2] * columns[3][1];
+	float A0323 = columns[2][0] * columns[3][3] - columns[2][3] * columns[3][0];
+	float A0223 = columns[2][0] * columns[3][2] - columns[2][2] * columns[3][0];
+	float A0123 = columns[2][0] * columns[3][1] - columns[2][1] * columns[3][0];
+	float A2313 = columns[1][2] * columns[3][3] - columns[1][3] * columns[3][2];
+	float A1313 = columns[1][1] * columns[3][3] - columns[1][3] * columns[3][1];
+	float A1213 = columns[1][1] * columns[3][2] - columns[1][2] * columns[3][1];
+	float A2312 = columns[1][2] * columns[2][3] - columns[1][3] * columns[2][2];
+	float A1312 = columns[1][1] * columns[2][3] - columns[1][3] * columns[2][1];
+	float A1212 = columns[1][1] * columns[2][2] - columns[1][2] * columns[2][1];
+	float A0313 = columns[1][0] * columns[3][3] - columns[1][3] * columns[3][0];
+	float A0213 = columns[1][0] * columns[3][2] - columns[1][2] * columns[3][0];
+	float A0312 = columns[1][0] * columns[2][3] - columns[1][3] * columns[2][0];
+	float A0212 = columns[1][0] * columns[2][2] - columns[1][2] * columns[2][0];
+	float A0113 = columns[1][0] * columns[3][1] - columns[1][1] * columns[3][0];
+	float A0112 = columns[1][0] * columns[2][1] - columns[1][1] * columns[2][0];
 
-	float det = columns[0][0] * (columns[1][1] * A2323 - columns[2][1] * A1323 + columns[3][1] * A1223)
-		- columns[1][0] * (columns[0][1] * A2323 - columns[2][1] * A0323 + columns[3][1] * A0223)
-		+ columns[2][0] * (columns[0][1] * A1323 - columns[1][1] * A0323 + columns[3][1] * A0123)
-		- columns[3][0] * (columns[0][1] * A1223 - columns[1][1] * A0223 + columns[2][1] * A0123);
+	float det = columns[0][0] * (columns[1][1] * A2323 - columns[1][2] * A1323 + columns[1][3] * A1223)
+		- columns[0][1] * (columns[1][0] * A2323 - columns[1][2] * A0323 + columns[1][3] * A0223)
+		+ columns[0][2] * (columns[1][0] * A1323 - columns[1][1] * A0323 + columns[1][3] * A0123)
+		- columns[0][3] * (columns[1][0] * A1223 - columns[1][1] * A0223 + columns[1][2] * A0123);
 	det = 1 / det;
 
-	float m00 = det * (columns[1][1] * A2323 - columns[2][1] * A1323 + columns[3][1] * A1223);
-	float m01 = det * -(columns[1][0] * A2323 - columns[2][0] * A1323 + columns[3][0] * A1223);
-	float m02 = det * (columns[1][0] * A2313 - columns[2][0] * A1313 + columns[3][0] * A1213);
-	float m03 = det * -(columns[1][0] * A2312 - columns[2][0] * A1312 + columns[3][0] * A1212);
-	float m10 = det * -(columns[0][1] * A2323 - columns[2][1] * A0323 + columns[3][1] * A0223);
-	float m11 = det * (columns[0][0] * A2323 - columns[2][0] * A0323 + columns[3][0] * A0223);
-	float m12 = det * -(columns[0][0] * A2313 - columns[2][0] * A0313 + columns[3][0] * A0213);
-	float m13 = det * (columns[0][0] * A2312 - columns[2][0] * A0312 + columns[3][0] * A0212);
-	float m20 = det * (columns[0][1] * A1323 - columns[1][1] * A0323 + columns[3][1] * A0123);
-	float m21 = det * -(columns[0][0] * A1323 - columns[1][0] * A0323 + columns[3][0] * A0123);
-	float m22 = det * (columns[0][0] * A1313 - columns[1][0] * A0313 + columns[3][0] * A0113);
-	float m23 = det * -(columns[0][0] * A1312 - columns[1][0] * A0312 + columns[3][0] * A0112);
-	float m30 = det * -(columns[0][1] * A1223 - columns[1][1] * A0223 + columns[2][1] * A0123);
-	float m31 = det * (columns[0][0] * A1223 - columns[1][0] * A0223 + columns[2][0] * A0123);
-	float m32 = det * -(columns[0][0] * A1213 - columns[1][0] * A0213 + columns[2][0] * A0113);
-	float m33 = det * (columns[0][0] * A1212 - columns[1][0] * A0212 + columns[2][0] * A0112);
+	float m00 = det * (columns[1][1] * A2323 - columns[1][2] * A1323 + columns[1][3] * A1223);
+	float m01 = det * -(columns[0][1] * A2323 - columns[0][2] * A1323 + columns[0][3] * A1223);
+	float m02 = det * (columns[0][1] * A2313 - columns[0][2] * A1313 + columns[0][3] * A1213);
+	float m03 = det * -(columns[0][1] * A2312 - columns[0][2] * A1312 + columns[0][3] * A1212);
+	float m10 = det * -(columns[1][0] * A2323 - columns[1][2] * A0323 + columns[1][3] * A0223);
+	float m11 = det * (columns[0][0] * A2323 - columns[0][2] * A0323 + columns[0][3] * A0223);
+	float m12 = det * -(columns[0][0] * A2313 - columns[0][2] * A0313 + columns[0][3] * A0213);
+	float m13 = det * (columns[0][0] * A2312 - columns[0][2] * A0312 + columns[0][3] * A0212);
+	float m20 = det * (columns[1][0] * A1323 - columns[1][1] * A0323 + columns[1][3] * A0123);
+	float m21 = det * -(columns[0][0] * A1323 - columns[0][1] * A0323 + columns[0][3] * A0123);
+	float m22 = det * (columns[0][0] * A1313 - columns[0][1] * A0313 + columns[0][3] * A0113);
+	float m23 = det * -(columns[0][0] * A1312 - columns[0][1] * A0312 + columns[0][3] * A0112);
+	float m30 = det * -(columns[1][0] * A1223 - columns[1][1] * A0223 + columns[1][2] * A0123);
+	float m31 = det * (columns[0][0] * A1223 - columns[0][1] * A0223 + columns[0][2] * A0123);
+	float m32 = det * -(columns[0][0] * A1213 - columns[0][1] * A0213 + columns[0][2] * A0113);
+	float m33 = det * (columns[0][0] * A1212 - columns[0][1] * A0212 + columns[0][2] * A0112);
 
 	return Matrix(
-		m00, m01, m02, m03,
-		m10, m11, m12, m13,
-		m20, m21, m22, m23,
-		m30, m31, m32, m33
+		m00, m10, m20, m30,
+		m01, m11, m21, m31,
+		m02, m12, m22, m32,
+		m03, m13, m23, m33
 	);
 }
 

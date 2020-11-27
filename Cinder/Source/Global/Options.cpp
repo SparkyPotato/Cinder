@@ -9,8 +9,8 @@ bool GQuiet = false;
 FILE* GLogFile = nullptr;
 fmt::memory_buffer GFormatBuffer;
 
-const char* GNewLineStart = "\n\0";
-const char* GNewLineEnd = GNewLineStart + 2;
+const char* GNewLineStart = "\r\n\0";
+const char* GNewLineEnd = GNewLineStart + 3;
 std::string GDebug = "Debug: ";
 std::string GVerbose = "Verbose: ";
 std::string GLog = "Log: ";
