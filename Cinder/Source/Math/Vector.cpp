@@ -290,8 +290,8 @@ Point& Point::operator-=(const Vector& direction)
 
 Point Point::operator*(const Matrix& matrix) const
 {
-	float vec[3];
-	for (int i = 0; i < 3; i++)
+	float vec[4];
+	for (int i = 0; i < 4; i++)
 	{
 		__m128 mul = _mm_mul_ps(m_Vector, matrix.m_Columns[i]);
 		__m128 shuffle = _mm_shuffle_ps(mul, mul, _MM_SHUFFLE(2, 3, 0, 1));
@@ -301,7 +301,16 @@ Point Point::operator*(const Matrix& matrix) const
 		vec[i] =  _mm_cvtss_f32(sums);
 	}
 	
-	return Point(vec[0], vec[1], vec[2]);
+	__m128 point;
+	point = _mm_load_ps(vec);
+	
+	if (vec[3] != 1.f)
+	{
+		__m128 scale = _mm_set_ps(vec[3], vec[3], vec[3], vec[3]);
+		point = _mm_div_ps(point, scale);
+	}
+	
+	return Point(point);
 }
 
 Point& Point::operator*=(const Matrix& matrix)

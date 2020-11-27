@@ -37,6 +37,20 @@ Matrix::Matrix(__m128 columns[4])
 	m_Columns[3] = columns[3];
 }
 
+float* Matrix::operator[](uint8_t column)
+{
+	ASSERT(column < 4, "Matrix index out of range!");
+	
+	return reinterpret_cast<float*>(&m_Columns[column]);
+}
+
+const float* Matrix::operator[](uint8_t column) const
+{
+	ASSERT(column < 4, "Matrix index out of range!");
+	
+	return reinterpret_cast<const float*>(&m_Columns[column]);
+}
+
 Matrix Matrix::operator*(const Matrix& matrix) const
 {
 	__m128 rows[4];
@@ -138,6 +152,7 @@ Matrix Matrix::Inverse() const
 		- columns[0][1] * (columns[1][0] * A2323 - columns[1][2] * A0323 + columns[1][3] * A0223)
 		+ columns[0][2] * (columns[1][0] * A1323 - columns[1][1] * A0323 + columns[1][3] * A0123)
 		- columns[0][3] * (columns[1][0] * A1223 - columns[1][1] * A0223 + columns[1][2] * A0123);
+	ASSERT(det != 0.f, "Determinant of matrix is 0, inverse cannot be computed!");
 	det = 1 / det;
 
 	float m00 = det * (columns[1][1] * A2323 - columns[1][2] * A1323 + columns[1][3] * A1223);

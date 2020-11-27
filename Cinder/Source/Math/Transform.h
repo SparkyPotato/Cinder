@@ -30,6 +30,8 @@ public:
 	RayDifferential operator()(const RayDifferential& ray) const;
 	Bound operator()(const Bound& bound) const;
 	Transform operator*(const Transform& transform) const;
+	
+	bool ChangesHandedness();
 
 private:
 	friend bool operator==(const Transform& first, const Transform& second);

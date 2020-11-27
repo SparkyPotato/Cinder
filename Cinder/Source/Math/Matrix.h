@@ -14,6 +14,9 @@ public:
 		float e20, float e21, float e22, float e23,
 		float e30, float e31, float e32, float e33);
 
+	float* operator[](uint8_t column);
+	const float* operator[](uint8_t column) const;
+	
 	Matrix operator*(const Matrix& matrix) const;
 	Matrix& operator*=(const Matrix& matrix);
 
