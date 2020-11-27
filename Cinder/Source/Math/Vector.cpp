@@ -214,6 +214,13 @@ void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector
 	outSecond = Cross(normalized, outFirst);
 }
 
+Vector Lerp(const Vector& from, const Vector& to, float ratio)
+{
+	return Vector(
+		from + (to - from) * ratio
+	);
+}
+
 Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z)
 {
 	return Vector(direction[x], direction[y], direction[z]);
@@ -342,10 +349,10 @@ float DistanceSquare(const Point& first, const Point& second)
 	return (first - second).GetLengthSquare();
 }
 
-Point Lerp(const Point& from, const Point& to, float value)
+Point Lerp(const Point& from, const Point& to, float ratio)
 {
 	return Point(
-		from + (to - from) * value
+		from + (to - from) * ratio
 	);
 }
 

@@ -66,6 +66,7 @@ float Dot(const Vector& first, const Vector& second);
 // Only calculates a 3D cross product
 Vector Cross(const Vector& first, const Vector& second);
 void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector& outSecond);
+Vector Lerp(const Vector& from, const Vector& to, float ratio);
 Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z);
 
 // Point in 3D space, with W coordinate of 1

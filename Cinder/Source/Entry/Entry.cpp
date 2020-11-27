@@ -28,7 +28,7 @@ int Entry(int argc, char** argv)
 #ifdef CFG_DEBUG
 		CinderColored(R"(** DEBUG BUILD **
 Will be slow, set log level to 0 to see debug information.
-			)");
+		)");
 #endif
 		
 		if (logo)

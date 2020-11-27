@@ -52,6 +52,9 @@ project "Cinder"
 	
 	filter "action:xcode4"
 		pchheader "Source/PCH.h"
+		
+	filter "action:gmake2"
+		pchheader "Cinder/Source/PCH.h"
 	
 	filter "system:windows"
 		systemversion "latest"

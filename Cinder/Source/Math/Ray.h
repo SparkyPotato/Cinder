@@ -20,7 +20,7 @@ public:
 	Point Origin;
 	Vector Direction;
 	float Extent = FloatMax;
-	uint64_t Frame = 0;
+	float Time = 0.f;
 	const Medium* CurrentMedium = nullptr;
 };
 

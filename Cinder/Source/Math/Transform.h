@@ -5,6 +5,7 @@
 #include "Ray.h"
 #include "Vector.h"
 
+// Transform of an object at an instant in time
 class Transform
 {
 public:
