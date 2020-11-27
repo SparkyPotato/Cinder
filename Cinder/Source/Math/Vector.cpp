@@ -13,7 +13,7 @@ Vector::Vector(float x, float y, float z)
 	ASSERT(!IsNAN(), "Constructed direction is NaN!");
 }
 
-Vector::Vector(__m128 vector)
+Vector::Vector(const __m128& vector)
 	: m_Vector(vector)
 {
 	ASSERT(!IsNAN(), "Constructed direction is NaN!");
@@ -226,7 +226,7 @@ Point::Point(float x, float y, float z)
 	ASSERT(!IsNAN(), "Constructed point is NaN!");
 }
 
-Point::Point(__m128 vector)
+Point::Point(const __m128& vector)
 	: m_Vector(vector)
 {
 	ASSERT(!IsNAN(), "Constructed point is NaN!");
@@ -384,7 +384,7 @@ Normal::Normal(float x, float y, float z)
 	ASSERT(!IsNAN(), "Constructed normal is NaN!");
 }
 
-Normal::Normal(__m128 vector)
+Normal::Normal(const __m128& vector)
 	: m_Vector(vector)
 {
 	ASSERT(!IsNAN(), "Constructed normal is NaN!");

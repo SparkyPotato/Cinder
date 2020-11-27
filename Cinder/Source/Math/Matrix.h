@@ -1,8 +1,5 @@
 #pragma once
 
-// Portable SIMD intrinsics
-#include <immintrin.h>
-
 // A 4x4 dimensional matrix
 class Matrix
 {

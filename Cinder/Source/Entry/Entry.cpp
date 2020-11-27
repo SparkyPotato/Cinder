@@ -2,8 +2,6 @@
 
 #include "Global/Options.h"
 
-#include "Math/Transform.h"
-
 int Entry(int argc, char** argv)
 {
 	try
@@ -39,7 +37,7 @@ Will be slow, set log level to 0 to see debug information.
 			CinderColored("Copyright 2020 SparkyPotato (under the MIT License).\n");
 		}
 		auto options = GenerateOptions(optionsInput);
-		
+
 		if (configFiles.empty())
 		{
 			Fatal("No project files passed. \nRun with '-help' or '-h' for help.");

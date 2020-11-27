@@ -1,8 +1,5 @@
 #pragma once
 
-// Portable SIMD intrinsics
-#include <immintrin.h>
-
 class Normal;
 class Matrix;
 
@@ -56,7 +53,7 @@ private:
 	friend float Dot(const Vector& first, const Normal& second);
 	friend Vector Cross(const Vector& first, const Vector& second);
 
-	Vector(__m128 vector);
+	Vector(const __m128& vector);
 
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };
@@ -102,7 +99,7 @@ public:
 	float& Z = reinterpret_cast<float*>(&m_Vector)[2];
 
 private:
-	Point(__m128 vector);
+	Point(const __m128& vector);
 
 	__m128 m_Vector = _mm_set_ps(1.f, 0.f, 0.f, 0.f);
 };
@@ -164,7 +161,7 @@ private:
 	friend float Dot(const Normal& first, const Vector& second);
 	friend float Dot(const Vector& first, const Normal& second);
 
-	Normal(__m128 vector);
+	Normal(const __m128& vector);
 
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };

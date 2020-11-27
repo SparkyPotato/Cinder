@@ -25,6 +25,9 @@
 #	error Unknown platform!
 #endif
 
+// Portable SIMD intrinsics
+#include <immintrin.h>
+
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
