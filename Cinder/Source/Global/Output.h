@@ -24,7 +24,7 @@ inline void Console(const char* format, Args&&... args)
 	
 	if (GQuiet) { GFormatBuffer.clear(); return; }
 
-	fmt::print(fg(fmt::color::floral_white), GFormatBuffer.data());
+	fmt::print(GFormatBuffer.data());
 	GFormatBuffer.clear();
 }
 

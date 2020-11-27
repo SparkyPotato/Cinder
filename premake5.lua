@@ -45,13 +45,16 @@ project "Cinder"
 		"Cinder/Dependencies/yaml-cpp/include"
 	}
 	
-	pchheader "PCH.h"
 	pchsource "Cinder/Source/PCH.cpp"
+	
+	filter "action:vs*"
+		pchheader "PCH.h"
+	
+	filter "action:xcode4"
+		pchheader "Source/PCH.h"
 	
 	filter "system:windows"
 		systemversion "latest"
-		
-	filter "system:"
 		
 	filter "configurations:Debug"
 		defines "CFG_DEBUG"

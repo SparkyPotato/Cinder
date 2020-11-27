@@ -88,12 +88,25 @@ Vector Vector::operator*(float scalar) const
 
 Vector Vector::operator*(const Matrix& matrix) const
 {
-
+	float vec[3];
+	for (int i = 0; i < 3; i++)
+	{
+		__m128 mul = _mm_mul_ps(m_Vector, matrix.m_Columns[i]);
+		__m128 shuffle = _mm_shuffle_ps(mul, mul, _MM_SHUFFLE(2, 3, 0, 1));
+		__m128 sums = _mm_add_ps(mul, shuffle);
+		shuffle = _mm_movehl_ps(shuffle, sums);
+		sums = _mm_add_ss(sums, shuffle);
+		vec[i] =  _mm_cvtss_f32(sums);
+	}
+	
+	return Vector(vec[0], vec[1], vec[2]);
 }
 
 Vector& Vector::operator*=(const Matrix& matrix)
 {
-
+	*this = *this * matrix;
+	
+	return *this;
 }
 
 Vector operator*(float scale, const Vector& direction)
@@ -277,12 +290,25 @@ Point& Point::operator-=(const Vector& direction)
 
 Point Point::operator*(const Matrix& matrix) const
 {
-
+	float vec[3];
+	for (int i = 0; i < 3; i++)
+	{
+		__m128 mul = _mm_mul_ps(m_Vector, matrix.m_Columns[i]);
+		__m128 shuffle = _mm_shuffle_ps(mul, mul, _MM_SHUFFLE(2, 3, 0, 1));
+		__m128 sums = _mm_add_ps(mul, shuffle);
+		shuffle = _mm_movehl_ps(shuffle, sums);
+		sums = _mm_add_ss(sums, shuffle);
+		vec[i] =  _mm_cvtss_f32(sums);
+	}
+	
+	return Point(vec[0], vec[1], vec[2]);
 }
 
 Point& Point::operator*=(const Matrix& matrix)
 {
-
+	*this = *this * matrix;
+	
+	return *this;
 }
 
 bool operator==(const Point& first, const Point& second)
@@ -416,12 +442,25 @@ Normal& Normal::operator-=(const Normal& other)
 
 Normal Normal::operator*(const Matrix& matrix) const
 {
-
+	float vec[3];
+	for (int i = 0; i < 3; i++)
+	{
+		__m128 mul = _mm_mul_ps(m_Vector, matrix.m_Columns[i]);
+		__m128 shuffle = _mm_shuffle_ps(mul, mul, _MM_SHUFFLE(2, 3, 0, 1));
+		__m128 sums = _mm_add_ps(mul, shuffle);
+		shuffle = _mm_movehl_ps(shuffle, sums);
+		sums = _mm_add_ss(sums, shuffle);
+		vec[i] =  _mm_cvtss_f32(sums);
+	}
+	
+	return Normal(vec[0], vec[1], vec[2]);
 }
 
 Normal& Normal::operator*=(const Matrix& matrix)
 {
-
+	*this = *this * matrix;
+	
+	return *this;
 }
 
 Normal Normal::operator*(float scalar) const

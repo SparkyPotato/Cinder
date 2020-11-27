@@ -39,7 +39,12 @@ Will be slow, set log level to 0 to see debug information.
 			CinderColored("Copyright 2020 SparkyPotato (under the MIT License). \n");
 		}
 		auto options = GenerateOptions(optionsInput);
-
+		
+		Vector a(1.f, 1.f, 1.f);
+		auto b = Scale(3.f);
+		b = b * Translate({ 3.f, 3.f, 3.f });
+		Console("{}", b(a));
+		
 		if (configFiles.empty())
 		{
 			Fatal("No config files passed. \r\nRun with '-help' or '-h' for help.");

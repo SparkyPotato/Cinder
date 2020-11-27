@@ -3,6 +3,7 @@
 // Portable SIMD intrinsics
 #include <immintrin.h>
 
+// A 4x4 dimensional matrix
 class Matrix
 {
 public:
@@ -23,14 +24,19 @@ public:
 	Matrix Inverse() const;
 
 private:
-	Matrix(__m128 rows[4]);
-
+	Matrix(__m128 columns[4]);
+	
+	friend class Vector;
+	friend class Point;
+	friend class Normal;
 	friend fmt::formatter<Matrix>;
 
 	friend bool operator==(const Matrix& first, const Matrix& second);
 	friend bool operator!=(const Matrix& first, const Matrix& second);
-
-	__m128 m_Rows[4];
+	
+	// Stored column-major to speed-up
+	// Vector-matrix multiplications
+	__m128 m_Columns[4];
 };
 
 bool operator==(const Matrix& first, const Matrix& second);
@@ -62,18 +68,18 @@ struct fmt::formatter<Matrix>
 	template<typename FormatContext>
 	auto format(const Matrix& matrix, FormatContext& context)
 	{
-		auto row0 = reinterpret_cast<const float*>(&matrix.m_Rows[0]);
-		auto row1 = reinterpret_cast<const float*>(&matrix.m_Rows[1]);
-		auto row2 = reinterpret_cast<const float*>(&matrix.m_Rows[2]);
-		auto row3 = reinterpret_cast<const float*>(&matrix.m_Rows[3]);
+		auto column0 = reinterpret_cast<const float*>(&matrix.m_Columns[0]);
+		auto column1 = reinterpret_cast<const float*>(&matrix.m_Columns[1]);
+		auto column2 = reinterpret_cast<const float*>(&matrix.m_Columns[2]);
+		auto column3 = reinterpret_cast<const float*>(&matrix.m_Columns[3]);
 
 		return format_to(
 			context.out(),
 			ParseString,
-			row0[0], row0[1], row0[2], row0[3],
-			row1[0], row1[1], row1[2], row1[3],
-			row2[0], row2[1], row2[2], row2[3],
-			row3[0], row3[1], row3[2], row3[3],
-			);
+			column0[0], column1[0], column2[0], column3[0],
+			column0[1], column1[1], column2[1], column3[1],
+			column0[2], column1[2], column2[2], column3[2],
+			column0[3], column1[3], column2[3], column3[3]
+		);
 	}
 };

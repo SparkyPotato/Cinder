@@ -92,16 +92,16 @@ bool operator!=(const Transform& first, const Transform& second)
 Transform Translate(const Vector& delta)
 {
 	Matrix matrix(
-		1.f, 0.f, 0.f, delta.X,
-		0.f, 1.f, 0.f, delta.Y,
-		0.f, 0.f, 1.f, delta.Z,
-		0.f, 0.f, 0.f, 1.f
+		1.f,     0.f,     0.f,     0.f,
+		0.f,     1.f,     0.f,     0.f,
+		0.f,     0.f,     1.f,     0.f,
+		delta.X, delta.Y, delta.Z, 1.f
 	);
 	Matrix inverse(
-		1.f, 0.f, 0.f, -delta.X,
-		0.f, 1.f, 0.f, -delta.Y,
-		0.f, 0.f, 1.f, -delta.Z,
-		0.f, 0.f, 0.f, 1.f
+		1.f,      0.f,      0.f,      0.f,
+		0.f,      1.f,      0.f,      0.f,
+		0.f,      0.f,      1.f,      0.f,
+		-delta.X, -delta.Y, -delta.Z, 1.f
 	);
 
 	return Transform(matrix, inverse);
@@ -116,10 +116,10 @@ Transform Scale(float scale)
 		0.f,   0.f,   0.f,   1.f
 	);
 	Matrix inverse(
-		-scale, 0.f,    0.f,    0.f,
-		0.f,    -scale, 0.f,    0.f,
-		0.f,    0.f,    -scale, 0.f,
-		0.f,    0.f,    0.f,    1.f
+		1.f / scale, 0.f,         0.f,         0.f,
+		0.f,         1.f / scale, 0.f,         0.f,
+		0.f,         0.f,         1.f / scale, 0.f,
+		0.f,         0.f,         0.f,         1.f
 	);
 
 	return Transform(matrix, inverse);
@@ -134,10 +134,10 @@ Transform Scale(const Vector& scale)
 		0.f,     0.f,     0.f,     1.f
 	);
 	Matrix inverse(
-		-scale.X, 0.f,      0.f,      0.f,
-		0.f,      -scale.Y, 0.f,      0.f,
-		0.f,      0.f,      -scale.Z, 0.f,
-		0.f,      0.f,      0.f,      1.f
+		1.f / scale.X, 0.f,           0.f,           0.f,
+		0.f,           1.f / scale.Y, 0.f,           0.f,
+		0.f,           0.f,           1.f / scale.Z, 0.f,
+		0.f,           0.f,           0.f,           1.f
 	);
 
 	return Transform(matrix, inverse);
@@ -145,15 +145,15 @@ Transform Scale(const Vector& scale)
 
 Transform Rotate(const Vector& eulerDegrees)
 {
-
+	
 }
 
 Transform Rotate(const Vector& axis, float degreeAngle)
 {
-
+	
 }
 
 Transform LookAt(const Point& location, const Point& focus, const Vector& up)
 {
-
+	
 }
