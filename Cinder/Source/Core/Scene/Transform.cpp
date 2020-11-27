@@ -99,6 +99,46 @@ bool Transform::ChangesHandedness()
 }
 
 
+Quaternion Transform::ToQuaternion()
+{
+	const Matrix& matrix = m_Matrix;
+	Quaternion quat;
+	float trace = matrix[0][0] + matrix[1][1] + matrix[2][2];
+
+	if (trace > 0.f)
+	{
+		float s = std::sqrt(trace + 1.0f);
+		quat.W = s / 2.0f;
+		s = 0.5f / s;
+		quat.X = (matrix[1][2] - matrix[2][1]) * s;
+		quat.Y = (matrix[2][0] - matrix[0][2]) * s;
+		quat.Z = (matrix[0][1] - matrix[1][0]) * s;
+	}
+	else
+	{
+		const int nxt[3] = { 1, 2, 0 };
+		float q[3];
+		int i = 0;
+		if (matrix[1][1] > matrix[0][0]) { i = 1; }
+		if (matrix[2][2] > matrix[i][i]) { i = 2; }
+
+		int j = nxt[i];
+		int k = nxt[j];
+		float s = std::sqrt((matrix[i][i] - (matrix[j][j] + matrix[k][k])) + 1.0f);
+		q[i] = s * 0.5f;
+		if (s != 0.f) s = 0.5f / s;
+		quat.W = (matrix[j][k] - matrix[k][j]) * s;
+		q[j] = (matrix[i][j] + matrix[j][i]) * s;
+		q[k] = (matrix[i][k] + matrix[k][i]) * s;
+
+		quat.X = q[0];
+		quat.Y = q[1];
+		quat.Z = q[2];
+	}
+
+	return quat;
+}
+
 bool operator==(const Transform& first, const Transform& second)
 {
 	return first.m_Matrix == second.m_Matrix;
@@ -201,6 +241,23 @@ Transform Rotate(const Vector& axis, float degreeAngle)
 		0.f,                           0.f,                           0.f,                           1.f
 	);
 	
+	return Transform(matrix, matrix.Transpose());
+}
+
+Transform Rotate(const Quaternion& quaternion)
+{
+	float X = quaternion.X;
+	float Y = quaternion.Y;
+	float Z = quaternion.Z;
+	float W = quaternion.W;
+
+	Matrix matrix(
+		1.f - 2.f * (Y * Y + Z * Z), 2.f * (X * Y + Z * W), 2.f * (X * Z - Y * W), 0.f,
+		2.f * (X * Y - Z * W), 1.f - 2.f * (X * X + Z * Z), 2 * (Y * Z + X * W), 0.f,
+		2.f * (X * Z + Y * W), 2.f * (Y * Z - X * W), 1.f - 2.f * (X * X + Y * Y), 0.f,
+		0.f, 0.f, 0.f, 1.f
+	);
+
 	return Transform(matrix, matrix.Transpose());
 }
 

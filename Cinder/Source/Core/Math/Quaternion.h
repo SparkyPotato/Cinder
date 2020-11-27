@@ -1,14 +1,11 @@
 #pragma once
 
-#include "Transform.h"
-
 class Quaternion
 {
 public:
 	Quaternion() = default;
 	Quaternion(float x, float y, float z, float w);
 	Quaternion(const Quaternion& other) = default;
-	Quaternion(const Transform& transform);
 
 	Quaternion& operator=(const Quaternion& other);
 
@@ -23,8 +20,6 @@ public:
 
 	Quaternion operator/(float scalar) const;
 	Quaternion& operator/=(float scalar);
-
-	Transform ToTransform() const;
 
 	Quaternion& Normalize();
 	Quaternion GetNormalized() const;

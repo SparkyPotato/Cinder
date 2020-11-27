@@ -36,9 +36,9 @@
 #include <thread>
 #include <vector>
 
-#include "Global/Assert.h"
-#include "Global/Options.h"
-#include "Global/OSAL.h"
-#include "Global/Output.h"
+#include "Core/Global/Assert.h"
+#include "Core/Global/Options.h"
+#include "Core/Global/OSAL.h"
+#include "Core/Global/Output.h"
 
-#include "Math/Math.h"
+#include "Core/Math/Math.h"

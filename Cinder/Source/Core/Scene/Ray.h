@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.h"
+#include "Core/Math/Vector.h"
 
 class Medium;
 
@@ -25,7 +25,6 @@ public:
 };
 
 // Difference between the rays of two samples
-// INCOMPLETE
 class RayDifferential : public Ray
 {
 public:

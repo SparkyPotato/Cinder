@@ -39,7 +39,7 @@ Transform Animation::GetTransform(float time) const
 	{
 		if (IsNearlyEqual(it->Time, time, 0.01f))
 		{
-			return Scale(it->Scale) * it->Rotation.ToTransform() * Translate(it->Translation);
+			return Scale(it->Scale) * Rotate(it->Rotation) * Translate(it->Translation);
 		}
 
 		if (it->Time > time)
@@ -59,7 +59,7 @@ Transform Animation::GetTransform(float time) const
 	Vector translation = Lerp(from->Translation, to->Translation, delta);
 	Quaternion rotation = Slerp(from->Rotation, to->Rotation, delta);
 
-	return Scale(scale) * rotation.ToTransform() * Translate(translation);
+	return Scale(scale) * Rotate(rotation) * Translate(translation);
 }
 
 float Animation::GetAnimationTime() const

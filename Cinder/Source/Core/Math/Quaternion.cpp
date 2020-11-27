@@ -8,43 +8,6 @@ Quaternion::Quaternion(float x, float y, float z, float w)
 	m_Vector = _mm_set_ps(w, z, y, x);
 }
 
-Quaternion::Quaternion(const Transform& transform)
-{
-	const Matrix& matrix = transform.GetMatrix();
-	float trace = matrix[0][0] + matrix[1][1] + matrix[2][2];
-
-	if (trace > 0.f) 
-	{
-		float s = std::sqrt(trace + 1.0f);
-		W = s / 2.0f;
-		s = 0.5f / s;
-		X = (matrix[1][2] - matrix[2][1]) * s;
-		X = (matrix[2][0] - matrix[0][2]) * s;
-		X = (matrix[0][1] - matrix[1][0]) * s;
-	}
-	else
-	{
-		const int nxt[3] = { 1, 2, 0 };
-		float q[3];
-		int i = 0;
-		if (matrix[1][1] > matrix[0][0]) { i = 1; }
-		if (matrix[2][2] > matrix[i][i]) { i = 2; }
-
-		int j = nxt[i];
-		int k = nxt[j];
-		float s = std::sqrt((matrix[i][i] - (matrix[j][j] + matrix[k][k])) + 1.0f);
-		q[i] = s * 0.5f;
-		if (s != 0.f) s = 0.5f / s;
-		W = (matrix[j][k] - matrix[k][j]) * s;
-		q[j] = (matrix[i][j] + matrix[j][i]) * s;
-		q[k] = (matrix[i][k] + matrix[k][i]) * s;
-
-		X = q[0];
-		X = q[1];
-		X = q[2];
-	}
-}
-
 Quaternion::Quaternion(const __m128& vector)
 	: m_Vector(vector)
 {}
@@ -101,18 +64,6 @@ Quaternion& Quaternion::operator/=(float scalar)
 	m_Vector = _mm_div_ps(m_Vector, scale);
 
 	return *this;
-}
-
-Transform Quaternion::ToTransform() const
-{
-	Matrix matrix(
-		1.f - 2.f * (Y * Y + Z * Z), 2.f * (X * Y + Z * W),       2.f * (X * Z - Y * W),       0.f,
-		2.f * (X * Y - Z * W),       1.f - 2.f * (X * X + Z * Z), 2 * (Y * Z + X * W),         0.f,
-		2.f * (X * Z + Y * W),       2.f * (Y * Z - X * W),       1.f - 2.f * (X * X + Y * Y), 0.f,
-		0.f,                         0.f,                         0.f,                         1.f
-	);
-
-	return Transform(matrix, matrix.Transpose());
 }
 
 Quaternion& Quaternion::Normalize()

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Bound.h"
-#include "Matrix.h"
+#include "Core/Math/Bound.h"
+#include "Core/Math/Matrix.h"
+#include "Core/Math/Quaternion.h"
+#include "Core/Math/Vector.h"
 #include "Ray.h"
-#include "Vector.h"
 
 // Transform of an object at an instant in time
 class Transform
@@ -34,6 +35,8 @@ public:
 	
 	bool ChangesHandedness();
 
+	Quaternion ToQuaternion();
+
 private:
 	friend bool operator==(const Transform& first, const Transform& second);
 
@@ -47,5 +50,6 @@ Transform Translate(const Vector& delta);
 Transform Scale(float scale);
 Transform Scale(const Vector& scale);
 Transform Rotate(const Vector& eulerDegrees);
+Transform Rotate(const Quaternion& quaternion);
 Transform Rotate(const Vector& axis, float degreeAngle);
 Transform LookAt(const Point& location, const Point& focus, const Vector& up);

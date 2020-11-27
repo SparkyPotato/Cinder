@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quaternion.h"
+#include "Core/Math/Quaternion.h"
 #include "Transform.h"
 
 struct Keyframe
