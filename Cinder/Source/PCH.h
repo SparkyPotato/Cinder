@@ -38,6 +38,8 @@
 #include <thread>
 #include <vector>
 
+#include "yaml-cpp/yaml.h"
+
 #include "Core/Global/Assert.h"
 #include "Core/Global/Options.h"
 #include "Core/Global/OSAL.h"

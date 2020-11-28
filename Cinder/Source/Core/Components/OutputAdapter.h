@@ -9,6 +9,8 @@ public:
 		: m_OutputFile(filename)
 	{}
 
+	virtual bool ParseSettings(const YAML::Node& node) { return true; }
+
 	virtual void WriteOutput(const Framebuffer& framebuffer) = 0;
 
 protected:

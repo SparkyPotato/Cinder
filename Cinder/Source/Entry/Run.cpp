@@ -1,8 +1,6 @@
 #include "PCH.h"
 #include "Run.h"
 
-#include "yaml-cpp/yaml.h"
-
 #include "Core/Components/Renderer.h"
 #include "Core/Components/Framebuffer.h"
 #include "Core/Components/OutputAdapter.h"
@@ -23,7 +21,8 @@ void RunProject(const std::filesystem::path& filePath)
 
 	Renderer* renderer;
 	try { renderer = ComponentManager::Get()->SpawnRenderer(type); }
-	catch (...) { Error("Renderer Type '{}' does not exist! Skipping.", type); }
+	catch (...) { Error("Renderer Type '{}' does not exist! Skipping.", type); return; }
+	if (!renderer->ParseSettings(project["Renderer"])) { Error("Parse settings failed! Skipping."); return;  }
 
 	type = "Simple";
 	uint32_t width = 1920, height = 1080;
@@ -36,7 +35,8 @@ void RunProject(const std::filesystem::path& filePath)
 
 	Framebuffer* framebuffer;
 	try { framebuffer = ComponentManager::Get()->SpawnFramebuffer(type, width, height); }
-	catch (...) { Error("Framebuffer Type '{}' does not exist! Skipping.", type); }
+	catch (...) { Error("Framebuffer Type '{}' does not exist! Skipping.", type); return; }
+	if (!framebuffer->ParseSettings(project["Framebuffer"])) { Error("Parse settings failed! Skipping."); return; }
 
 	type = "PNG";
 	std::string file = "Output.png";
@@ -48,9 +48,8 @@ void RunProject(const std::filesystem::path& filePath)
 	OutputAdapter* output;
 	std::string outputPath = filePath.parent_path().string() + "/" + file;
 	try { output = ComponentManager::Get()->SpawnOutputAdapter(type, outputPath); }
-	catch (...) { Error("Output Adapter Type '{}' does not exist! Skipping.", type); }
-
-
+	catch (...) { Error("Output Adapter Type '{}' does not exist! Skipping.", type); return; }
+	if (!output->ParseSettings(project["Output"])) { Error("Parse settings failed! Skipping."); return; }
 
 	output->WriteOutput(*framebuffer);
 }

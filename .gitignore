@@ -21,3 +21,8 @@ Cinder/Dependencies/ProjectFiles/*
 
 # Log files
 */Log.txt
+
+# Render Results
+*.png
+*.jpg
+*jpeg

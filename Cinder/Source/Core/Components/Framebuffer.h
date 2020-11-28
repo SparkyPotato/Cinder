@@ -14,6 +14,8 @@ public:
 
 	uint32_t Width, Height;
 
+	virtual bool ParseSettings(const YAML::Node& node) { return true; }
+
 	virtual const Color* GetOutputColorData() const = 0;
 };
 

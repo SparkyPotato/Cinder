@@ -7,6 +7,9 @@ class Renderer
 {
 public:
 	virtual ~Renderer() {}
+
+	virtual bool ParseSettings(const YAML::Node& node) { return true; }
+
 	virtual void Render(const Scene& scene) = 0;
 };
 
