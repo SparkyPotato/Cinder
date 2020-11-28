@@ -30,3 +30,13 @@ void ComponentManager::RegisterFramebuffer(const char* name, FramebufferSpawnFun
 {
 	m_Framebuffers.emplace(name, function);
 }
+
+OutputAdapter* ComponentManager::SpawnOutputAdapter(const std::string& name, const std::string& filename)
+{
+	return m_OutputAdapters.at(name)(filename);
+}
+
+void ComponentManager::RegisterOutputAdapter(const char* name, OutputAdapterSpawnFunction function)
+{
+	m_OutputAdapters.emplace(name, function);
+}

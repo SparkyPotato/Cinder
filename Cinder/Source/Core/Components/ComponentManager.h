@@ -2,8 +2,10 @@
 
 class Renderer;
 class Framebuffer;
+class OutputAdapter;
 
 typedef Renderer* (*RendererSpawnFunction)();
+typedef OutputAdapter* (*OutputAdapterSpawnFunction)(const std::string& filename);
 typedef Framebuffer* (*FramebufferSpawnFunction)(uint32_t, uint32_t);
 
 class ComponentManager
@@ -19,9 +21,13 @@ public:
 	Framebuffer* SpawnFramebuffer(const std::string& name, uint32_t width, uint32_t height);
 	void RegisterFramebuffer(const char* name, FramebufferSpawnFunction function);
 
+	OutputAdapter* SpawnOutputAdapter(const std::string& name, const std::string& filename);
+	void RegisterOutputAdapter(const char* name, OutputAdapterSpawnFunction function);
+
 private:
 	static ComponentManager* s_Singleton;
 
 	std::map<std::string, RendererSpawnFunction> m_Renderers;
 	std::map<std::string, FramebufferSpawnFunction> m_Framebuffers;
+	std::map<std::string, OutputAdapterSpawnFunction> m_OutputAdapters;
 };

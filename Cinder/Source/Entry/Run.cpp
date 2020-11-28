@@ -5,6 +5,7 @@
 
 #include "Core/Components/Renderer.h"
 #include "Core/Components/Framebuffer.h"
+#include "Core/Components/OutputAdapter.h"
 
 void RunProject(const std::filesystem::path& filePath)
 {
@@ -22,10 +23,7 @@ void RunProject(const std::filesystem::path& filePath)
 
 	Renderer* renderer;
 	try { renderer = ComponentManager::Get()->SpawnRenderer(type); }
-	catch (...)
-	{
-		Error("Renderer Type '{}' does not exist! Skipping.", type);
-	}
+	catch (...) { Error("Renderer Type '{}' does not exist! Skipping.", type); }
 
 	type = "Simple";
 	uint32_t width = 1920, height = 1080;
@@ -38,8 +36,21 @@ void RunProject(const std::filesystem::path& filePath)
 
 	Framebuffer* framebuffer;
 	try { framebuffer = ComponentManager::Get()->SpawnFramebuffer(type, width, height); }
-	catch (...)
-	{
-		Error("Framebuffer Type '{}' does not exist! Skipping.", type);
-	}
+	catch (...) { Error("Framebuffer Type '{}' does not exist! Skipping.", type); }
+
+	type = "PNG";
+	std::string file = "Output.png";
+	if (project["Output"]["Type"]) { type = project["Output"]["Type"].as<std::string>(); }
+	else { Warning("No Output Type, using default ({})", type); }
+	if (project["Output"]["File"]) { file = project["Output"]["File"].as<std::string>(); }
+	else { Warning("No Output File, using default ({})", file); }
+
+	OutputAdapter* output;
+	std::string outputPath = filePath.parent_path().string() + "/" + file;
+	try { output = ComponentManager::Get()->SpawnOutputAdapter(type, outputPath); }
+	catch (...) { Error("Output Adapter Type '{}' does not exist! Skipping.", type); }
+
+
+
+	output->WriteOutput(*framebuffer);
 }
