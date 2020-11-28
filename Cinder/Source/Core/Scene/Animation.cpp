@@ -1,5 +1,4 @@
 #include "PCH.h"
-
 #include "Animation.h"
 
 bool operator==(const Keyframe& first, const Keyframe& second)

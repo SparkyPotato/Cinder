@@ -1,12 +1,13 @@
 #include "PCH.h"
 
 #include "Core/Global/Options.h"
+#include "Run.h"
 
 int Entry(int argc, char** argv)
 {
 	try
 	{
-		std::vector<const char*> configFiles;
+		std::vector<const char*> projectFiles;
 		std::vector<std::string> optionsInput;
 		
 		// Parse command line arguments:
@@ -21,7 +22,7 @@ int Entry(int argc, char** argv)
 			// Check if the first character of the argument is a '-',
 			// if it is not then we assume it is a config file
 			if (strcmp(argv[i], "-nologo") == 0) { logo = false; }
-			else if (*argv[i] != '-') { configFiles.emplace_back(argv[i]); }
+			else if (*argv[i] != '-') { projectFiles.emplace_back(argv[i]); }
 			else { optionsInput.emplace_back(argv[i]); }
 		}
 		
@@ -38,7 +39,7 @@ Will be slow, set log level to 0 to see debug information.
 		}
 		auto options = GenerateOptions(optionsInput);
 
-		if (configFiles.empty())
+		if (projectFiles.empty())
 		{
 			Fatal("No project files passed. \nRun with '-help' or '-h' for help.");
 		}
@@ -56,18 +57,31 @@ Will be slow, set log level to 0 to see debug information.
 		
 		Log("Rendering with {} threads.", options.ThreadCount);
 		
+		for (auto file : projectFiles)
+		{
+			std::filesystem::path path = file;
+			if (!std::filesystem::exists(path))
+			{
+				Error("Project file '{}' does not exist! Skipping.", path.string());
+				continue;
+			}
+			if (!std::filesystem::is_regular_file(path))
+			{
+				Error("'{}' is not a file! Skipping.", path.string());
+				continue;
+			}
+			
+			RunProject(path);
+		}
+		
+		Log("Rendering complete.");
+		
 		fclose(GLogFile);
 		return EXIT_SUCCESS;
 	}
-	catch (std::exception& e)
-	{
-		Console(e.what());
-		fclose(GLogFile);
-		return EXIT_FAILURE;
-	}
-	catch (...)
-	{
-		fclose(GLogFile);
-		return EXIT_FAILURE;
-	}
+	catch (std::exception& e) { Console(e.what()); }
+	catch (...) {}
+	
+	fclose(GLogFile);
+	return EXIT_FAILURE;
 }

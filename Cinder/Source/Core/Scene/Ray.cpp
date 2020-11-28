@@ -1,5 +1,4 @@
 #include "PCH.h"
-
 #include "Ray.h"
 
 Ray::Ray(const Point& origin, const Vector& direction, float extent, const Medium* medium)

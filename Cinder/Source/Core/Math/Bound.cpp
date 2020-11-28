@@ -1,5 +1,4 @@
 #include "PCH.h"
-
 #include "Bound.h"
 
 Bound::Bound()

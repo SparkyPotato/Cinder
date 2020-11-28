@@ -1,5 +1,4 @@
 #include "PCH.h"
-
 #include "Options.h"
 
 void ShowHelp();

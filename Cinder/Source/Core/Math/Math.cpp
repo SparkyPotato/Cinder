@@ -1,4 +1,5 @@
 #include "PCH.h"
+#include "Math.h"
 
 float Lerp(float from, float to, float ratio)
 {
