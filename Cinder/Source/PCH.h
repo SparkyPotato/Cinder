@@ -31,7 +31,9 @@
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
+#include <functional>
 #include <iostream>
+#include <map>
 #include <string>
 #include <thread>
 #include <vector>
