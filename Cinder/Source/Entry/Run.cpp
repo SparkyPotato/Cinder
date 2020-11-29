@@ -4,6 +4,7 @@
 #include "Core/Components/Renderer.h"
 #include "Core/Components/Framebuffer.h"
 #include "Core/Components/OutputAdapter.h"
+#include "Core/Scene/AccelerationStructure.h"
 
 Renderer* SpawnRenderer(YAML::Node& project);
 Framebuffer* SpawnFramebuffer(YAML::Node& project);
@@ -67,6 +68,31 @@ void RunProject(const std::filesystem::path& filePath)
 		Error("Failed to parse scene! Skipping project.");
 		return;
 	}
+
+	std::string accelerationStructure = "None";
+	if (project["Scene"]["Acceleration"])
+	{
+		try { accelerationStructure = project["Scene"]["Acceleration"]["Type"].as<std::string>(); }
+		catch (YAML::Exception& e)
+		{
+			Error("Acceleration Structure Type must be a string (line {})!", e.mark.line);
+			Error("Failed to create Acceleration Structure. Skipping project.");
+			return;
+		}
+	}
+	else
+	{
+		Warning("No Acceleration Structure given, using default ({})", accelerationStructure);
+	}
+
+	try { scene.AccelStructure = ComponentManager::Get()->SpawnAccelerationStructure(accelerationStructure); }
+	catch (...)
+	{
+		Error("Acceleration Structure '{}' does not exist!", accelerationStructure);
+		Error("Failed to create Acceleration Structure. Skipping project.");
+		return;
+	}
+	scene.AccelStructure->Build(scene);
 
 	renderer->Render(scene, *framebuffer);
 

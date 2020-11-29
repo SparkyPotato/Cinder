@@ -50,3 +50,13 @@ void ComponentManager::RegisterShape(const char* type, ShapeSpawnFunction functi
 {
 	m_Shapes.emplace(type, function);
 }
+
+AccelerationStructure* ComponentManager::SpawnAccelerationStructure(const std::string type)
+{
+	return m_AccelerationStructures.at(type)();
+}
+
+void ComponentManager::RegisterAccelerationStructure(const char* type, AccelerationSpawnFunction function)
+{
+	m_AccelerationStructures.emplace(type, function);
+}

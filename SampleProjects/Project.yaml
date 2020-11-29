@@ -3,7 +3,8 @@
 Scene:
   File: Scene.yaml
   Camera: Main Camera
-  Acceleration: BVH
+  Acceleration:
+    Type: None
 
 Renderer:
   Type: Preview

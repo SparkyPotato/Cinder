@@ -19,3 +19,13 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 
 	return true;
 }
+
+bool Object::Intersect(const Ray& ray, RayIntersection& intersection) const
+{
+	return ObjectShape->Intersect(ray, intersection);
+}
+
+bool Object::TestIntersect(const Ray& ray) const
+{
+	return ObjectShape->TestIntersect(ray);
+}

@@ -10,6 +10,7 @@ public:
 	Shape(const Transform& objectToWorld)
 		: m_ObjectToWorld(objectToWorld)
 	{}
+	virtual ~Shape() {}
 
 	virtual bool Intersect(const Ray&, RayIntersection& intersection) = 0;
 	virtual bool TestIntersect(const Ray& ray) 

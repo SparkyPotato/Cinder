@@ -5,11 +5,13 @@ class Framebuffer;
 class OutputAdapter;
 class Shape;
 class Transform;
+class AccelerationStructure;
 
 typedef Renderer* (*RendererSpawnFunction)();
 typedef OutputAdapter* (*OutputAdapterSpawnFunction)(const std::string&);
 typedef Framebuffer* (*FramebufferSpawnFunction)(uint32_t, uint32_t);
 typedef Shape* (*ShapeSpawnFunction)(const Transform&);
+typedef AccelerationStructure* (*AccelerationSpawnFunction)();
 
 class ComponentManager
 {
@@ -30,6 +32,9 @@ public:
 	Shape* SpawnShape(const std::string& type, const Transform& transform);
 	void RegisterShape(const char* type, ShapeSpawnFunction function);
 
+	AccelerationStructure* SpawnAccelerationStructure(const std::string type);
+	void RegisterAccelerationStructure(const char* type, AccelerationSpawnFunction function);
+
 private:
 	static ComponentManager* s_Singleton;
 
@@ -37,4 +42,5 @@ private:
 	std::map<std::string, FramebufferSpawnFunction> m_Framebuffers;
 	std::map<std::string, OutputAdapterSpawnFunction> m_OutputAdapters;
 	std::map<std::string, ShapeSpawnFunction> m_Shapes;
+	std::map<std::string, AccelerationSpawnFunction> m_AccelerationStructures;
 };

@@ -7,6 +7,9 @@ class Object
 public:
 	Object() = default;
 
+	bool Intersect(const Ray& ray, RayIntersection& intersection) const;
+	bool TestIntersect(const Ray& ray) const;
+
 	Shape* ObjectShape = nullptr;
 };
 

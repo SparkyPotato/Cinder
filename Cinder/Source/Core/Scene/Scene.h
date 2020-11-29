@@ -2,6 +2,8 @@
 
 #include "Object.h"
 
+class AccelerationStructure;
+
 class Scene
 {
 public:
@@ -9,6 +11,7 @@ public:
 	static Scene FromFile(const std::string& file);
 
 	std::vector<Object> Objects;
+	AccelerationStructure* AccelStructure;
 };
 
 template<>
