@@ -40,3 +40,13 @@ void ComponentManager::RegisterOutputAdapter(const char* name, OutputAdapterSpaw
 {
 	m_OutputAdapters.emplace(name, function);
 }
+
+Shape* ComponentManager::SpawnShape(const std::string& type, const Transform& transform)
+{
+	return m_Shapes.at(type)(transform);
+}
+
+void ComponentManager::RegisterShape(const char* type, ShapeSpawnFunction function)
+{
+	m_Shapes.emplace(type, function);
+}

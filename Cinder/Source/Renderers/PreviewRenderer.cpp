@@ -8,7 +8,7 @@ PreviewRenderer::PreviewRenderer()
 	Verbose("Preview Renderer created.");
 }
 
-void PreviewRenderer::Render(const Scene& scene)
+void PreviewRenderer::Render(const Scene& scene, Framebuffer& framebuffer)
 {
 
 }

@@ -29,7 +29,6 @@ void RunProject(const std::filesystem::path& filePath)
 		return;
 	}
 
-	// Framebuffer
 	Framebuffer* framebuffer = SpawnFramebuffer(project);
 	if (!framebuffer)
 	{
@@ -37,13 +36,39 @@ void RunProject(const std::filesystem::path& filePath)
 		return;
 	}
 
-	// Output Adapter
 	OutputAdapter* output = SpawnOutputAdapter(project, filePath);
 	if (!output)
 	{
 		Error("Failed Output Adapter creation. Skipping project.");
 		return;
 	}
+
+	std::string file;
+	if (project["Scene"]["File"])
+	{
+		try { file = project["Scene"]["File"].as<std::string>(); }
+		catch (YAML::Exception& e)
+		{
+			Error("Scene File must be a string (line {})!", e.mark.line);
+			Error("Failed to load Scene. Skipping project.");
+			return;
+		}
+	}
+	else
+	{
+		Error("Scene Path does not exist! Skipping project.");
+	}
+
+	std::string scenePath = filePath.parent_path().string() + "/" + file;
+	Scene scene;
+	try { scene = Scene::FromFile(scenePath); }
+	catch (...)
+	{
+		Error("Failed to parse scene! Skipping project.");
+		return;
+	}
+
+	renderer->Render(scene, *framebuffer);
 
 	output->WriteOutput(*framebuffer);
 	Log("Project '{}' finished rendering.", filePath.filename().string());

@@ -10,7 +10,7 @@ public:
 
 	virtual bool ParseSettings(const YAML::Node& node) { return true; }
 
-	virtual void Render(const Scene& scene) = 0;
+	virtual void Render(const Scene& scene, Framebuffer& framebuffer) = 0;
 };
 
 #define REGISTER_RENDERER(name, className) \

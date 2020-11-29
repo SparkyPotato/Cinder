@@ -3,10 +3,13 @@
 class Renderer;
 class Framebuffer;
 class OutputAdapter;
+class Shape;
+class Transform;
 
 typedef Renderer* (*RendererSpawnFunction)();
-typedef OutputAdapter* (*OutputAdapterSpawnFunction)(const std::string& filename);
+typedef OutputAdapter* (*OutputAdapterSpawnFunction)(const std::string&);
 typedef Framebuffer* (*FramebufferSpawnFunction)(uint32_t, uint32_t);
+typedef Shape* (*ShapeSpawnFunction)(const Transform&);
 
 class ComponentManager
 {
@@ -24,10 +27,14 @@ public:
 	OutputAdapter* SpawnOutputAdapter(const std::string& name, const std::string& filename);
 	void RegisterOutputAdapter(const char* name, OutputAdapterSpawnFunction function);
 
+	Shape* SpawnShape(const std::string& type, const Transform& transform);
+	void RegisterShape(const char* type, ShapeSpawnFunction function);
+
 private:
 	static ComponentManager* s_Singleton;
 
 	std::map<std::string, RendererSpawnFunction> m_Renderers;
 	std::map<std::string, FramebufferSpawnFunction> m_Framebuffers;
 	std::map<std::string, OutputAdapterSpawnFunction> m_OutputAdapters;
+	std::map<std::string, ShapeSpawnFunction> m_Shapes;
 };

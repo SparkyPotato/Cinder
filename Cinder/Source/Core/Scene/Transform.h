@@ -32,6 +32,7 @@ public:
 	RayDifferential operator()(const RayDifferential& ray) const;
 	Bound operator()(const Bound& bound) const;
 	Transform operator*(const Transform& transform) const;
+	Transform operator*=(const Transform& transform);
 	
 	bool ChangesHandedness();
 
@@ -53,3 +54,9 @@ Transform Rotate(const Vector& eulerDegrees);
 Transform Rotate(const Quaternion& quaternion);
 Transform Rotate(const Vector& axis, float degreeAngle);
 Transform LookAt(const Point& location, const Point& focus, const Vector& up);
+
+template<>
+struct YAML::convert<Transform>
+{
+	static bool decode(const Node& node, Transform& transform);
+};
