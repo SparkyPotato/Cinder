@@ -59,13 +59,7 @@ Normal Transform::operator()(const Normal& normal) const
 Ray Transform::operator()(const Ray& ray) const
 {
 	return Ray(ray.Origin * m_Matrix, ray.Direction * m_Matrix,
-		ray.Extent, ray.CurrentMedium);
-}
-
-RayDifferential Transform::operator()(const RayDifferential& ray) const
-{
-	return RayDifferential(ray.Origin * m_Matrix, ray.Direction * m_Matrix,
-		ray.Extent, ray.CurrentMedium);
+		ray.Extent);
 }
 
 Bound Transform::operator()(const Bound& bound) const

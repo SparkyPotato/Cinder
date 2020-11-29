@@ -7,7 +7,7 @@ class Sphere : public Shape
 public:
 	Sphere(const Transform& objectToWorld);
 
-	bool Intersect(const Ray&, RayIntersection& intersection) override;
+	bool Intersect(const Ray& ray, RayIntersection& intersection) override;
 	bool TestIntersect(const Ray& ray) override;
 
 	bool ParseProperties(const YAML::Node& node) override;

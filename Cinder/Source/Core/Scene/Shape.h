@@ -12,7 +12,7 @@ public:
 	{}
 	virtual ~Shape() {}
 
-	virtual bool Intersect(const Ray&, RayIntersection& intersection) = 0;
+	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) = 0;
 	virtual bool TestIntersect(const Ray& ray) 
 	{ 
 		RayIntersection discard;

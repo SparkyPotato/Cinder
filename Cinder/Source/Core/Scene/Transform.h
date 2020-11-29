@@ -29,7 +29,6 @@ public:
 	Vector operator()(const Vector& vector) const;
 	Normal operator()(const Normal& normal) const;
 	Ray operator()(const Ray& ray) const;
-	RayDifferential operator()(const RayDifferential& ray) const;
 	Bound operator()(const Bound& bound) const;
 	Transform operator*(const Transform& transform) const;
 	Transform operator*=(const Transform& transform);

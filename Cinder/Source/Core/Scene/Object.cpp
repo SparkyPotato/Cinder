@@ -22,7 +22,9 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 
 bool Object::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
-	return ObjectShape->Intersect(ray, intersection);
+	bool ret = ObjectShape->Intersect(ray, intersection);
+	if (ret) { intersection.HitObject = this; }
+	return ret;
 }
 
 bool Object::TestIntersect(const Ray& ray) const
