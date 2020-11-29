@@ -7,6 +7,7 @@ SimpleFramebuffer::SimpleFramebuffer(uint32_t width, uint32_t height)
 	: Framebuffer(width, height)
 {
 	m_Data = new Color[width * height];
+	Verbose("Simple Framebuffer created with resolution {}x{}.", width, height);
 }
 
 SimpleFramebuffer::~SimpleFramebuffer()

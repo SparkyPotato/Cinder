@@ -9,10 +9,14 @@ REGISTER_OUTPUT_ADAPTER(PNG, PNGOutput)
 
 PNGOutput::PNGOutput(const std::string& filename)
 	: OutputAdapter(filename)
-{}
+{
+	Verbose("PNG Output Adapter created with output file '{}'.", filename);
+}
 
 void PNGOutput::WriteOutput(const Framebuffer& framebuffer)
 {
+	Log("Writing image to file.");
+
 	struct Pixel
 	{
 		uint8_t R, G, B;

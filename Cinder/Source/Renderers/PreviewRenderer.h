@@ -5,5 +5,7 @@
 class PreviewRenderer : public Renderer 
 {
 public:
+	PreviewRenderer();
+
 	void Render(const Scene& scene) override;
 };

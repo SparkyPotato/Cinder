@@ -8,10 +8,14 @@ REGISTER_OUTPUT_ADAPTER(JPEG, JPEGOuput)
 
 JPEGOuput::JPEGOuput(const std::string& filename)
 	: OutputAdapter(filename)
-{}
+{
+	Verbose("JPEG Output Adapter created with output file '{}'.", filename);
+}
 
 void JPEGOuput::WriteOutput(const Framebuffer& framebuffer)
 {
+	Log("Writing image to file.");
+
 	struct Pixel
 	{
 		uint8_t R, G, B;
@@ -39,7 +43,15 @@ void JPEGOuput::WriteOutput(const Framebuffer& framebuffer)
 
 bool JPEGOuput::ParseSettings(const YAML::Node& node)
 {
-	if (node["Quality"]) { m_Quality = node["Quality"].as<int>(); }
+	if (node["Quality"]) 
+	{
+		try { m_Quality = node["Quality"].as<int>(); }
+		catch (YAML::Exception& e)
+		{
+			Error("JPEG Quality must be an integer (line {})!", e.mark.line);
+			return false;
+		}
+	}
 	else
 	{
 		Warning("JPEG Quality not set! Using default ({})", m_Quality);
