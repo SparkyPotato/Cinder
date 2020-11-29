@@ -61,14 +61,14 @@ bool Sphere::ParseProperties(const YAML::Node& node)
 {
 	if (!node["Radius"])
 	{
-		Error("Sphere has no radius!");
+		Error("Sphere has no radius (line {})!", node.Mark().line + 1);
 		return false;
 	}
 
 	try { m_Radius = node["Radius"].as<float>(); }
 	catch (YAML::Exception& e)
 	{
-		Error("Sphere Radius must be a float (line {})!", e.mark.line);
+		Error("Sphere Radius must be a float (line {})!", e.mark.line + 1);
 		return false;
 	}
 

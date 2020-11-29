@@ -48,7 +48,7 @@ bool JPEGOuput::ParseSettings(const YAML::Node& node)
 		try { m_Quality = node["Quality"].as<int>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("JPEG Quality must be an integer (line {})!", e.mark.line);
+			Error("JPEG Quality must be an integer (line {})!", e.mark.line + 1);
 			return false;
 		}
 	}
@@ -59,7 +59,7 @@ bool JPEGOuput::ParseSettings(const YAML::Node& node)
 
 	if (m_Quality < 0 || m_Quality > 100)
 	{
-		Error("Quality ({}) out of range! Must be between 0 to 100 inclusive.", m_Quality);
+		Error("Quality ({}) out of range! Must be between 0 to 100 inclusive (line {}).", m_Quality, node["Quality"].Mark().line + 1);
 		return false;
 	}
 

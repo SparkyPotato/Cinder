@@ -32,12 +32,12 @@ struct YAML::convert<Shape*>
 	{
 		if (!node["Type"])
 		{
-			Error("Shape has no Type!");
+			Error("Shape has no Type (line {})!", node.Mark().line + 1);
 			return false;
 		}
 		if (!node["Transform"])
 		{
-			Error("Shape has no transform!");
+			Error("Shape has no transform (line {})!", node.Mark().line + 1);
 			return false;
 		}
 
@@ -45,7 +45,7 @@ struct YAML::convert<Shape*>
 		try { type = node["Type"].as<std::string>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Shape Type must be a string (line {})!", e.mark.line);
+			Error("Shape Type must be a string (line {})!", e.mark.line + 1);
 			return false;
 		}
 
@@ -60,7 +60,7 @@ struct YAML::convert<Shape*>
 		try { shape = ComponentManager::Get()->SpawnShape(type, transform); }
 		catch (...)
 		{
-			Error("Shape Type '{}' does not exist!", type);
+			Error("Shape Type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);
 			return false;
 		}
 		if (!shape->ParseProperties(node))

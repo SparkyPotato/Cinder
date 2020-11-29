@@ -7,7 +7,7 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 {
 	if (!node["Shape"])
 	{
-		Error("Object has no shape!");
+		Error("Object has no shape (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { object.ObjectShape = node["Shape"].as<Shape*>(); }

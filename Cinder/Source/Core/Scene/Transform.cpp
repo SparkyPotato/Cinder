@@ -295,33 +295,33 @@ bool YAML::convert<Transform>::decode(const Node& node, Transform& transform)
 {
 	if (!node["Position"])
 	{
-		Error("Transform does not have Position!");
+		Error("Transform does not have Position (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	if (!node["Rotation"])
 	{
-		Error("Transform does not have Rotation!");
+		Error("Transform does not have Rotation (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	if (!node["Scale"])
 	{
-		Error("Transform does not have Scale!");
+		Error("Transform does not have Scale (line {})!", node.Mark().line + 1);
 		return false;
 	}
 
 	if (!node["Position"].IsSequence() || node["Position"].size() != 3)
 	{
-		Error("Invalid format for Position!");
+		Error("Invalid dimension for Position (line {})!", node["Position"].Mark().line + 1);
 		return false;
 	}
 	if (!node["Rotation"].IsSequence() || node["Rotation"].size() != 3)
 	{
-		Error("Invalid format for Rotation!");
+		Error("Invalid dimension for Rotation (line {})!", node["Rotation"].Mark().line + 1);
 		return false;
 	}
 	if (!node["Scale"].IsSequence() || node["Scale"].size() != 3)
 	{
-		Error("Invalid format for Scale!");
+		Error("Invalid dimension for Scale (line {})!", node["Scale"].Mark().line + 1);
 		return false;
 	}
 
@@ -332,7 +332,7 @@ bool YAML::convert<Transform>::decode(const Node& node, Transform& transform)
 	}
 	catch (YAML::Exception& e)
 	{
-		Error("Scale expects floats (line {})!", e.mark.line);
+		Error("Scale expects floats (line {})!", e.mark.line + 1);
 		return false;
 	}
 
@@ -343,7 +343,7 @@ bool YAML::convert<Transform>::decode(const Node& node, Transform& transform)
 	}
 	catch (YAML::Exception& e)
 	{
-		Error("Rotation expects floats (line {})!", e.mark.line);
+		Error("Rotation expects floats (line {})!", e.mark.line + 1);
 		return false;
 	}
 
@@ -354,7 +354,7 @@ bool YAML::convert<Transform>::decode(const Node& node, Transform& transform)
 	}
 	catch (YAML::Exception& e)
 	{
-		Error("Position expects floats (line {})!", e.mark.line);
+		Error("Position expects floats (line {})!", e.mark.line + 1);
 		return false;
 	}
 

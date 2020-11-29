@@ -18,7 +18,7 @@ void RunProject(const std::filesystem::path& filePath)
 	try { project = YAML::LoadFile(filePath.string()); }
 	catch (YAML::Exception& e)
 	{
-		Error("Failed to parse project file. Error at line {}.", e.mark.line);
+		Error("Failed to parse project file (line {})!", e.mark.line);
 		Error("Skipping project.");
 		return;
 	}
@@ -50,14 +50,15 @@ void RunProject(const std::filesystem::path& filePath)
 		try { file = project["Scene"]["File"].as<std::string>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Scene File must be a string (line {})!", e.mark.line);
+			Error("Scene File must be a string (line {})!", e.mark.line + 1);
 			Error("Failed to load Scene. Skipping project.");
 			return;
 		}
 	}
 	else
 	{
-		Error("Scene Path does not exist! Skipping project.");
+		Error("Scene Path does not exist (line {})!.", project["Scene"].Mark().line + 1);
+		Error("Skipping project.");
 	}
 
 	std::string scenePath = filePath.parent_path().string() + "/" + file;
@@ -65,7 +66,8 @@ void RunProject(const std::filesystem::path& filePath)
 	try { scene = Scene::FromFile(scenePath); }
 	catch (...)
 	{
-		Error("Failed to parse scene! Skipping project.");
+		Error("Failed to parse scene!");
+		Error("Skipping project.");
 		return;
 	}
 
@@ -75,7 +77,7 @@ void RunProject(const std::filesystem::path& filePath)
 		try { accelerationStructure = project["Scene"]["Acceleration"]["Type"].as<std::string>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Acceleration Structure Type must be a string (line {})!", e.mark.line);
+			Error("Acceleration Structure Type must be a string (line {})!", e.mark.line + 1);
 			Error("Failed to create Acceleration Structure. Skipping project.");
 			return;
 		}
@@ -204,7 +206,7 @@ OutputAdapter* SpawnOutputAdapter(YAML::Node& project, const std::filesystem::pa
 		try { type = project["Output"]["Type"].as<std::string>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Output Adapter Type must be a string (line {})!", e.mark.line);
+			Error("Output Adapter Type must be a string (line {})!", e.mark.line + 1);
 			return nullptr;
 		}
 	}
@@ -218,7 +220,7 @@ OutputAdapter* SpawnOutputAdapter(YAML::Node& project, const std::filesystem::pa
 		try { file = project["Output"]["File"].as<std::string>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Output Adapter File must be a string (line {})!", e.mark.line);
+			Error("Output Adapter File must be a string (line {})!", e.mark.line + 1);
 			return nullptr;
 		}
 	}
