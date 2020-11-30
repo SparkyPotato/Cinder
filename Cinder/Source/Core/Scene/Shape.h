@@ -7,8 +7,8 @@
 class Shape
 {
 public:
-	Shape(const Transform& objectToWorld)
-		: m_ObjectToWorld(objectToWorld)
+	Shape(const Transform& objectToCamera)
+		: m_ObjectToCamera(objectToCamera)
 	{}
 	virtual ~Shape() {}
 
@@ -22,8 +22,10 @@ public:
 	virtual bool ParseProperties(const YAML::Node& node) = 0;
 
 protected:
-	Transform m_ObjectToWorld;
+	Transform m_ObjectToCamera;
 };
+
+extern Transform GCameraTransform;
 
 template<>
 struct YAML::convert<Shape*>
@@ -40,7 +42,7 @@ struct YAML::convert<Shape*>
 			Error("Shape has no transform (line {})!", node.Mark().line + 1);
 			return false;
 		}
-
+		
 		std::string type;
 		try { type = node["Type"].as<std::string>(); }
 		catch (YAML::Exception& e)
@@ -57,7 +59,7 @@ struct YAML::convert<Shape*>
 			return false;
 		}
 
-		try { shape = ComponentManager::Get()->SpawnShape(type, transform); }
+		try { shape = ComponentManager::Get()->SpawnShape(type, GCameraTransform.GetInverse() * transform); }
 		catch (...)
 		{
 			Error("Shape Type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);

@@ -51,7 +51,7 @@ void ComponentManager::RegisterShape(const char* type, ShapeSpawnFunction functi
 	m_Shapes.emplace(type, function);
 }
 
-AccelerationStructure* ComponentManager::SpawnAccelerationStructure(const std::string type)
+AccelerationStructure* ComponentManager::SpawnAccelerationStructure(const std::string& type)
 {
 	return m_AccelerationStructures.at(type)();
 }
@@ -59,4 +59,14 @@ AccelerationStructure* ComponentManager::SpawnAccelerationStructure(const std::s
 void ComponentManager::RegisterAccelerationStructure(const char* type, AccelerationSpawnFunction function)
 {
 	m_AccelerationStructures.emplace(type, function);
+}
+
+Camera* ComponentManager::SpawnCamera(std::string& type)
+{
+	return m_Cameras.at(type)();
+}
+
+void ComponentManager::RegisterCamera(const char* type, CameraSpawnFunction function)
+{
+	m_Cameras.emplace(type, function);
 }

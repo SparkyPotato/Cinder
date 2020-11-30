@@ -5,7 +5,7 @@
 class Sphere : public Shape
 {
 public:
-	Sphere(const Transform& objectToWorld);
+	Sphere(const Transform& objectToCamera);
 
 	bool Intersect(const Ray& ray, RayIntersection& intersection) override;
 	bool TestIntersect(const Ray& ray) override;

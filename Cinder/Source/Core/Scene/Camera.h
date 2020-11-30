@@ -1,0 +1,22 @@
+#pragma once
+
+#include "Core/Components/ComponentManager.h"
+
+class Camera
+{
+public:
+	virtual ~Camera() {}
+	
+	virtual bool ParseProperties(const YAML::Node& node) = 0;
+};
+
+#define REGISTER_CAMERA(name, className) \
+Camera* Spawn##className() { return new className(); } \
+struct Register##className \
+{ \
+	Register##className() \
+	{ \
+		ComponentManager::Get()->RegisterCamera(#name, &Spawn##className); \
+	} \
+}; \
+static Register##className StaticRegister##className;

@@ -66,7 +66,7 @@ void RunProject(const std::filesystem::path& filePath)
 	try { scene = Scene::FromFile(scenePath); }
 	catch (...)
 	{
-		Error("Failed to parse scene!");
+		Error("Failed to load scene!");
 		Error("Skipping project.");
 		return;
 	}

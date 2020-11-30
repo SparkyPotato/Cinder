@@ -3,14 +3,14 @@
 
 REGISTER_SHAPE(Sphere, Sphere)
 
-Sphere::Sphere(const Transform& objectToWorld)
-	: Shape(objectToWorld)
+Sphere::Sphere(const Transform& objectToCamera)
+	: Shape(objectToCamera)
 {}
 
 bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 {
 	// Transform to object space
-	Ray transformed = m_ObjectToWorld.GetInverse()(ray);
+	Ray transformed = m_ObjectToCamera.GetInverse()(ray);
 
 	// Get Quadratic coefficients
 	float a = transformed.Direction.X * transformed.Direction.X +
@@ -39,7 +39,7 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 bool Sphere::TestIntersect(const Ray& ray)
 {
 	// Transform to object space
-	Ray transformed = m_ObjectToWorld.GetInverse()(ray);
+	Ray transformed = m_ObjectToCamera.GetInverse()(ray);
 	
 	// Get Quadratic coefficients
 	float a = transformed.Direction.X * transformed.Direction.X +

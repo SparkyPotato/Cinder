@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Camera.h"
 #include "Object.h"
 
 class AccelerationStructure;
@@ -14,6 +15,7 @@ public:
 
 	std::vector<Object> Objects;
 	AccelerationStructure* AccelStructure;
+	Camera* MainCamera;
 };
 
 template<>

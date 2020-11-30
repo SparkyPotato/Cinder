@@ -1,11 +1,11 @@
 ---
-Cameras:
-  Main Camera:
-    Type: Perspective
-    Transform:
-      Position: [ 0, 0, -10 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+Camera:
+  Type: Perspective
+  Transform:
+    Position: [ 0, 0, -10 ]
+    Rotation: [ 0, 0, 0 ]
+    Scale: [ 1, 1, 1 ]
+  FOV: 60
 
 Objects:
   - Shape:

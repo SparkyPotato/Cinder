@@ -6,12 +6,14 @@ class OutputAdapter;
 class Shape;
 class Transform;
 class AccelerationStructure;
+class Camera;
 
 typedef Renderer* (*RendererSpawnFunction)();
 typedef OutputAdapter* (*OutputAdapterSpawnFunction)(const std::string&);
 typedef Framebuffer* (*FramebufferSpawnFunction)(uint32_t, uint32_t);
 typedef Shape* (*ShapeSpawnFunction)(const Transform&);
 typedef AccelerationStructure* (*AccelerationSpawnFunction)();
+typedef Camera* (*CameraSpawnFunction)();
 
 class ComponentManager
 {
@@ -32,8 +34,11 @@ public:
 	Shape* SpawnShape(const std::string& type, const Transform& transform);
 	void RegisterShape(const char* type, ShapeSpawnFunction function);
 
-	AccelerationStructure* SpawnAccelerationStructure(const std::string type);
+	AccelerationStructure* SpawnAccelerationStructure(const std::string& type);
 	void RegisterAccelerationStructure(const char* type, AccelerationSpawnFunction function);
+	
+	Camera* SpawnCamera(std::string& type);
+	void RegisterCamera(const char* type, CameraSpawnFunction function);
 
 private:
 	static ComponentManager* s_Singleton;
@@ -43,4 +48,5 @@ private:
 	std::map<std::string, OutputAdapterSpawnFunction> m_OutputAdapters;
 	std::map<std::string, ShapeSpawnFunction> m_Shapes;
 	std::map<std::string, AccelerationSpawnFunction> m_AccelerationStructures;
+	std::map<std::string, CameraSpawnFunction> m_Cameras;
 };

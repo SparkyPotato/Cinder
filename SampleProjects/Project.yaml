@@ -2,7 +2,6 @@
 # Experimental project format
 Scene:
   File: Scene.yaml
-  Camera: Main Camera
   Acceleration:
     Type: None
 
