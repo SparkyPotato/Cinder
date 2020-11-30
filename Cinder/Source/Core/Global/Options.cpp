@@ -6,6 +6,7 @@ void ShowHelp();
 int GLogLevel = LogLevel::Warning;
 bool GQuiet = false;
 FILE* GLogFile = nullptr;
+Options GOptions;
 fmt::memory_buffer GFormatBuffer;
 
 const char* GNewLineStart = "\r\n\0";

@@ -37,25 +37,25 @@ Will be slow, set log level to 0 to see debug information.
 			CinderColored("Cinder (built {}, {})", __TIME__, __DATE__);
 			CinderColored("Copyright 2020 SparkyPotato (under the MIT License).\n");
 		}
-		auto options = GenerateOptions(optionsInput);
+		GOptions = GenerateOptions(optionsInput);
 
 		if (projectFiles.empty())
 		{
 			Fatal("No project files passed. \nRun with '-help' or '-h' for help.");
 		}
 		
-		if (options.ThreadCount == 0)
+		if (GOptions.ThreadCount == 0)
 		{
 			Log("Auto-detecting thread count.");
-			options.ThreadCount = std::thread::hardware_concurrency();
-			if (options.ThreadCount == 0)
+			GOptions.ThreadCount = std::thread::hardware_concurrency();
+			if (GOptions.ThreadCount == 0)
 			{
 				Warning("Could not detect number of threads, using 4 as a reasonable default.");
-				options.ThreadCount = 4;
+				GOptions.ThreadCount = 4;
 			}
 		}
 		
-		Log("Rendering with {} threads.", options.ThreadCount);
+		Log("Rendering with {} threads.", GOptions.ThreadCount);
 		
 		for (auto file : projectFiles)
 		{

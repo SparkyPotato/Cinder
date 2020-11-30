@@ -9,5 +9,5 @@ class RayIntersection
 public:
 	Point HitPoint;
 	Normal HitNormal;
-	const Object* HitObject;
+	const Object* HitObject  = nullptr;
 };

@@ -95,6 +95,7 @@ void RunProject(const std::filesystem::path& filePath)
 		return;
 	}
 	scene->AccelStructure->Build(*scene);
+	scene->MainCamera->RegisterFramebuffer(*framebuffer);
 
 	renderer->Render(*scene, *framebuffer);
 

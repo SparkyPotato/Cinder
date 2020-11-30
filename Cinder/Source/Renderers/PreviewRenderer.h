@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Core/Components/Renderer.h"
+#include "Sampler.h"
 
-class PreviewRenderer : public Renderer 
+class PreviewRenderer : public Sampler
 {
 public:
 	PreviewRenderer();
 
-	void Render(const Scene& scene, Framebuffer& framebuffer) override;
+	bool ParseSettings(const YAML::Node& node) override;
 };

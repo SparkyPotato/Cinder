@@ -1,0 +1,33 @@
+#pragma once
+
+#include "Core/Components/Renderer.h"
+
+class Sampler : public Renderer
+{
+public:
+	Sampler() = default;
+
+	void Render(const Scene& scene, Framebuffer& framebuffer) override;
+
+	bool ParseSettings(const YAML::Node& node) override;
+
+protected:
+	struct Tile
+	{
+		Tile(uint32_t xmin, uint32_t xmax, uint32_t ymin, uint32_t ymax)
+			: Xmin(xmin), Xmax(xmax), Ymin(ymin), Ymax(ymax)
+		{}
+		uint32_t Xmin, Xmax;
+		uint32_t Ymin, Ymax;
+	};
+
+	void Thread();
+
+	unsigned int m_Samples = 1;
+
+	std::vector<Tile> m_RenderTiles;
+	std::vector<std::thread> m_Threads;
+	std::atomic<unsigned int> m_Tile = 0;
+	const Scene* m_Scene;
+	Framebuffer* m_Framebuffer;
+};

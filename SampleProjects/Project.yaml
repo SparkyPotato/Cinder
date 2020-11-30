@@ -1,5 +1,4 @@
 ---
-# Experimental project format
 Scene:
   File: Scene.yaml
   Acceleration:
@@ -7,6 +6,7 @@ Scene:
 
 Renderer:
   Type: Preview
+  Samples: 1
 
 Framebuffer:
   Type: Simple

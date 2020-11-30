@@ -6,6 +6,7 @@
 struct Options
 {
 	uint16_t ThreadCount = 0;
+	uint32_t TileSize = 16;
 };
 
 namespace LogLevel
@@ -20,5 +21,6 @@ namespace LogLevel
 extern int GLogLevel;
 extern bool GQuiet;
 extern FILE* GLogFile;
+extern Options GOptions;
 
 Options GenerateOptions(const std::vector<std::string>& options);
