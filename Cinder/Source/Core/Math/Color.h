@@ -7,5 +7,24 @@ public:
 	Color() = default;
 	Color(float r, float g, float b);
 
-	float R = 0.f, G = 0.f, B = 0.f;
+	Color operator+(const Color& other);
+	Color& operator+=(const Color& other);
+
+	Color operator-(const Color& other);
+	Color& operator-=(const Color& other);
+
+	Color operator*(const Color& other);
+	Color& operator*=(const Color& other);
+
+	Color operator/(const Color& other);
+	Color& operator/=(const Color& other);
+
+	float& R = reinterpret_cast<float*>(&m_Vector)[0];
+	float& G = reinterpret_cast<float*>(&m_Vector)[1];
+	float& B = reinterpret_cast<float*>(&m_Vector)[2];
+
+private:
+	Color(__m128 vector);
+
+	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };

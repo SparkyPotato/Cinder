@@ -95,7 +95,7 @@ void RunProject(const std::filesystem::path& filePath)
 		return;
 	}
 	scene->AccelStructure->Build(*scene);
-	scene->MainCamera->RegisterFramebuffer(*framebuffer);
+	scene->MainCamera->SetAspectRatio((float)framebuffer->Width / framebuffer->Height);
 
 	renderer->Render(*scene, *framebuffer);
 

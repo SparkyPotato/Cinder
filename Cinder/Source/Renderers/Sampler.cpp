@@ -9,6 +9,9 @@ void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 	m_Scene = &scene;
 	m_Framebuffer = &framebuffer;
 
+	m_AdjustedWidth = m_Framebuffer->Width * m_Supersamples;
+	m_AdjustedHeight = m_Framebuffer->Height * m_Supersamples;
+
 	for (uint32_t x = 0; x < framebuffer.Width; x += GOptions.TileSize)
 	{
 		uint32_t xMax = x + GOptions.TileSize;
@@ -36,16 +39,16 @@ void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 
 bool Sampler::ParseSettings(const YAML::Node& node)
 {
-	if (!node["Samples"])
+	if (!node["Supersample"])
 	{
-		Warning("No Sample count given. Using default ({})", m_Samples);
+		Warning("No Supersample count given. Using default ({})", m_Supersamples);
 	}
 	else
 	{
-		try { m_Samples = node["Samples"].as<unsigned int>(); }
+		try { m_Supersamples = node["Supersample"].as<unsigned int>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Sample count must be an unsigned integer (line {})!", e.mark.line + 1);
+			Error("Supersample count must be an unsigned integer (line {})!", e.mark.line + 1);
 			return false;
 		}
 	}
@@ -65,13 +68,25 @@ void Sampler::Thread()
 		{
 			for (uint32_t y = rTile.Ymin; y != rTile.Ymax; y++)
 			{
-				auto ray = m_Scene->MainCamera->GetRay(x, y);
-				if (m_Scene->AccelStructure->TestIntersect(ray))
+				for (uint32_t ix = 0; ix < m_Supersamples; ix++)
 				{
-					bTile.GetPixel(x, y) = { 1.f, 0.f, 0.f };
+					float xval = (float(x * m_Supersamples + ix) + 0.5f) / m_AdjustedWidth;
+					for (uint32_t iy = 0; iy < m_Supersamples; iy++)
+					{
+						float yval = (float(y * m_Supersamples + iy) + 0.5f) / m_AdjustedHeight;
+
+						auto ray = m_Scene->MainCamera->GetRay(xval, yval);
+						if (m_Scene->AccelStructure->TestIntersect(ray))
+						{
+							bTile.GetPixel(x, y) += { 1.f, 0.f, 0.f };
+						}
+					}
 				}
+				bTile.GetPixel(x, y) /= { float(m_Supersamples), float(m_Supersamples), float(m_Supersamples) };
 			}
 		}
+
+		m_Framebuffer->SaveBufferTile(bTile);
 
 		tile = std::atomic_fetch_add(&m_Tile, 1);
 	}

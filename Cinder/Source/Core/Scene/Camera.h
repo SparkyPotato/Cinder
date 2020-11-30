@@ -10,8 +10,8 @@ public:
 	
 	virtual bool ParseProperties(const YAML::Node& node) = 0;
 
-	virtual void RegisterFramebuffer(const Framebuffer& framebuffer) = 0;
-	virtual Ray GetRay(uint32_t x, uint32_t y) = 0;
+	virtual void SetAspectRatio(float aspectRatio) = 0;
+	virtual Ray GetRay(float x, float y) = 0;
 };
 
 #define REGISTER_CAMERA(name, className) \

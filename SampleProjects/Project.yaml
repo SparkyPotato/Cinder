@@ -6,7 +6,7 @@ Scene:
 
 Renderer:
   Type: Preview
-  Samples: 1
+  Supersample: 1
 
 Framebuffer:
   Type: Simple
