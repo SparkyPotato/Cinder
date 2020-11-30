@@ -8,6 +8,8 @@
 class AccelerationStructure
 {
 public:
+	virtual ~AccelerationStructure() {}
+	
 	virtual void Build(const Scene& scene) = 0;
 
 	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) = 0;

@@ -1,15 +1,24 @@
 #include "PCH.h"
 #include "Scene.h"
 
-Scene Scene::FromFile(const std::string& file)
+Scene::~Scene()
 {
-	YAML::Node scene = YAML::LoadFile(file);
-	return scene.as<Scene>();
+	for (auto& object : Objects)
+	{
+		if (object.ObjectShape) { delete object.ObjectShape; }
+	}
 }
 
-
-bool YAML::convert<Scene>::decode(const Node& node, Scene& scene)
+Scene* Scene::FromFile(const std::string& file)
 {
+	YAML::Node scene = YAML::LoadFile(file);
+	return scene.as<Scene*>();
+}
+
+bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
+{
+	scene = new Scene;
+	
 	if (!node["Objects"])
 	{
 		Error("No Object list present!");
@@ -24,7 +33,7 @@ bool YAML::convert<Scene>::decode(const Node& node, Scene& scene)
 
 	for (auto object : node["Objects"])
 	{
-		scene.Objects.emplace_back(object.as<Object>());
+		scene->Objects.emplace_back(object.as<Object>());
 	}
 
 	return true;

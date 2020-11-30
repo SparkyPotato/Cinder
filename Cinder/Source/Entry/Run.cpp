@@ -62,7 +62,7 @@ void RunProject(const std::filesystem::path& filePath)
 	}
 
 	std::string scenePath = filePath.parent_path().string() + "/" + file;
-	Scene scene;
+	Scene* scene;
 	try { scene = Scene::FromFile(scenePath); }
 	catch (...)
 	{
@@ -87,19 +87,25 @@ void RunProject(const std::filesystem::path& filePath)
 		Warning("No Acceleration Structure given, using default ({})", accelerationStructure);
 	}
 
-	try { scene.AccelStructure = ComponentManager::Get()->SpawnAccelerationStructure(accelerationStructure); }
+	try { scene->AccelStructure = ComponentManager::Get()->SpawnAccelerationStructure(accelerationStructure); }
 	catch (...)
 	{
 		Error("Acceleration Structure '{}' does not exist!", accelerationStructure);
 		Error("Failed to create Acceleration Structure. Skipping project.");
 		return;
 	}
-	scene.AccelStructure->Build(scene);
+	scene->AccelStructure->Build(*scene);
 
-	renderer->Render(scene, *framebuffer);
+	renderer->Render(*scene, *framebuffer);
 
 	output->WriteOutput(*framebuffer);
 	Log("Project '{}' finished rendering.", filePath.filename().string());
+	
+	delete scene->AccelStructure;
+	delete scene;
+	delete renderer;
+	delete framebuffer;
+	delete output;
 }
 
 Renderer* SpawnRenderer(YAML::Node& project)

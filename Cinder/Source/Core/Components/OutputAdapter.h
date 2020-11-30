@@ -8,6 +8,7 @@ public:
 	OutputAdapter(const std::string& filename)
 		: m_OutputFile(filename)
 	{}
+	virtual ~OutputAdapter() {}
 
 	virtual bool ParseSettings(const YAML::Node& node) { return true; }
 
