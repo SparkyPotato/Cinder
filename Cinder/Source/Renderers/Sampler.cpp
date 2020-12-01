@@ -57,7 +57,7 @@ bool Sampler::ParseSettings(const YAML::Node& node)
 
 void Sampler::Thread()
 {
-	unsigned int tile = std::atomic_fetch_add(&m_Tile, 1);
+	unsigned int tile = std::atomic_fetch_add(&m_Tile, 1u);
 	while (tile < m_RenderTiles.size())
 	{
 		Tile& rTile = m_RenderTiles[tile];
@@ -84,6 +84,6 @@ void Sampler::Thread()
 
 		m_Framebuffer->SaveBufferTile(bTile);
 
-		tile = std::atomic_fetch_add(&m_Tile, 1);
+		tile = std::atomic_fetch_add(&m_Tile, 1u);
 	}
 }
