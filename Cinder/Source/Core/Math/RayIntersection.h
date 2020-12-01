@@ -10,4 +10,6 @@ public:
 	Point HitPoint;
 	Normal HitNormal;
 	const Object* HitObject  = nullptr;
+
+	float U = 0.f, V = 0.f;
 };

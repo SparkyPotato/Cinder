@@ -5,7 +5,7 @@ Camera:
     Position: [ 0, 0, -20 ]
     Rotation: [ 0, 0, 0 ]
     Scale: [ 1, 1, 1 ]
-  FOV: 90
+  FOV: 60
 
 Objects:
   - Shape:
@@ -15,11 +15,11 @@ Objects:
         Rotation: [ 0, 0, 0 ]
         Scale: [ 1, 1, 1 ]
       Radius: 10
-    Material: Red
+    Material: Texture
   - Shape:
       Type: Sphere
       Transform:
-        Position: [ 10, 0, -5 ]
+        Position: [ 10, 0, 0 ]
         Rotation: [ 0, 0, 0 ]
         Scale: [ 1, 1, 1 ]
       Radius: 5
@@ -27,6 +27,13 @@ Objects:
 
 Materials:
   - Name: Red
+    Sampler: Bilinear
     Albedo: [ 1, 0, 0 ]
   - Name: Green
+    Sampler: Bilinear
     Albedo: [ 0, 1, 0 ]
+  - Name: Texture
+    Sampler: Bilinear
+    Albedo:
+      Loader: Standard
+      File: Textures/Rock_Albedo.png

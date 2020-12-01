@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Components/ComponentManager.h"
-#include "RayIntersection.h"
-#include "Transform.h"
+#include "Core/Math/RayIntersection.h"
+#include "Core/Math/Transform.h"
 
 class Shape
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Components/ComponentManager.h"
-#include "Ray.h"
+#include "Core/Math/Ray.h"
 
 class Camera
 {

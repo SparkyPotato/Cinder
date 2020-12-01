@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Scene/Camera.h"
+#include "Core/Components/Camera.h"
 
 class PerspectiveCamera : public Camera
 {

@@ -1,14 +1,18 @@
 #pragma once
 
-#include "Core/Math/Color.h"
+#include "Core/Components/TextureSampler.h"
 
 class Material
 {
 public:
 	Material() = default;
 	
+	Color SampleAlbedo(float u, float v);
+
 	std::string Name;
-	Color Albedo;
+	TextureSampler* Sampler;
+
+	Texture Albedo;
 };
 
 template<>

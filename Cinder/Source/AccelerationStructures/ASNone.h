@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Scene/AccelerationStructure.h"
+#include "Core/Components/AccelerationStructure.h"
 
 class ASNone : public AccelerationStructure
 {

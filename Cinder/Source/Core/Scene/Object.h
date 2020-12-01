@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shape.h"
+#include "Core/Components/Shape.h"
 #include "Material.h"
 
 class Object

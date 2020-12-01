@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Core/Components/ComponentManager.h"
-#include "Ray.h"
-#include "RayIntersection.h"
-#include "Scene.h"
+#include "Core/Math/Ray.h"
+#include "Core/Math/RayIntersection.h"
+#include "Core/Scene/Scene.h"
 
 class AccelerationStructure
 {

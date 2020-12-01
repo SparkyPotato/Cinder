@@ -32,6 +32,8 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 	ray.Extent = t;
 	intersection.HitPoint = ray.Origin + ray.Direction * t;
 	intersection.HitNormal = Normal(intersection.HitPoint - Point()).GetNormalized();
+	intersection.U = 0.5f - std::atan2(intersection.HitNormal.Z, intersection.HitNormal.X) * (InversePi / 2.f);
+	intersection.V = 0.5f - std::asin(intersection.HitNormal.Y) * InversePi;
 
 	return true;
 }

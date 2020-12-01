@@ -1,18 +1,22 @@
 #include "PCH.h"
 #include "Run.h"
 
+#include "fmt/chrono.h"
+
 #include "Core/Components/Renderer.h"
 #include "Core/Components/Framebuffer.h"
 #include "Core/Components/OutputAdapter.h"
-#include "Core/Scene/AccelerationStructure.h"
+#include "Core/Components/AccelerationStructure.h"
 
 Renderer* SpawnRenderer(YAML::Node& project);
 Framebuffer* SpawnFramebuffer(YAML::Node& project);
-OutputAdapter* SpawnOutputAdapter(YAML::Node& project, const std::filesystem::path& filePath);
+OutputAdapter* SpawnOutputAdapter(YAML::Node& project);
 
 void RunProject(const std::filesystem::path& filePath)
 {
 	Console("{}", filePath.filename().string());
+
+	auto setupStart = std::chrono::high_resolution_clock().now();
 
 	YAML::Node project;
 	try { project = YAML::LoadFile(filePath.string()); }
@@ -22,6 +26,9 @@ void RunProject(const std::filesystem::path& filePath)
 		Error("Skipping project.");
 		return;
 	}
+	
+	std::filesystem::path workingDirectory = std::filesystem::current_path();
+	std::filesystem::current_path(filePath.parent_path());
 
 	Renderer* renderer = SpawnRenderer(project);
 	if (!renderer)
@@ -37,7 +44,7 @@ void RunProject(const std::filesystem::path& filePath)
 		return;
 	}
 
-	OutputAdapter* output = SpawnOutputAdapter(project, filePath);
+	OutputAdapter* output = SpawnOutputAdapter(project);
 	if (!output)
 	{
 		Error("Failed Output Adapter creation. Skipping project.");
@@ -61,9 +68,8 @@ void RunProject(const std::filesystem::path& filePath)
 		Error("Skipping project.");
 	}
 
-	std::string scenePath = filePath.parent_path().string() + "/" + file;
 	Scene* scene;
-	try { scene = Scene::FromFile(scenePath); }
+	try { scene = Scene::FromFile(file); }
 	catch (...)
 	{
 		Error("Failed to load scene!");
@@ -97,16 +103,24 @@ void RunProject(const std::filesystem::path& filePath)
 	scene->AccelStructure->Build(*scene);
 	scene->MainCamera->SetAspectRatio((float)framebuffer->Width / framebuffer->Height);
 
+	auto setupEnd = std::chrono::high_resolution_clock().now();
+
 	renderer->Render(*scene, *framebuffer);
 
+	auto renderEnd = std::chrono::high_resolution_clock().now();
+
 	output->WriteOutput(*framebuffer);
-	Log("Project '{}' finished rendering.", filePath.filename().string());
-	
+	Console("Project '{}' finished rendering.", filePath.filename().string());
+	Console("Took {:%M:%S}.", renderEnd - setupStart);
+	Log("Out of that, load took {:%M:%S}, and render took {:%M:%S}.", setupEnd - setupStart, renderEnd - setupEnd);
+
 	delete scene->AccelStructure;
 	delete scene;
 	delete renderer;
 	delete framebuffer;
 	delete output;
+
+	std::filesystem::current_path(workingDirectory);
 }
 
 Renderer* SpawnRenderer(YAML::Node& project)
@@ -204,7 +218,7 @@ Framebuffer* SpawnFramebuffer(YAML::Node& project)
 	return framebuffer;
 }
 
-OutputAdapter* SpawnOutputAdapter(YAML::Node& project, const std::filesystem::path& filePath)
+OutputAdapter* SpawnOutputAdapter(YAML::Node& project)
 {
 	std::string type = "PNG";
 	std::string file = "Output.png";
@@ -237,8 +251,7 @@ OutputAdapter* SpawnOutputAdapter(YAML::Node& project, const std::filesystem::pa
 	}
 
 	OutputAdapter* output = nullptr;
-	std::string outputPath = filePath.parent_path().string() + "/" + file;
-	try { output = ComponentManager::Get()->SpawnOutputAdapter(type, outputPath); }
+	try { output = ComponentManager::Get()->SpawnOutputAdapter(type, file); }
 	catch (...) 
 	{ 
 		Error("Output Adapter Type '{}' does not exist!", type);

@@ -2,7 +2,7 @@
 
 #include "Core/Components/Renderer.h"
 #include "Core/Math/Color.h"
-#include "Core/Scene/AccelerationStructure.h"
+#include "Core/Components/AccelerationStructure.h"
 
 class Sampler : public Renderer
 {

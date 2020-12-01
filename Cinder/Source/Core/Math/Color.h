@@ -9,16 +9,16 @@ public:
 	
 	Color& operator=(const Color& other);
 	
-	Color operator+(const Color& other);
+	Color operator+(const Color& other) const;
 	Color& operator+=(const Color& other);
 
-	Color operator-(const Color& other);
+	Color operator-(const Color& other) const;
 	Color& operator-=(const Color& other);
 
-	Color operator*(const Color& other);
+	Color operator*(const Color& other) const;
 	Color& operator*=(const Color& other);
 
-	Color operator/(const Color& other);
+	Color operator/(const Color& other) const;
 	Color& operator/=(const Color& other);
 
 	float& R = reinterpret_cast<float*>(&m_Vector)[0];
@@ -30,6 +30,8 @@ private:
 
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };
+
+Color Lerp(const Color& from, const Color& to, float ratio);
 
 template<>
 struct YAML::convert<Color>

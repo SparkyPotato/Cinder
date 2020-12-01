@@ -61,7 +61,7 @@ void ComponentManager::RegisterAccelerationStructure(const char* type, Accelerat
 	m_AccelerationStructures.emplace(type, function);
 }
 
-Camera* ComponentManager::SpawnCamera(std::string& type)
+Camera* ComponentManager::SpawnCamera(const std::string& type)
 {
 	return m_Cameras.at(type)();
 }
@@ -69,4 +69,24 @@ Camera* ComponentManager::SpawnCamera(std::string& type)
 void ComponentManager::RegisterCamera(const char* type, CameraSpawnFunction function)
 {
 	m_Cameras.emplace(type, function);
+}
+
+TextureLoader* ComponentManager::SpawnTextureLoader(const std::string& type)
+{
+	return m_TextureLoaders.at(type)();
+}
+
+void ComponentManager::RegisterTextureLoader(const char* type, TextureLoaderSpawnFunction function)
+{
+	m_TextureLoaders.emplace(type, function);
+}
+
+TextureSampler* ComponentManager::SpawnTextureSampler(const std::string& type)
+{
+	return m_TextureSamplers.at(type)();
+}
+
+void ComponentManager::RegisterTextureSampler(const char* type, TextureSamplerSpawnFunction function)
+{
+	m_TextureSamplers.emplace(type, function);
 }

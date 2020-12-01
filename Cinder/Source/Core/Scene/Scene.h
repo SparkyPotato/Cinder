@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Camera.h"
+#include "Core/Components/Camera.h"
 #include "Object.h"
 
 class AccelerationStructure;

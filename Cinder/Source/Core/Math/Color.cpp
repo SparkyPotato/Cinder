@@ -18,7 +18,7 @@ Color& Color::operator=(const Color& other)
 	return *this;
 }
 
-Color Color::operator+(const Color& other)
+Color Color::operator+(const Color& other) const
 {
 	return _mm_add_ps(m_Vector, other.m_Vector);
 }
@@ -30,7 +30,7 @@ Color& Color::operator+=(const Color& other)
 	return *this;
 }
 
-Color Color::operator-(const Color& other)
+Color Color::operator-(const Color& other) const
 {
 	return _mm_sub_ps(m_Vector, other.m_Vector);
 }
@@ -42,7 +42,7 @@ Color& Color::operator-=(const Color& other)
 	return *this;
 }
 
-Color Color::operator*(const Color& other)
+Color Color::operator*(const Color& other) const
 {
 	return _mm_mul_ps(m_Vector, other.m_Vector);
 }
@@ -54,7 +54,7 @@ Color& Color::operator*=(const Color& other)
 	return *this;
 }
 
-Color Color::operator/(const Color& other)
+Color Color::operator/(const Color& other) const
 {
 	return _mm_div_ps(m_Vector, other.m_Vector);
 }
@@ -64,6 +64,11 @@ Color& Color::operator/=(const Color& other)
 	m_Vector = _mm_div_ps(m_Vector, other.m_Vector);
 
 	return *this;
+}
+
+Color Lerp(const Color& from, const Color& to, float ratio)
+{
+	return from + (to - from) * Color(ratio, ratio, ratio);
 }
 
 bool YAML::convert<Color>::decode(const Node& node, Color& color)
