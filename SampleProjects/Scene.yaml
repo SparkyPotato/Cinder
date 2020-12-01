@@ -36,4 +36,4 @@ Materials:
     Sampler: Bilinear
     Albedo:
       Loader: Standard
-      File: Textures/Rock_Albedo.png
+      File: Textures/Marble_Albedo.png

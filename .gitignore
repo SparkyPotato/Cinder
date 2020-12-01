@@ -26,3 +26,4 @@ Cinder/Dependencies/ProjectFiles/*
 *.png
 *.jpg
 *jpeg
+!SampleProjects/Textures/*

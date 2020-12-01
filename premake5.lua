@@ -55,6 +55,7 @@ project "Cinder"
 		
 	filter "action:gmake2"
 		pchheader "Cinder/Source/PCH.h"
+		linkoptions "-lpthread"
 	
 	filter "system:windows"
 		systemversion "latest"
