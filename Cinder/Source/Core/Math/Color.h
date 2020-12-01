@@ -6,7 +6,9 @@ class Color
 public:
 	Color() = default;
 	Color(float r, float g, float b);
-
+	
+	Color& operator=(const Color& other);
+	
 	Color operator+(const Color& other);
 	Color& operator+=(const Color& other);
 
@@ -27,4 +29,10 @@ private:
 	Color(__m128 vector);
 
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
+};
+
+template<>
+struct YAML::convert<Color>
+{
+	static bool decode(const Node& node, Color& color);
 };

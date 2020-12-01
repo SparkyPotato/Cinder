@@ -14,6 +14,7 @@ public:
 	static Scene* FromFile(const std::string& file);
 
 	std::vector<Object> Objects;
+	std::vector<Material> Materials;
 	AccelerationStructure* AccelStructure;
 	Camera* MainCamera;
 };

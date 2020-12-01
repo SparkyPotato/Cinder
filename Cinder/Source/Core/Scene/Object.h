@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shape.h"
+#include "Material.h"
 
 class Object
 {
@@ -11,6 +12,8 @@ public:
 	bool TestIntersect(const Ray& ray) const;
 
 	Shape* ObjectShape = nullptr;
+	Material* ObjectMaterial = nullptr;
+	std::string MaterialName;
 };
 
 template<>

@@ -17,9 +17,10 @@ bool PreviewRenderer::ParseSettings(const YAML::Node& node)
 
 Color PreviewRenderer::TraceRay(const Ray& ray)
 {
-	if (m_Scene->AccelStructure->TestIntersect(ray))
+	RayIntersection r;
+	if (m_Scene->AccelStructure->Intersect(ray, r))
 	{
-		return { 1.f, 0.f, 0.f };
+		return r.HitObject->ObjectMaterial->Albedo;
 	}
 
 	return { 0.f, 0.f, 0.f };

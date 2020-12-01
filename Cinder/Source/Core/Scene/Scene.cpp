@@ -77,10 +77,45 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 		Error("Object list must be a sequence (line {})!", node["Objects"].Mark().line + 1);
 		return false;
 	}
+	
+	if (!node["Materials"])
+	{
+		Error("No Material list present (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	
+	if (!node["Materials"].IsSequence())
+	{
+		Error("Material list must be a sequence (line {})!", node["Materials"].Mark().line + 1);
+		return false;
+	}
 
-	for (auto object : node["Objects"])
+	for (auto& object : node["Objects"])
 	{
 		scene->Objects.emplace_back(object.as<Object>());
+	}
+	
+	for (auto& material : node["Materials"])
+	{
+		scene->Materials.emplace_back(material.as<Material>());
+	}
+	
+	for (auto& object : scene->Objects)
+	{
+		for (auto& material : scene->Materials)
+		{
+			if (object.MaterialName == material.Name)
+			{
+				object.ObjectMaterial = &material;
+				break;
+			}
+		}
+		
+		if (!object.ObjectMaterial)
+		{
+			Error("Material '{}' does not exist!", object.MaterialName);
+			return false;
+		}
 	}
 
 	return true;

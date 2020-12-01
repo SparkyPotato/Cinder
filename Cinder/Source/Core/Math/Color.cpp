@@ -11,6 +11,13 @@ Color::Color(__m128 vector)
 	m_Vector = vector;
 }
 
+Color& Color::operator=(const Color& other)
+{
+	m_Vector = other.m_Vector;
+	
+	return *this;
+}
+
 Color Color::operator+(const Color& other)
 {
 	return _mm_add_ps(m_Vector, other.m_Vector);
@@ -59,3 +66,30 @@ Color& Color::operator/=(const Color& other)
 	return *this;
 }
 
+bool YAML::convert<Color>::decode(const Node& node, Color& color)
+{
+	if (!node.IsSequence())
+	{
+		Error("Color must be a sequence (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	if (node.size() != 3)
+	{
+		Error("Color must be 3 dimensional (line {)!", node.Mark().line + 1);
+		return false;
+	}
+	
+	try
+	{
+		color.R = node[0].as<float>();
+		color.G = node[1].as<float>();
+		color.B = node[2].as<float>();
+	}
+	catch (YAML::Exception& e)
+	{
+		Error("Color values must be float (line {})!", e.mark.line + 1);
+		return false;
+	}
+	
+	return true;
+}

@@ -15,3 +15,18 @@ Objects:
         Rotation: [ 0, 0, 0 ]
         Scale: [ 1, 1, 1 ]
       Radius: 10
+    Material: Red
+  - Shape:
+      Type: Sphere
+      Transform:
+        Position: [ 10, 0, -5 ]
+        Rotation: [ 0, 0, 0 ]
+        Scale: [ 1, 1, 1 ]
+      Radius: 5
+    Material: Green
+
+Materials:
+  - Name: Red
+    Albedo: [ 1, 0, 0 ]
+  - Name: Green
+    Albedo: [ 0, 1, 0 ]

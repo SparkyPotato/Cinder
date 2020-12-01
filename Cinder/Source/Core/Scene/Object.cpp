@@ -16,6 +16,18 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 		Error("Shape creation failed!");
 		return false;
 	}
+	
+	if (!node["Material"])
+	{
+		Error("Object has no material (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	try { object.MaterialName = node["Material"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Material name must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
 
 	return true;
 }

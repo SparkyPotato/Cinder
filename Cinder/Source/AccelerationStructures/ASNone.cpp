@@ -10,10 +10,13 @@ void ASNone::Build(const Scene& scene)
 
 bool ASNone::Intersect(const Ray& ray, RayIntersection& intersection)
 {
-	bool ret = false;
+	int ret = false;
 	for (const auto& object : m_Scene->Objects)
 	{
-		ret = object.Intersect(ray, intersection);
+		if (object.Intersect(ray, intersection))
+		{
+			ret++;
+		}
 	}
 	return ret;
 }
