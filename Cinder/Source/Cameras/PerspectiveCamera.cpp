@@ -20,6 +20,11 @@ bool PerspectiveCamera::ParseProperties(const YAML::Node& node)
 		return false;
 	}
 	
+	if (m_FOV > 90.f)
+	{
+		Warning("FOV greater than 90 degrees may lead to distorted images.");
+	}
+
 	m_FOV = ToRadians(m_FOV);
 	
 	return true;

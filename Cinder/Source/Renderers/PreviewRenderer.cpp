@@ -14,3 +14,13 @@ bool PreviewRenderer::ParseSettings(const YAML::Node& node)
 
 	return true;
 }
+
+Color PreviewRenderer::TraceRay(const Ray& ray)
+{
+	if (m_Scene->AccelStructure->TestIntersect(ray))
+	{
+		return { 1.f, 0.f, 0.f };
+	}
+
+	return { 0.f, 0.f, 0.f };
+}

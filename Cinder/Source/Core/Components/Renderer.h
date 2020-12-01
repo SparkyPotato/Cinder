@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Scene/Scene.h"
 #include "ComponentManager.h"
+#include "Core/Scene/Scene.h"
 
 class Renderer
 {

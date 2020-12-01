@@ -2,7 +2,6 @@
 #include "Sampler.h"
 
 #include "Core/Components/Framebuffer.h"
-#include "Core/Scene/AccelerationStructure.h"
 
 void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 {
@@ -76,10 +75,7 @@ void Sampler::Thread()
 						float yval = (float(y * m_Supersamples + iy) + 0.5f) / m_AdjustedHeight;
 
 						auto ray = m_Scene->MainCamera->GetRay(xval, yval);
-						if (m_Scene->AccelStructure->TestIntersect(ray))
-						{
-							bTile.GetPixel(x, y) += { 1.f, 0.f, 0.f };
-						}
+						bTile.GetPixel(x, y) += TraceRay(ray);
 					}
 				}
 				bTile.GetPixel(x, y) /= { float(m_Supersamples), float(m_Supersamples), float(m_Supersamples) };

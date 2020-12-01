@@ -8,4 +8,6 @@ public:
 	PreviewRenderer();
 
 	bool ParseSettings(const YAML::Node& node) override;
+
+	Color TraceRay(const Ray& ray) override;
 };

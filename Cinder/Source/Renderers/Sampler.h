@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Core/Components/Renderer.h"
+#include "Core/Math/Color.h"
+#include "Core/Scene/AccelerationStructure.h"
 
 class Sampler : public Renderer
 {
@@ -10,6 +12,8 @@ public:
 	void Render(const Scene& scene, Framebuffer& framebuffer) override;
 
 	bool ParseSettings(const YAML::Node& node) override;
+
+	virtual Color TraceRay(const Ray& ray) = 0;
 
 protected:
 	struct Tile
