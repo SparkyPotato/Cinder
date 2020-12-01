@@ -22,7 +22,8 @@ static std::vector<std::string> s_ValidOptions =
 {
 	"-threads", "-t",
 	"-loglevel", "-ll",
-	"-log", "-l"
+	"-log", "-l",
+	"-tilesize", "-ts"
 };
 static std::vector<std::string> s_ValidSwitches =
 {
@@ -68,6 +69,20 @@ Options GenerateOptions(const std::vector<std::string>& options)
 					}
 				}
 				catch (std::exception) { Error("Thread count must be an integer. Auto-detecting."); }
+			}
+			else if (name == "-tilesize" || name == "-ts")
+			{
+				try
+				{
+					int count = stoi(value);
+					if (count <= 0)
+					{
+						Error("Tile size cannot be 0 or negative. Using default ({}).", GOptions.TileSize);
+						count = 0;
+					}
+					output.TileSize = count;
+				}
+				catch (std::exception) { Error("Tile size must be an integer. Using default ({}).", GOptions.TileSize); }
 			}
 			else if (name == "-loglevel" || name == "-ll")
 			{
@@ -141,5 +156,7 @@ Options:
                          2 - Warning
                          3 - Error
                          4 - Fatal
+  -tilesize/-ts=<n>      <n> is the length of each tile in a sampler-based renderer.
+				         The default is 16
 )");
 }

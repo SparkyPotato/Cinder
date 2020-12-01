@@ -29,6 +29,7 @@
 #include <immintrin.h>
 
 #include <algorithm>
+#include <atomic>
 #include <cstring>
 #include <filesystem>
 #include <functional>
