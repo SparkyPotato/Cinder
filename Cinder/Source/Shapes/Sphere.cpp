@@ -26,6 +26,7 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 
 	float t0, t1, t;
 	if (!SolveQuadratic(a, b, c, t0, t1)) { return false; }
+	if (t1 < 0.f) { return false; }
 	t = (t0 > 0.f) ? t0 : t1;
 	if (t > ray.Extent) { return false; }
 

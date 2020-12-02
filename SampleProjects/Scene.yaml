@@ -3,7 +3,7 @@ Camera:
   Type: Perspective
   Transform:
     Position: [ 0, 0, -20 ]
-    Rotation: [ 0, 150, 0 ]
+    Rotation: [ 0, 0, 0 ]
     Scale: [ 1, 1, 1 ]
   FOV: 60
 

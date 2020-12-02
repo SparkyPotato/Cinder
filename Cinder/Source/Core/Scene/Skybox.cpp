@@ -3,17 +3,34 @@
 
 #include "Material.h"
 
+struct Face
+{
+	Vector FaceDirection;
+	Vector UVector;
+	Vector VVector;
+};
+
+static Face FaceData[6] =
+{
+	{ Vector(0.f, 0.f, 1.f), Vector(1.f, 0.f, 0.f), Vector(0.f, -1.f, 0.f) },
+	{ Vector(0.f, 0.f, -1.f), Vector(-1.f, 0.f, 0.f), Vector(0.f, -1.f, 0.f) },
+	{ Vector(-1.f, 0.f, 0.f), Vector(0.f, 0.f, 1.f), Vector(0.f, -1.f, 0.f) },
+	{ Vector(1.f, 0.f, 0.f), Vector(0.f, 0.f, -1.f), Vector(0.f, -1.f, 0.f) },
+	{ Vector(0.f, 1.f, 0.f), Vector(1.f, 0.f, 0.f), Vector(0.f, 0.f, 1.f) },
+	{ Vector(0.f, -1.f, 0.f), Vector(1.f, 0.f, 0.f), Vector(0.f, 0.f, -1.f) }
+};
+
 Color Skybox::Sample(const Vector& direction) const
 {
 	Vector normal = direction.GetNormalized();
 
 	float dots[6];
-	dots[0] = Dot(normal, Vector(0.f, 0.f, 1.f));
-	dots[1] = Dot(normal, Vector(0.f, 0.f, -1.f));
-	dots[2] = Dot(normal, Vector(-1.f, 0.f, 0.f));
-	dots[3] = Dot(normal, Vector(1.f, 0.f, 0.f));
-	dots[4] = Dot(normal, Vector(0.f, 1.f, 0.f));
-	dots[5] = Dot(normal, Vector(0.f, -1.f, 0.f));
+	dots[0] = Dot(normal, FaceData[0].FaceDirection);
+	dots[1] = Dot(normal, FaceData[1].FaceDirection);
+	dots[2] = Dot(normal, FaceData[2].FaceDirection);
+	dots[3] = Dot(normal, FaceData[3].FaceDirection);
+	dots[4] = Dot(normal, FaceData[4].FaceDirection);
+	dots[5] = Dot(normal, FaceData[5].FaceDirection);
 
 	float dotMax = dots[0];
 	int index = 0;
@@ -22,95 +39,50 @@ Color Skybox::Sample(const Vector& direction) const
 		if (dots[i] > dotMax) { dotMax = dots[i]; index = i; }
 	}
 
-	const Texture* sampleFrom;
-	Vector faceDirection;
-	Vector uVector, vVector;
-	switch (index)
-	{
-	case 0: 
-		sampleFrom = &Front;
-		faceDirection = Vector(0.f, 0.f, 1.f);
-		uVector = Vector(1.f, 0.f, 0.f);
-		vVector = Vector(0.f, -1.f, 0.f);
-		break;
-	case 1: 
-		sampleFrom = &Back;
-		faceDirection = Vector(0.f, 0.f, -1.f);
-		uVector = Vector(-1.f, 0.f, 0.f);
-		vVector = Vector(0.f, -1.f, 0.f);
-		break;
-	case 2: 
-		sampleFrom = &Left;
-		faceDirection = Vector(-1.f, 0.f, 0.f);
-		uVector = Vector(0.f, 0.f, 1.f);
-		vVector = Vector(0.f, -1.f, 0.f);
-		break;
-	case 3: 
-		sampleFrom = &Right;
-		faceDirection = Vector(1.f, 0.f, 0.f);
-		uVector = Vector(0.f, 0.f, -1.f);
-		vVector = Vector(0.f, -1.f, 0.f);
-		break;
-	case 4: 
-		sampleFrom = &Top;
-		faceDirection = Vector(0.f, 1.f, 0.f);
-		uVector = Vector(1.f, 0.f, 0.f);
-		vVector = Vector(0.f, 0.f, 1.f);
-		break;
-	case 5: 
-		sampleFrom = &Bottom;
-		faceDirection = Vector(0.f, -1.f, 0.f);
-		uVector = Vector(1.f, 0.f, 0.f);
-		vVector = Vector(0.f, 0.f, 1.f);
-		break;
-	}
-
 	normal *= (1 / dotMax);
-	Vector uv = (Point() + normal) - (Point() + faceDirection);
-	float u = Dot(uv, uVector);
-	float v = Dot(uv, vVector);
-	u = u * 0.5f + 0.5f;
-	v = v * 0.5f + 0.5f;
+	Vector uv = (Point() + normal) - (Point() + FaceData[index].FaceDirection);
+	float u = 0.5f * Dot(uv, FaceData[index].UVector) + 0.5f;
+	float v = 0.5f * Dot(uv, FaceData[index].VVector) + 0.5f;
 
-	return Sampler->Sample(*sampleFrom, u, v);
+	return Sampler->Sample(Faces[index], u, v);
 }
 
 Skybox DefaultSkybox()
 {
 	Skybox box;
 
-	box.Front.Width = 2;
-	box.Front.Height = 2;
-	box.Front.Data = new Color[4];
+	box.Faces[0].Width = 2;
+	box.Faces[0].Height = 2;
+	box.Faces[0].Data = new Color[4];
 
-	box.Back.Width = 2;
-	box.Back.Height = 2;
-	box.Back.Data = new Color[4];
+	box.Faces[1].Width = 2;
+	box.Faces[1].Height = 2;
+	box.Faces[1].Data = new Color[4];
 
-	box.Left.Width = 2;
-	box.Left.Height = 2;
-	box.Left.Data = new Color[4];
+	box.Faces[2].Width = 2;
+	box.Faces[2].Height = 2;
+	box.Faces[2].Data = new Color[4];
 
-	box.Right.Width = 2;
-	box.Right.Height = 2;
-	box.Right.Data = new Color[4];
+	box.Faces[3].Width = 2;
+	box.Faces[3].Height = 2;
+	box.Faces[3].Data = new Color[4];
 
-	box.Top.Width = 2;
-	box.Top.Height = 2;
-	box.Top.Data = new Color[4];
+	box.Faces[4].Width = 2;
+	box.Faces[4].Height = 2;
+	box.Faces[4].Data = new Color[4];
 
-	box.Bottom.Width = 2;
-	box.Bottom.Height = 2;
-	box.Bottom.Data = new Color[4];
+	box.Faces[5].Width = 2;
+	box.Faces[5].Height = 2;
+	box.Faces[5].Data = new Color[4];
 
 	for (int i = 0; i < 4; i++)
 	{
-		box.Front.Data[i] = Color();
-		box.Back.Data[i] = Color();
-		box.Left.Data[i] = Color();
-		box.Right.Data[i] = Color();
-		box.Top.Data[i] = Color();
-		box.Bottom.Data[i] = Color();
+		box.Faces[0].Data[i] = Color();
+		box.Faces[1].Data[i] = Color();
+		box.Faces[2].Data[i] = Color();
+		box.Faces[3].Data[i] = Color();
+		box.Faces[4].Data[i] = Color();
+		box.Faces[5].Data[i] = Color();
 	}
 
 	return box;
@@ -138,47 +110,47 @@ bool YAML::convert<Skybox>::decode(const Node& node, Skybox& skybox)
 		return false;
 	}
 
-	if (!node["Top"])
-	{
-		Error("Skybox needs to have a Top (line {})!", node.Mark().line + 1);
-		return false;
-	}
-	LoadTexture(skybox.Top, node["Top"]);
-
-	if (!node["Bottom"])
-	{
-		Error("Skybox needs to have a Bottom (line {})!", node.Mark().line + 1);
-		return false;
-	}
-	LoadTexture(skybox.Bottom, node["Bottom"]);
-
-	if (!node["Left"])
-	{
-		Error("Skybox needs to have a Left (line {})!", node.Mark().line + 1);
-		return false;
-	}
-	LoadTexture(skybox.Left, node["Left"]);
-
-	if (!node["Right"])
-	{
-		Error("Skybox needs to have a Right (line {})!", node.Mark().line + 1);
-		return false;
-	}
-	LoadTexture(skybox.Right, node["Right"]);
-
 	if (!node["Front"])
 	{
 		Error("Skybox needs to have a Front (line {})!", node.Mark().line + 1);
 		return false;
 	}
-	LoadTexture(skybox.Front, node["Front"]);
+	LoadTexture(skybox.Faces[0], node["Front"]);
 
 	if (!node["Back"])
 	{
 		Error("Skybox needs to have a Back (line {})!", node.Mark().line + 1);
 		return false;
 	}
-	LoadTexture(skybox.Back, node["Back"]);
+	LoadTexture(skybox.Faces[1], node["Back"]);
+
+	if (!node["Left"])
+	{
+		Error("Skybox needs to have a Left (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	LoadTexture(skybox.Faces[2], node["Left"]);
+
+	if (!node["Right"])
+	{
+		Error("Skybox needs to have a Right (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	LoadTexture(skybox.Faces[3], node["Right"]);
+
+	if (!node["Top"])
+	{
+		Error("Skybox needs to have a Top (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	LoadTexture(skybox.Faces[4], node["Top"]);
+
+	if (!node["Bottom"])
+	{
+		Error("Skybox needs to have a Bottom (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	LoadTexture(skybox.Faces[5], node["Bottom"]);
 
 	return true;
 }

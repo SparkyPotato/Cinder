@@ -9,7 +9,7 @@ public:
 	Skybox() = default;
 
 	TextureSampler* Sampler = nullptr;
-	Texture Top, Bottom, Right, Left, Front, Back;
+	Texture Faces[6];
 
 	Color Sample(const Vector& direction) const;
 };

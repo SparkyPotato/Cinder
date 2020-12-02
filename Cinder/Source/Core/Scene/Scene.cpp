@@ -15,12 +15,10 @@ Scene::~Scene()
 		delete[] material.Albedo.Data;
 	}
 
-	delete[] SceneSkybox.Front.Data;
-	delete[] SceneSkybox.Back.Data;
-	delete[] SceneSkybox.Left.Data;
-	delete[] SceneSkybox.Right.Data;
-	delete[] SceneSkybox.Top.Data;
-	delete[] SceneSkybox.Bottom.Data;
+	for (int i = 0; i < 6; i++)
+	{
+		delete SceneSkybox.Faces[i].Data;
+	}
 }
 
 Scene* Scene::FromFile(const std::string& file)
