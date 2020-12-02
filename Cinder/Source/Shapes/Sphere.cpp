@@ -30,10 +30,17 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 	if (t >= ray.Extent) { return false; }
 
 	ray.Extent = t;
-	intersection.HitPoint = ray.Origin + ray.Direction * t;
+	Point point = ray.Origin + ray.Direction * t;
+	intersection.HitPoint = point;
 	intersection.HitNormal = Normal(intersection.HitPoint - Point()).GetNormalized();
-	intersection.U = 0.5f - std::atan2(intersection.HitNormal.Z, intersection.HitNormal.X) * (InversePi / 2.f);
-	intersection.V = 0.5f - std::asin(intersection.HitNormal.Y) * InversePi;
+	
+	float azimuthal = std::atan2(-point.X, point.Z);
+	float polar = std::acos(-point.Y / m_Radius);
+	intersection.U = 1.f - (azimuthal / (2 * Pi) + 0.5f);
+	intersection.V = (1.f - polar / Pi);
+	
+	intersection.HitPoint = m_ObjectToCamera(intersection.HitPoint);
+	intersection.HitNormal = m_ObjectToCamera(intersection.HitNormal);
 
 	return true;
 }

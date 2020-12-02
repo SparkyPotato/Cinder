@@ -11,5 +11,5 @@ public:
 	const Color& GetPixel(uint32_t x, uint32_t y) const;
 
 	uint32_t Width = 0, Height = 0;
-	std::vector<Color> Data;
+	Color* Data;
 };

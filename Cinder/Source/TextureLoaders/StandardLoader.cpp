@@ -14,11 +14,12 @@ Texture StandardLoader::LoadTexture(const std::string& filePath)
 	uint8_t* data = stbi_load(filePath.c_str(), &width, &height, &comp, 3);
 	if (!data)
 	{
-		Error("{}", filePath, stbi_failure_reason());
+		Error("stb image fail: {}", filePath, stbi_failure_reason());
 		throw -1;
 	}
 	
 	Texture ret(width, height);
+	ret.Data = new Color[width * height];
 	
 	for (int i = 0; i < width * height * 3; i += 3)
 	{
@@ -27,7 +28,7 @@ Texture StandardLoader::LoadTexture(const std::string& filePath)
 		g = float(data[i + 1]) / 255.f;
 		b = float(data[i + 2]) / 255.f;
 
-		ret.Data.emplace_back(r, g, b);
+		ret.Data[i / 3] = Color(r, g, b);
 	}
 
 	return ret;

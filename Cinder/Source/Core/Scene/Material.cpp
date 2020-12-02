@@ -61,8 +61,12 @@ bool YAML::convert<Material>::decode(const Node& node, Material& material)
 			return false;
 		}
 
-		material.Albedo.Height = material.Albedo.Width = 1;
-		material.Albedo.Data.emplace_back(color);
+		material.Albedo.Height = material.Albedo.Width = 2;
+		material.Albedo.Data = new Color[4];
+		material.Albedo.Data[0] = color;
+		material.Albedo.Data[1] = color;
+		material.Albedo.Data[2] = color;
+		material.Albedo.Data[3] = color;
 	}
 	else
 	{

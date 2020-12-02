@@ -10,8 +10,8 @@ Color BilinearSampler::Sample(const Texture& texture, float u, float v)
 		return Color(1.f, 0.f, 0.f);
 	}
 
-	u *= texture.Width;
-	v *= texture.Height;
+	u *= texture.Width - 1;
+	v *= texture.Height - 1;
 
 	auto Lu = uint32_t(std::floor(u));
 	auto Lv = uint32_t(std::floor(v));

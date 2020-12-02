@@ -9,6 +9,11 @@ Scene::~Scene()
 	{
 		if (object.ObjectShape) { delete object.ObjectShape; }
 	}
+	
+	for (auto& material : Materials)
+	{
+		delete[] material.Albedo.Data;
+	}
 }
 
 Scene* Scene::FromFile(const std::string& file)
