@@ -25,7 +25,7 @@ Vector::operator Normal()
 
 Vector& Vector::operator=(const Vector& other)
 {
-	m_Vector = other.m_Vector;
+	memcpy(&m_Vector, &other.m_Vector, sizeof(__m128));
 
 	return *this;
 }
@@ -240,7 +240,7 @@ Point::Point(const __m128& vector)
 
 Point& Point::operator=(const Point& other)
 {
-	m_Vector = other.m_Vector;
+	memcpy(&m_Vector, &other.m_Vector, sizeof(__m128));
 
 	return *this;
 }
@@ -403,7 +403,7 @@ Normal::operator Vector()
 
 Normal& Normal::operator=(const Normal& other)
 {
-	m_Vector = other.m_Vector;
+	memcpy(&m_Vector, &other.m_Vector, sizeof(__m128));
 
 	return *this;
 }

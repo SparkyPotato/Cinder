@@ -21,7 +21,7 @@ Color PreviewRenderer::TraceRay(const Ray& ray)
 	if (m_Scene->AccelStructure->Intersect(ray, r))
 	{
 		// return r.HitObject->ObjectMaterial->SampleAlbedo(r.U, r.V);
-		return Color(r.U, r.V, 0.f);
+		return Color(r.V, r.V, r.V);
 	}
 
 	return { 0.f, 0.f, 0.f };

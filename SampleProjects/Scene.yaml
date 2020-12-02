@@ -14,16 +14,8 @@ Objects:
         Position: [ 0, 0, 0 ]
         Rotation: [ 0, 0, 0 ]
         Scale: [ 1, 1, 1 ]
-      Radius: 10
-    Material: Texture
-  - Shape:
-      Type: Sphere
-      Transform:
-        Position: [ 10, 0, 0 ]
-        Rotation: [ 0, 0, 0 ]
-        Scale: [ 1, 1, 1 ]
       Radius: 5
-    Material: Green
+    Material: Texture
 
 Materials:
   - Name: Red

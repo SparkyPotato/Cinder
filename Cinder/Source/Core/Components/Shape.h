@@ -25,7 +25,7 @@ protected:
 	Transform m_ObjectToCamera;
 };
 
-extern Transform GCameraTransform;
+extern Transform GCameraToWorld;
 
 template<>
 struct YAML::convert<Shape*>
@@ -59,7 +59,7 @@ struct YAML::convert<Shape*>
 			return false;
 		}
 
-		try { shape = ComponentManager::Get()->SpawnShape(type, GCameraTransform.GetInverse() * transform); }
+		try { shape = ComponentManager::Get()->SpawnShape(type, transform * GCameraToWorld.GetInverse()); }
 		catch (...)
 		{
 			Error("Shape Type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);

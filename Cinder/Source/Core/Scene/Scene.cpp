@@ -1,7 +1,7 @@
 #include "PCH.h"
 #include "Scene.h"
 
-Transform GCameraTransform;
+Transform GCameraToWorld;
 
 Scene::~Scene()
 {
@@ -50,7 +50,7 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 		return false;
 	}
 	
-	GCameraTransform = node["Camera"]["Transform"].as<Transform>();
+	GCameraToWorld = node["Camera"]["Transform"].as<Transform>();
 	std::string type;
 	try { type = node["Camera"]["Type"].as<std::string>(); }
 	catch (YAML::Exception& e)
