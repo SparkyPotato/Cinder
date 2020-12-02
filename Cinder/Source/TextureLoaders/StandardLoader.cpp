@@ -21,15 +21,17 @@ Texture StandardLoader::LoadTexture(const std::string& filePath)
 	Texture ret(width, height);
 	ret.Data = new Color[width * height];
 	
-	for (int i = 0; i < width * height * 3; i += 3)
+	for (int i = 0; i < width * height; i ++)
 	{
 		float r, g, b;
-		r = float(data[i]) / 255.f;
-		g = float(data[i + 1]) / 255.f;
-		b = float(data[i + 2]) / 255.f;
+		r = float(data[3 * i]) / 255.f;
+		g = float(data[3 * i + 1]) / 255.f;
+		b = float(data[3 * i + 2]) / 255.f;
 
-		ret.Data[i / 3] = Color(r, g, b);
+		ret.Data[i] = Color(r, g, b);
 	}
+	
+	stbi_image_free(data);
 
 	return ret;
 }
