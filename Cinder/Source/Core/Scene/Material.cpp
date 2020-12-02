@@ -8,8 +8,6 @@ Color Material::SampleAlbedo(float u, float v)
 	return Sampler->Sample(Albedo, u, v);
 }
 
-bool LoadTexture(Texture& texture, const YAML::Node& node);
-
 bool YAML::convert<Material>::decode(const Node& node, Material& material)
 {
 	if (!node["Name"])

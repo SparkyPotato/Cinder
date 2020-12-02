@@ -2,6 +2,7 @@
 
 #include "Core/Components/Camera.h"
 #include "Object.h"
+#include "Skybox.h"
 
 class AccelerationStructure;
 
@@ -15,6 +16,8 @@ public:
 
 	std::vector<Object> Objects;
 	std::vector<Material> Materials;
+	Skybox SceneSkybox;
+
 	AccelerationStructure* AccelStructure;
 	Camera* MainCamera;
 };

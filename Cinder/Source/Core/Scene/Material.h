@@ -15,6 +15,8 @@ public:
 	Texture Albedo;
 };
 
+bool LoadTexture(Texture& texture, const YAML::Node& node);
+
 template<>
 struct YAML::convert<Material>
 {

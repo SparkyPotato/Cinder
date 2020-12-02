@@ -14,6 +14,13 @@ Scene::~Scene()
 	{
 		delete[] material.Albedo.Data;
 	}
+
+	delete[] SceneSkybox.Front.Data;
+	delete[] SceneSkybox.Back.Data;
+	delete[] SceneSkybox.Left.Data;
+	delete[] SceneSkybox.Right.Data;
+	delete[] SceneSkybox.Top.Data;
+	delete[] SceneSkybox.Bottom.Data;
 }
 
 Scene* Scene::FromFile(const std::string& file)
@@ -121,6 +128,16 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 			Error("Material '{}' does not exist!", object.MaterialName);
 			return false;
 		}
+	}
+
+	if (!node["Skybox"])
+	{
+		Warning("No skybox present, using default black.");
+		scene->SceneSkybox = DefaultSkybox();
+	}
+	else
+	{
+		scene->SceneSkybox = node["Skybox"].as<Skybox>();
 	}
 
 	return true;

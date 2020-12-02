@@ -3,7 +3,7 @@ Camera:
   Type: Perspective
   Transform:
     Position: [ 0, 0, -20 ]
-    Rotation: [ 0, 20, 0 ]
+    Rotation: [ 0, 150, 0 ]
     Scale: [ 1, 1, 1 ]
   FOV: 60
 
@@ -16,6 +16,27 @@ Objects:
         Scale: [ 1, 1, 1 ]
       Radius: 5
     Material: Texture
+
+Skybox:
+  Sampler: Bilinear
+  Top:
+    Loader: Standard
+    File: Textures/Skybox/Top.jpg
+  Bottom:
+    Loader: Standard
+    File: Textures/Skybox/Bottom.jpg
+  Left:
+    Loader: Standard
+    File: Textures/Skybox/Left.jpg
+  Right:
+    Loader: Standard
+    File: Textures/Skybox/Right.jpg
+  Front:
+    Loader: Standard
+    File: Textures/Skybox/Front.jpg
+  Back:
+    Loader: Standard
+    File: Textures/Skybox/Back.jpg
 
 Materials:
   - Name: Red

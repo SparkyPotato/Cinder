@@ -23,5 +23,5 @@ Color PreviewRenderer::TraceRay(const Ray& ray)
 		return r.HitObject->ObjectMaterial->SampleAlbedo(r.U, r.V);
 	}
 
-	return { 0.f, 0.f, 0.f };
+	return m_Scene->SceneSkybox.Sample(GCameraToWorld(ray.Direction));
 }
