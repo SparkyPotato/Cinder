@@ -8,9 +8,6 @@ void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 	m_Scene = &scene;
 	m_Framebuffer = &framebuffer;
 
-	m_AdjustedWidth = m_Framebuffer->Width * m_Supersamples;
-	m_AdjustedHeight = m_Framebuffer->Height * m_Supersamples;
-
 	for (uint32_t x = 0; x < framebuffer.Width; x += GOptions.TileSize)
 	{
 		uint32_t xMax = x + GOptions.TileSize;
@@ -38,20 +35,6 @@ void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 
 bool Sampler::ParseSettings(const YAML::Node& node)
 {
-	if (!node["Supersample"])
-	{
-		Warning("No Supersample count given. Using default ({})", m_Supersamples);
-	}
-	else
-	{
-		try { m_Supersamples = node["Supersample"].as<unsigned int>(); }
-		catch (YAML::Exception& e)
-		{
-			Error("Supersample count must be an unsigned integer (line {})!", e.mark.line + 1);
-			return false;
-		}
-	}
-
 	return true;
 }
 
@@ -67,18 +50,11 @@ void Sampler::Thread()
 		{
 			for (uint32_t y = rTile.Ymin; y != rTile.Ymax; y++)
 			{
-				for (uint32_t ix = 0; ix < m_Supersamples; ix++)
-				{
-					float xval = (float(x * m_Supersamples + ix) + 0.5f) / m_AdjustedWidth;
-					for (uint32_t iy = 0; iy < m_Supersamples; iy++)
-					{
-						float yval = (float(y * m_Supersamples + iy) + 0.5f) / m_AdjustedHeight;
+				float xval = float(x + 0.5f) / m_Framebuffer->Width;
+				float yval = float(y + 0.5f) / m_Framebuffer->Height;
 
-						auto ray = m_Scene->MainCamera->GetRay(xval, yval);
-						bTile.GetPixel(x, y) += TraceRay(ray);
-					}
-				}
-				bTile.GetPixel(x, y) /= { float(m_Supersamples), float(m_Supersamples), float(m_Supersamples) };
+				auto ray = m_Scene->MainCamera->GetRay(xval, yval);
+				bTile.GetPixel(x, y) = TraceRay(ray);
 			}
 		}
 

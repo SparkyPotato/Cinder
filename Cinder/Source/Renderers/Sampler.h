@@ -27,13 +27,9 @@ protected:
 
 	void Thread();
 
-	uint32_t m_Supersamples = 1;
-
 	std::vector<Tile> m_RenderTiles;
 	std::vector<std::thread> m_Threads;
 	std::atomic<unsigned int> m_Tile = 0;
 	const Scene* m_Scene;
 	Framebuffer* m_Framebuffer;
-	uint32_t m_AdjustedWidth = 0;
-	uint32_t m_AdjustedHeight = 0;
 };

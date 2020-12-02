@@ -27,17 +27,17 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 	float t0, t1, t;
 	if (!SolveQuadratic(a, b, c, t0, t1)) { return false; }
 	t = (t0 > 0.f) ? t0 : t1;
-	if (t >= ray.Extent) { return false; }
+	if (t > ray.Extent) { return false; }
 
-	Point point = ray.Origin + ray.Direction * t;
-	Normal normal = Normal(point - Point()).GetNormalized();
+	Point hit = transformed(t);
+	float azimuthal = -std::atan2(hit.X, hit.Z);
+	if (azimuthal < 0.f) { azimuthal += 2 * Pi; }
+	intersection.U = azimuthal * (InversePi / 2.f);
+	float altitude = std::acos(hit.Y / m_Radius);
+	intersection.V = altitude * InversePi;
 
-	intersection.U = (std::atan2(point.X, point.Z) * (InversePi / 2.f)) + 0.5f;
-	intersection.V = 0.5f - (std::asin(point.Y / m_Radius) * InversePi);
-
-	ray.Extent = t;
-	intersection.HitPoint = m_ObjectToCamera(point);
-	intersection.HitNormal = m_ObjectToCamera(normal).GetNormalized();
+	intersection.HitPoint = m_ObjectToCamera(hit);
+	intersection.HitNormal = m_ObjectToCamera(Normal(hit - Point())).GetNormalized();
 
 	return true;
 }

@@ -3,7 +3,7 @@ Camera:
   Type: Perspective
   Transform:
     Position: [ 0, 0, -20 ]
-    Rotation: [ 0, 0, 0 ]
+    Rotation: [ 0, 20, 0 ]
     Scale: [ 1, 1, 1 ]
   FOV: 60
 
@@ -12,9 +12,9 @@ Objects:
       Type: Sphere
       Transform:
         Position: [ 0, 0, 0 ]
-        Rotation: [ 0, 0, 0 ]
+        Rotation: [ -30, 30, 0 ]
         Scale: [ 1, 1, 1 ]
-      Radius: 10
+      Radius: 5
     Material: Texture
 
 Materials:

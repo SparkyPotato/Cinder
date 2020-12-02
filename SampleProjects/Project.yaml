@@ -6,7 +6,6 @@ Scene:
 
 Renderer:
   Type: Preview
-  Supersample: 2
 
 Framebuffer:
   Type: Simple
