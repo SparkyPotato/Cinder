@@ -10,7 +10,7 @@ public:
 };
 
 #define REGISTER_TEXTURE_SAMPLER(name, className) \
-TextureSampler* Spawn##className() { return new className; } \
+TextureSampler* Spawn##className() { return Memory::Get()->Allocate<className>(); } \
 struct Register##className \
 { \
 	Register##className() \

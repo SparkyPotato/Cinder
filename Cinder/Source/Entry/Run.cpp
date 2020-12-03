@@ -15,6 +15,7 @@ OutputAdapter* SpawnOutputAdapter(YAML::Node& project);
 void RunProject(const std::filesystem::path& filePath)
 {
 	Console("{}", filePath.filename().string());
+	Memory::Get()->StartProject();
 
 	auto setupStart = std::chrono::high_resolution_clock().now();
 
@@ -113,12 +114,6 @@ void RunProject(const std::filesystem::path& filePath)
 	Console("Project '{}' finished rendering.", filePath.filename().string());
 	Console("Took {:%M:%S}.", renderEnd - setupStart);
 	Log("Out of that, load took {:%M:%S}, and render took {:%M:%S}.", setupEnd - setupStart, renderEnd - setupEnd);
-
-	delete scene->AccelStructure;
-	delete scene;
-	delete renderer;
-	delete framebuffer;
-	delete output;
 
 	std::filesystem::current_path(workingDirectory);
 }

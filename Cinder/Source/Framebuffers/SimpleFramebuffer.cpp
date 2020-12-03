@@ -6,13 +6,8 @@ REGISTER_FRAMEBUFFER(Simple, SimpleFramebuffer)
 SimpleFramebuffer::SimpleFramebuffer(uint32_t width, uint32_t height)
 	: Framebuffer(width, height)
 {
-	m_Data = new Color[width * height];
+	m_Data = Memory::Get()->AllocateArr<Color>(width * height);
 	Verbose("Simple Framebuffer created with resolution {}x{}.", width, height);
-}
-
-SimpleFramebuffer::~SimpleFramebuffer()
-{
-	delete[] m_Data;
 }
 
 const Color* SimpleFramebuffer::GetOutputColorData() const

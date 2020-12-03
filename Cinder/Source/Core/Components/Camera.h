@@ -15,7 +15,7 @@ public:
 };
 
 #define REGISTER_CAMERA(name, className) \
-Camera* Spawn##className() { return new className(); } \
+Camera* Spawn##className() { return Memory::Get()->Allocate<className>(); } \
 struct Register##className \
 { \
 	Register##className() \

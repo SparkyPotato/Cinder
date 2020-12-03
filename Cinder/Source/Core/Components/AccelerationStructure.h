@@ -17,7 +17,7 @@ public:
 };
 
 #define REGISTER_ACCELERATION_STRUCTURE(name, className) \
-AccelerationStructure* Spawn##className() { return new className; } \
+AccelerationStructure* Spawn##className() { return Memory::Get()->Allocate<className>(); } \
 struct Register##className \
 { \
 	Register##className() \

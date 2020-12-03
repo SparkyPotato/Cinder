@@ -13,7 +13,7 @@ public:
 };
 
 #define REGISTER_TEXTURE_LOADER(name, className) \
-TextureLoader* Spawn##className() { return new className; } \
+TextureLoader* Spawn##className() { return Memory::Get()->Allocate<className>(); } \
 struct Register##className \
 { \
 	Register##className() \

@@ -14,7 +14,7 @@ public:
 };
 
 #define REGISTER_RENDERER(name, className) \
-Renderer* Spawn##className() { return new className; } \
+Renderer* Spawn##className() { return Memory::Get()->Allocate<className>(); } \
 struct Register##className \
 { \
 	Register##className() \

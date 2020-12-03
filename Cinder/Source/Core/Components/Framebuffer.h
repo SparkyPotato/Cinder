@@ -43,7 +43,7 @@ public:
 };
 
 #define REGISTER_FRAMEBUFFER(name, className) \
-Framebuffer* Spawn##className(uint32_t width, uint32_t height) { return new className(width, height); } \
+Framebuffer* Spawn##className(uint32_t width, uint32_t height) { return Memory::Get()->Allocate<className>(width, height); } \
 struct Register##className \
 { \
 	Register##className() \

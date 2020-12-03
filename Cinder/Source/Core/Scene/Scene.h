@@ -10,7 +10,6 @@ class Scene
 {
 public:
 	Scene() = default;
-	~Scene();
 	
 	static Scene* FromFile(const std::string& file);
 

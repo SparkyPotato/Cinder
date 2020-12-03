@@ -76,7 +76,7 @@ struct YAML::convert<Shape*>
 };
 
 #define REGISTER_SHAPE(name, className) \
-Shape* Spawn##className(const Transform& transform) { return new className(transform); } \
+Shape* Spawn##className(const Transform& transform) { return Memory::Get()->Allocate<className>(transform); } \
 struct Register##className \
 { \
 	Register##className() \

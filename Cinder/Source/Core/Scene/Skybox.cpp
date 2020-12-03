@@ -51,29 +51,12 @@ Skybox DefaultSkybox()
 {
 	Skybox box;
 
-	box.Faces[0].Width = 2;
-	box.Faces[0].Height = 2;
-	box.Faces[0].Data = new Color[4];
-
-	box.Faces[1].Width = 2;
-	box.Faces[1].Height = 2;
-	box.Faces[1].Data = new Color[4];
-
-	box.Faces[2].Width = 2;
-	box.Faces[2].Height = 2;
-	box.Faces[2].Data = new Color[4];
-
-	box.Faces[3].Width = 2;
-	box.Faces[3].Height = 2;
-	box.Faces[3].Data = new Color[4];
-
-	box.Faces[4].Width = 2;
-	box.Faces[4].Height = 2;
-	box.Faces[4].Data = new Color[4];
-
-	box.Faces[5].Width = 2;
-	box.Faces[5].Height = 2;
-	box.Faces[5].Data = new Color[4];
+	for (int i = 0; i < 6; i++)
+	{
+		box.Faces[i].Width = 2;
+		box.Faces[i].Height = 2;
+		box.Faces[i].Data = Memory::Get()->AllocateArr<Color>(4);
+	}
 
 	for (int i = 0; i < 4; i++)
 	{

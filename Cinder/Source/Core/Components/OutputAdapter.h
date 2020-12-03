@@ -19,7 +19,7 @@ protected:
 };
 
 #define REGISTER_OUTPUT_ADAPTER(name, className) \
-OutputAdapter* Spawn##className(const std::string& file) { return new className(file); } \
+OutputAdapter* Spawn##className(const std::string& file) { return Memory::Get()->Allocate<className>(file); } \
 struct Register##className \
 { \
 	Register##className() \

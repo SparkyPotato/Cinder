@@ -3,24 +3,6 @@
 
 Transform GCameraToWorld;
 
-Scene::~Scene()
-{
-	for (auto& object : Objects)
-	{
-		if (object.ObjectShape) { delete object.ObjectShape; }
-	}
-	
-	for (auto& material : Materials)
-	{
-		delete[] material.Albedo.Data;
-	}
-
-	for (int i = 0; i < 6; i++)
-	{
-		delete SceneSkybox.Faces[i].Data;
-	}
-}
-
 Scene* Scene::FromFile(const std::string& file)
 {
 	try
@@ -37,7 +19,7 @@ Scene* Scene::FromFile(const std::string& file)
 
 bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 {
-	scene = new Scene;
+	scene = Memory::Get()->Allocate<Scene>();
 	
 	if (!node["Camera"])
 	{

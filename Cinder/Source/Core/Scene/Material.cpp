@@ -60,7 +60,7 @@ bool YAML::convert<Material>::decode(const Node& node, Material& material)
 		}
 
 		material.Albedo.Height = material.Albedo.Width = 2;
-		material.Albedo.Data = new Color[4];
+		material.Albedo.Data = Memory::Get()->AllocateArr<Color>(4);
 		material.Albedo.Data[0] = color;
 		material.Albedo.Data[1] = color;
 		material.Albedo.Data[2] = color;
