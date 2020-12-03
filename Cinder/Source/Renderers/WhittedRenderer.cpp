@@ -55,7 +55,24 @@ bool WhittedRenderer::ParseSettings(const YAML::Node& node)
 
 Color WhittedRenderer::TraceRay(const Ray& ray)
 {
-	return m_Irradiance(GCameraToWorld(ray.Direction));
+	RayIntersection intersection;
+	if (m_Scene->AccelStructure->Intersect(ray, intersection))
+	{
+		// Skybox IBL
+		float sigma = intersection.HitObject->ObjectMaterial->SampleRoughness(intersection.U, intersection.V).R;
+		float sigma2 = sigma * sigma;
+		float A = 1.f - 0.5f * (sigma2 / (sigma2 + 0.33f));
+		float B = 0.45f * (sigma2 / (sigma2 + 0.09f));
+		float dot = Dot(intersection.HitNormal, (intersection.HitPoint - Point()).GetNormalized());
+		float alpha = std::acos(dot);
+
+		Color E0 = m_Irradiance(GCameraToWorld(intersection.HitNormal));
+		Color rhopi = intersection.HitObject->ObjectMaterial->SampleAlbedo(intersection.U, intersection.V) / Pi;
+
+		return rhopi * E0 * (A + B * dot * std::sin(alpha));
+	}
+
+	return m_Scene->Skybox(GCameraToWorld(ray.Direction));
 }
 
 WhittedRenderer::IrradianceSample WhittedRenderer::GetAverageIrradiance(const Scene& scene)
@@ -124,6 +141,9 @@ void WhittedRenderer::GenerateIrradiance(const IrradianceSample& average)
 				{
 					color += sample.Coefficients[i];
 				}
+				color.R = std::max(0.f, color.R);
+				color.G = std::max(0.f, color.G);
+				color.B = std::max(0.f, color.B);
 			}
 		}
 	}

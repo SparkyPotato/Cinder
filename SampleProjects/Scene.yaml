@@ -2,7 +2,7 @@
 Camera:
   Type: Perspective
   Transform:
-    Position: [ 0, 0, -20 ]
+    Position: [ 0, 0, -25 ]
     Rotation: [ 0, 0, 0 ]
     Scale: [ 1, 1, 1 ]
   FOV: 60
@@ -15,7 +15,15 @@ Objects:
         Rotation: [ -30, 30, 0 ]
         Scale: [ 1, 1, 1 ]
       Radius: 5
-    Material: Texture
+    Material: White
+  - Shape:
+      Type: Sphere
+      Transform:
+        Position: [ 5, -10, 0 ]
+        Rotation: [ 0, 0, 0 ]
+        Scale: [ 1, 1, 1 ]
+      Radius: 5
+    Material: White
 
 Skybox:
   Sampler: Bilinear
@@ -39,14 +47,15 @@ Skybox:
     File: Textures/Skybox/Back.jpg
 
 Materials:
-  - Name: Red
+  - Name: White
     Sampler: Bilinear
-    Albedo: [ 1, 0, 0 ]
-  - Name: Green
-    Sampler: Bilinear
-    Albedo: [ 0, 1, 0 ]
-  - Name: Texture
+    Albedo: [ 1, 1, 1 ]
+    Roughness: 0
+  - Name: Marble
     Sampler: Bilinear
     Albedo:
       Loader: Standard
       File: Textures/Marble_Albedo.png
+    Roughness:
+      Loader: Standard
+      File: Textures/Marble_Roughness.png

@@ -12,6 +12,7 @@ public:
 	Texture Faces[6];
 
 	Color operator()(const Vector& direction) const;
+	Color operator()(const Normal& direction) const;
 };
 
 Cubemap DefaultSkybox();

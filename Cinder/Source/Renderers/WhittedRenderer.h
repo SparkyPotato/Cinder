@@ -27,5 +27,7 @@ private:
 	void GenerateIrradiance(const IrradianceSample& average);
 
 	uint32_t m_IrradianceResolution = 128;
+	float m_ShadowEpsilon = 0.05f;
+
 	Cubemap m_Irradiance;
 };

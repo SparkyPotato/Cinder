@@ -23,6 +23,11 @@ Color Cubemap::operator()(const Vector& direction) const
 	return Sampler->Sample(Faces[index], u, v);
 }
 
+Color Cubemap::operator()(const Normal& direction) const
+{
+	return (*this)(Vector(direction));
+}
+
 Cubemap DefaultSkybox()
 {
 	Cubemap box;

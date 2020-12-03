@@ -8,11 +8,13 @@ public:
 	Material() = default;
 	
 	Color SampleAlbedo(float u, float v);
+	Color SampleRoughness(float u, float v);
 
 	std::string Name;
 	TextureSampler* Sampler;
 
 	Texture Albedo;
+	Texture Roughness;
 };
 
 template<>

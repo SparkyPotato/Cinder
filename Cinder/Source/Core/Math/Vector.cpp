@@ -18,7 +18,7 @@ Vector::Vector(const __m128& vector)
 	ASSERT(!IsNAN(), "Constructed direction is NaN!");
 }
 
-Vector::operator Normal()
+Vector::operator Normal() const
 {
 	return Normal(X, Y, Z);
 }
@@ -396,7 +396,7 @@ Normal::Normal(const __m128& vector)
 	ASSERT(!IsNAN(), "Constructed normal is NaN!");
 }
 
-Normal::operator Vector()
+Normal::operator Vector() const
 {
 	return Vector(X, Y, Z);
 }

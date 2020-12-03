@@ -10,7 +10,7 @@ public:
 	Vector() = default;
 	Vector(float x, float y, float z);
 	Vector(const Vector& other) = default;
-	explicit operator Normal();
+	explicit operator Normal() const;
 
 	Vector& operator=(const Vector& other);
 
@@ -122,7 +122,7 @@ public:
 	Normal() = default;
 	Normal(float x, float y, float z);
 	Normal(const Normal & other) = default;
-	explicit operator Vector();
+	explicit operator Vector() const;
 
 	Normal& operator=(const Normal& other);
 

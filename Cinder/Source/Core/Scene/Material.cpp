@@ -6,6 +6,11 @@ Color Material::SampleAlbedo(float u, float v)
 	return Sampler->Sample(Albedo, u, v);
 }
 
+Color Material::SampleRoughness(float u, float v)
+{
+	return Sampler->Sample(Roughness, u, v);
+}
+
 bool YAML::convert<Material>::decode(const Node& node, Material& material)
 {
 	if (!node["Name"])
@@ -53,7 +58,7 @@ bool YAML::convert<Material>::decode(const Node& node, Material& material)
 		try { color = node["Albedo"].as<Color>(); }
 		catch (YAML::Exception& e)
 		{
-			Error("Invalid color albedo (line {})!", e.mark.line + 1);
+			Error("Invalid color Albedo (line {})!", e.mark.line + 1);
 			return false;
 		}
 
@@ -67,6 +72,34 @@ bool YAML::convert<Material>::decode(const Node& node, Material& material)
 	else
 	{
 		if (!LoadTexture(material.Albedo, node["Albedo"])) { return false; }
+	}
+
+	if (!node["Roughness"])
+	{
+		Error("Material must have an Roughness (line {})!", node.Mark().line + 1);
+		return false;
+	}
+
+	if (!node["Albedo"].IsMap())
+	{
+		Color color;
+		try { color = Color(node["Roughness"].as<float>()); }
+		catch (YAML::Exception& e)
+		{
+			Error("Invalid Roughness value! (line {})!", e.mark.line + 1);
+			return false;
+		}
+
+		material.Roughness.Height = material.Roughness.Width = 2;
+		material.Roughness.Data = Memory::Get()->AllocateArr<Color>(4);
+		material.Roughness.Data[0] = color;
+		material.Roughness.Data[1] = color;
+		material.Roughness.Data[2] = color;
+		material.Roughness.Data[3] = color;
+	}
+	else
+	{
+		if (!LoadTexture(material.Roughness, node["Roughness"])) { return false; }
 	}
 	
 	return true;
