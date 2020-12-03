@@ -1,6 +1,11 @@
 #include "PCH.h"
 #include "Color.h"
 
+Color::Color(float g)
+{
+	m_Vector = _mm_set_ps(0.f, g, g, g);
+}
+
 Color::Color(float r, float g, float b)
 {
 	m_Vector = _mm_set_ps(0.f, b, g, r);

@@ -9,9 +9,9 @@ class Sampler : public Renderer
 public:
 	Sampler() = default;
 
-	void Render(const Scene& scene, Framebuffer& framebuffer) override;
+	virtual void Render(const Scene& scene, Framebuffer& framebuffer) override;
 
-	bool ParseSettings(const YAML::Node& node) override;
+	virtual bool ParseSettings(const YAML::Node& node) override;
 
 	virtual Color TraceRay(const Ray& ray) = 0;
 
@@ -30,6 +30,6 @@ protected:
 	std::vector<Tile> m_RenderTiles;
 	std::vector<std::thread> m_Threads;
 	std::atomic<unsigned int> m_Tile = 0;
-	const Scene* m_Scene;
-	Framebuffer* m_Framebuffer;
+	const Scene* m_Scene = nullptr;
+	Framebuffer* m_Framebuffer = nullptr;
 };

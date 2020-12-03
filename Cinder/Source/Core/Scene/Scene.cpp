@@ -113,11 +113,11 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	if (!node["Skybox"])
 	{
 		Warning("No skybox present, using default black.");
-		scene->SceneSkybox = DefaultSkybox();
+		scene->Skybox = DefaultSkybox();
 	}
 	else
 	{
-		scene->SceneSkybox = node["Skybox"].as<Skybox>();
+		scene->Skybox = node["Skybox"].as<Cubemap>();
 	}
 
 	return true;

@@ -5,6 +5,7 @@ class Color
 {
 public:
 	Color() = default;
+	Color(float g);
 	Color(float r, float g, float b);
 	
 	Color& operator=(const Color& other);

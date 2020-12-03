@@ -5,7 +5,8 @@ Scene:
     Type: None
 
 Renderer:
-  Type: Preview
+  Type: Whitted
+  Env Map Resolution: 256
 
 Framebuffer:
   Type: Simple

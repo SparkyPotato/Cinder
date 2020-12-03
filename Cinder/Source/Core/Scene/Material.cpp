@@ -1,8 +1,6 @@
 #include "PCH.h"
 #include "Material.h"
 
-#include "Core/Components/TextureLoader.h"
-
 Color Material::SampleAlbedo(float u, float v)
 {
 	return Sampler->Sample(Albedo, u, v);
@@ -71,50 +69,5 @@ bool YAML::convert<Material>::decode(const Node& node, Material& material)
 		if (!LoadTexture(material.Albedo, node["Albedo"])) { return false; }
 	}
 	
-	return true;
-}
-
-bool LoadTexture(Texture& texture, const YAML::Node& node)
-{
-	std::string loader = "Standard";
-	if (!node["Loader"])
-	{
-		Warning("No explicit loader! Using default '{}' (line {})", loader, node.Mark().line + 1);
-	}
-	if (!node["File"])
-	{
-		Error("No provided file (line {})!", node.Mark().line + 1);
-		return false;
-	}
-
-	try { loader = node["Loader"].as<std::string>(); }
-	catch (YAML::Exception& e)
-	{
-		Error("Loader must be a string (line {})!", e.mark.line + 1);
-		return false;
-	}
-	std::string file;
-	try { file = node["File"].as<std::string>(); }
-	catch (YAML::Exception& e)
-	{
-		Error("File must be a string (line {})!", e.mark.line + 1);
-		return false;
-	}
-
-	TextureLoader* tLoader;
-	try { tLoader = ComponentManager::Get()->SpawnTextureLoader(loader); }
-	catch (...)
-	{
-		Error("Texture Loader '{}' does not exist (line {})!", loader, node["Loader"].Mark().line + 1);
-		return false;
-	}
-
-	try { texture = tLoader->LoadTexture(file); }
-	catch (...)
-	{
-		Error("Failed to load texture '{}' (line {})!", file, node["File"].Mark().line + 1);
-		return false;
-	}
-
 	return true;
 }

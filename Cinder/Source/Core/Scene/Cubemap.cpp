@@ -1,55 +1,31 @@
 #include "PCH.h"
-#include "Skybox.h"
+#include "Cubemap.h"
 
 #include "Material.h"
 
-struct Face
+Color Cubemap::operator()(const Vector& direction) const
 {
-	Vector FaceDirection;
-	Vector UVector;
-	Vector VVector;
-};
+	Vector normalized = direction.GetNormalized();
 
-static Face FaceData[6] =
-{
-	{ Vector(0.f, 0.f, 1.f), Vector(1.f, 0.f, 0.f), Vector(0.f, -1.f, 0.f) },
-	{ Vector(0.f, 0.f, -1.f), Vector(-1.f, 0.f, 0.f), Vector(0.f, -1.f, 0.f) },
-	{ Vector(-1.f, 0.f, 0.f), Vector(0.f, 0.f, 1.f), Vector(0.f, -1.f, 0.f) },
-	{ Vector(1.f, 0.f, 0.f), Vector(0.f, 0.f, -1.f), Vector(0.f, -1.f, 0.f) },
-	{ Vector(0.f, 1.f, 0.f), Vector(1.f, 0.f, 0.f), Vector(0.f, 0.f, 1.f) },
-	{ Vector(0.f, -1.f, 0.f), Vector(1.f, 0.f, 0.f), Vector(0.f, 0.f, -1.f) }
-};
-
-Color Skybox::Sample(const Vector& direction) const
-{
-	Vector normal = direction.GetNormalized();
-
-	float dots[6];
-	dots[0] = Dot(normal, FaceData[0].FaceDirection);
-	dots[1] = Dot(normal, FaceData[1].FaceDirection);
-	dots[2] = Dot(normal, FaceData[2].FaceDirection);
-	dots[3] = Dot(normal, FaceData[3].FaceDirection);
-	dots[4] = Dot(normal, FaceData[4].FaceDirection);
-	dots[5] = Dot(normal, FaceData[5].FaceDirection);
-
-	float dotMax = dots[0];
-	int index = 0;
-	for (int i = 1; i < 6; i++)
+	float dotMax = 0.f;
+	int index;
+	for (int i = 0; i < 6; i++)
 	{
-		if (dots[i] > dotMax) { dotMax = dots[i]; index = i; }
+		float dot = Dot(normalized, CubemapFaceData[i].FaceDirection);
+		if (dot > dotMax) { dotMax = dot; index = i; }
 	}
 
-	normal *= (1 / dotMax);
-	Vector uv = (Point() + normal) - (Point() + FaceData[index].FaceDirection);
-	float u = 0.5f * Dot(uv, FaceData[index].UVector) + 0.5f;
-	float v = 0.5f * Dot(uv, FaceData[index].VVector) + 0.5f;
+	normalized *= (1 / dotMax);
+	Vector uv = (Point() + normalized) - (Point() + CubemapFaceData[index].FaceDirection);
+	float u = 0.5f * Dot(uv, CubemapFaceData[index].UVector) + 0.5f;
+	float v = 0.5f * Dot(uv, CubemapFaceData[index].VVector) + 0.5f;
 
 	return Sampler->Sample(Faces[index], u, v);
 }
 
-Skybox DefaultSkybox()
+Cubemap DefaultSkybox()
 {
-	Skybox box;
+	Cubemap box;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -71,7 +47,7 @@ Skybox DefaultSkybox()
 	return box;
 }
 
-bool YAML::convert<Skybox>::decode(const Node& node, Skybox& skybox)
+bool YAML::convert<Cubemap>::decode(const Node& node, Cubemap& skybox)
 {
 	std::string sampler = "Bilinear";
 	if (!node["Sampler"])
