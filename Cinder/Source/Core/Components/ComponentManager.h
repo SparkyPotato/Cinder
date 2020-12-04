@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Component.h"
+
 class Renderer;
 class Framebuffer;
 class OutputAdapter;

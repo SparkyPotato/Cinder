@@ -2,7 +2,7 @@
 
 #include "Framebuffer.h"
 
-class OutputAdapter
+class OutputAdapter : public Component
 {
 public:
 	OutputAdapter(const std::string& filename)

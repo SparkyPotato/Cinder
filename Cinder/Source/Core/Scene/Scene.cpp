@@ -19,7 +19,7 @@ Scene* Scene::FromFile(const std::string& file)
 
 bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 {
-	scene = Memory::Get()->Allocate<Scene>();
+	scene = new Scene;
 	
 	if (!node["Camera"])
 	{

@@ -19,7 +19,7 @@ Texture StandardLoader::LoadTexture(const std::string& filePath)
 	}
 	
 	Texture ret(width, height);
-	ret.Data = Memory::Get()->AllocateArr<Color>(width * height);
+	ret.Data = Memory::Get()->AllocateTextureData(width, height);
 	
 	for (int i = 0; i < width * height; i ++)
 	{

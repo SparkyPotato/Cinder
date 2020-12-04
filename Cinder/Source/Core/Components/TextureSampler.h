@@ -3,10 +3,12 @@
 #include "Core/Scene/Texture.h"
 #include "ComponentManager.h"
 
-class TextureSampler
+class TextureSampler : public Component
 {
 public:
-	virtual  Color Sample(const Texture& texture, float u, float v) = 0;
+	virtual ~TextureSampler() {}
+	
+	virtual Color Sample(const Texture& texture, float u, float v) = 0;
 };
 
 #define REGISTER_TEXTURE_SAMPLER(name, className) \

@@ -3,7 +3,7 @@
 #include "Core/Components/ComponentManager.h"
 #include "Core/Math/Ray.h"
 
-class Camera
+class Camera : public Component
 {
 public:
 	virtual ~Camera() {}

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Core/Components/Component.h"
+
+class Color;
+
 class Memory
 {
 public:
@@ -22,12 +26,15 @@ public:
 		m_ArrayAllocations.emplace_back(p);
 		return p;
 	}
+	
+	Color* AllocateTextureData(uint32_t width, uint32_t height);
 
 private:
 	Memory() = default;
 
 	static Memory* s_Memory;
 
-	std::vector<void*> m_ScalarAllocations;
-	std::vector<void*> m_ArrayAllocations;
+	std::vector<Component*> m_ScalarAllocations;
+	std::vector<Component*> m_ArrayAllocations;
+	std::vector<Color*> m_Textures;
 };

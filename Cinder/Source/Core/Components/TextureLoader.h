@@ -3,7 +3,7 @@
 #include "ComponentManager.h"
 #include "Core/Scene/Texture.h"
 
-class TextureLoader
+class TextureLoader : public Component
 {
 public:
 	virtual ~TextureLoader() {}

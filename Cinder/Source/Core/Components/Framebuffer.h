@@ -24,7 +24,7 @@ private:
 	Color* m_Data;
 };
 
-class Framebuffer
+class Framebuffer : public Component
 {
 public:
 	Framebuffer(uint32_t width, uint32_t height)

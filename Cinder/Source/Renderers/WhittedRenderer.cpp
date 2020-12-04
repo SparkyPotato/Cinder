@@ -45,7 +45,7 @@ bool WhittedRenderer::ParseSettings(const YAML::Node& node)
 	{
 		m_Irradiance.Faces[i].Width = m_IrradianceResolution;
 		m_Irradiance.Faces[i].Height = m_IrradianceResolution;
-		m_Irradiance.Faces[i].Data = Memory::Get()->AllocateArr<Color>(m_IrradianceResolution * m_IrradianceResolution);
+		m_Irradiance.Faces[i].Data = Memory::Get()->AllocateTextureData(m_IrradianceResolution, m_IrradianceResolution);
 	}
 
 	m_Irradiance.Sampler = ComponentManager::Get()->SpawnTextureSampler("Bilinear");

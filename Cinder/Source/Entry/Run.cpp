@@ -114,6 +114,8 @@ void RunProject(const std::filesystem::path& filePath)
 	Console("Project '{}' finished rendering.", filePath.filename().string());
 	Console("Took {:%M:%S}.", renderEnd - setupStart);
 	Log("Out of that, load took {:%M:%S}, and render took {:%M:%S}.", setupEnd - setupStart, renderEnd - setupEnd);
+	
+	delete scene;
 
 	std::filesystem::current_path(workingDirectory);
 }

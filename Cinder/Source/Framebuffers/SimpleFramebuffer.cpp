@@ -6,7 +6,7 @@ REGISTER_FRAMEBUFFER(Simple, SimpleFramebuffer)
 SimpleFramebuffer::SimpleFramebuffer(uint32_t width, uint32_t height)
 	: Framebuffer(width, height)
 {
-	m_Data = Memory::Get()->AllocateArr<Color>(width * height);
+	m_Data = Memory::Get()->AllocateTextureData(width, height);
 	Verbose("Simple Framebuffer created with resolution {}x{}.", width, height);
 }
 

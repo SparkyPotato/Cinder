@@ -3,7 +3,7 @@
 #include "ComponentManager.h"
 #include "Core/Scene/Scene.h"
 
-class Renderer
+class Renderer : public Component
 {
 public:
 	virtual ~Renderer() {}

@@ -4,7 +4,7 @@
 #include "Core/Math/RayIntersection.h"
 #include "Core/Math/Transform.h"
 
-class Shape
+class Shape : public Component
 {
 public:
 	Shape(const Transform& objectToCamera)

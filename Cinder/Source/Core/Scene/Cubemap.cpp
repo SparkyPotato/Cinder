@@ -36,7 +36,7 @@ Cubemap DefaultSkybox()
 	{
 		box.Faces[i].Width = 2;
 		box.Faces[i].Height = 2;
-		box.Faces[i].Data = Memory::Get()->AllocateArr<Color>(4);
+		box.Faces[i].Data = Memory::Get()->AllocateTextureData(2, 2);;
 	}
 
 	for (int i = 0; i < 4; i++)

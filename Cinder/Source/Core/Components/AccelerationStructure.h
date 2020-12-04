@@ -5,7 +5,7 @@
 #include "Core/Math/RayIntersection.h"
 #include "Core/Scene/Scene.h"
 
-class AccelerationStructure
+class AccelerationStructure : public Component
 {
 public:
 	virtual ~AccelerationStructure() {}
