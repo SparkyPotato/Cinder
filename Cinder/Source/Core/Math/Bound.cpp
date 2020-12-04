@@ -1,5 +1,5 @@
 #include "PCH.h"
-#include "Bound.h"
+#include "Core/Math/Bound.h"
 
 Bound::Bound()
 	: Minimum(FloatMin, FloatMin, FloatMin),

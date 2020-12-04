@@ -1,7 +1,5 @@
 #include "PCH.h"
-#include "Memory.h"
-
-#include "Core/Math/Color.h"
+#include "Core/Memory/Memory.h"
 
 Memory* Memory::s_Memory = nullptr;
 
@@ -15,29 +13,27 @@ Memory* Memory::Get()
 	return s_Memory;
 }
 
-Color* Memory::AllocateTextureData(uint32_t width, uint32_t height)
+void Memory::StartRange()
 {
-	Color* ret = new Color[width * height];
-	m_Textures.emplace_back(ret);
-	return ret;
+	for (auto ptr : m_Allocations)
+	{
+		free(ptr);
+	}
+	m_Allocations.clear();
 }
 
-void Memory::StartProject()
+MemoryArena::MemoryArena()
 {
-	for (auto ptr : m_ScalarAllocations)
-	{
-		delete ptr;
-	}
-	for (auto ptr : m_ArrayAllocations)
-	{
-		delete[] ptr;
-	}
-	for (auto ptr : m_Textures)
-	{
-		delete[] ptr;
-	}
+	m_Data = reinterpret_cast<uint8_t*>(malloc(1024 * 1024));
+	m_Allocate = m_Data;
+}
 
-	m_ScalarAllocations.clear();
-	m_ArrayAllocations.clear();
-	m_Textures.clear();
+MemoryArena::~MemoryArena()
+{
+	free(m_Data);
+}
+
+void MemoryArena::Reset()
+{
+	m_Allocate = m_Data;
 }

@@ -1,40 +1,62 @@
 #pragma once
 
-#include "Core/Components/Component.h"
-
-class Color;
-
 class Memory
 {
 public:
 	static Memory* Get();
 
-	void StartProject();
+	void StartRange();
 
 	template<typename T, typename... Args>
 	T* Allocate(Args&&... args)
 	{
-		auto p = new T(std::forward<Args>(args)...);
-		m_ScalarAllocations.emplace_back(p);
-		return p;
+		void* ptr = malloc(sizeof(T));
+		m_Allocations.emplace_back(ptr);
+
+		return new (ptr) T(std::forward<Args>(args)...);
 	}
 
 	template<typename T>
-	T* AllocateArr(size_t count)
+	T* AllocateArray(size_t count)
 	{
-		auto p = new T[count];
-		m_ArrayAllocations.emplace_back(p);
-		return p;
+		void* ptr = malloc(sizeof(T) * count);
+		m_Allocations.emplace_back(ptr);
+
+		auto construct = reinterpret_cast<T*>(ptr);
+		for (; construct != construct + count; construct++)
+		{
+			new (construct) T(std::forward<Args>(args)...);
+		}
+
+		return reinterpret_cast<T*>(ptr);
 	}
-	
-	Color* AllocateTextureData(uint32_t width, uint32_t height);
 
 private:
 	Memory() = default;
-
 	static Memory* s_Memory;
 
-	std::vector<Component*> m_ScalarAllocations;
-	std::vector<Component*> m_ArrayAllocations;
-	std::vector<Color*> m_Textures;
+	std::vector<void*> m_Allocations;
+};
+
+class MemoryArena
+{
+public:
+	MemoryArena();
+	~MemoryArena();
+
+	template<typename T, typename... Args>
+	T* Allocate(Args&&... args)
+	{
+		ASSERT(m_Allocate + sizeof(T) < m_Data + 1024 * 1024, "Memory Arena full!");
+
+		uint8_t* data = m_Allocate;
+		m_Allocate += sizeof(T);
+		return new (data) T(std::forward<Args>(args)...);
+	}
+
+	void Reset();
+
+private:
+	uint8_t* m_Data;
+	uint8_t* m_Allocate;
 };

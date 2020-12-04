@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Quaternion.h"
-#include "Transform.h"
+#include "Core/Math/Quaternion.h"
+#include "Core/Math/Transform.h"
 
 struct Keyframe
 {

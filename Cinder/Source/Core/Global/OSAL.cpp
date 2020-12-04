@@ -1,5 +1,5 @@
 #include "PCH.h"
-#include "OSAL.h"
+#include "Core/Global/OSAL.h"
 
 #ifdef PLATFORM_WINDOWS
 

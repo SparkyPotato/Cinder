@@ -1,7 +1,7 @@
 #include "PCH.h"
-#include "Vector.h"
+#include "Core/Math/Vector.h"
 
-#include "Matrix.h"
+#include "Core/Math/Matrix.h"
 
 Vector::Vector(float x, float y, float z)
 {

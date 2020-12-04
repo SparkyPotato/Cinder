@@ -1,18 +1,19 @@
 ---
-Scene:
-  File: Scene.yaml
-  Acceleration:
-    Type: None
+# Name of the project, will be displayed in Cinder while rendering
+Project Name: Sample Cinder Project
 
+# A list of scenes to render in the project, with its corresponding output file
+Scenes:
+  - File: Scene.yaml
+    Output: Render.png
+
+# Which renderer to use, and the settings for the renderer
 Renderer:
-  Type: Whitted
-  Env Map Resolution: 256
+  Type: Preview
 
+# Type of framebuffer, and the format of the output.
+# Should be the same format as your output file (*.png -> PNG)
 Framebuffer:
-  Type: Simple
-  Width: 1920
-  Height: 1080
-
-Output:
-  Type: PNG
-  File: Render.png
+  Type: 8-bit
+  Ouput: PNG
+  Resolution: [ 1920, 1080 ]

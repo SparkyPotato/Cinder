@@ -35,4 +35,4 @@ make config=debug/release
 3. Ensure that ` config ` is set to either ` debug ` or ` release `.
 
 ## Using Cinder
-Coming later, when you can actually use Cinder.
+Head over to the wiki

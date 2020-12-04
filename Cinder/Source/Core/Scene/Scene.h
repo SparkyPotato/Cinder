@@ -1,24 +1,24 @@
 #pragma once
 
-#include "Core/Components/Camera.h"
-#include "Object.h"
-#include "Cubemap.h"
-
-class AccelerationStructure;
+#include "Core/Scene/Camera.h"
+#include "Core/Scene/Geometry.h"
 
 class Scene
 {
 public:
 	Scene() = default;
-	
-	static Scene* FromFile(const std::string& file);
+	static Scene* Load(const std::string& file);
 
-	std::vector<Object> Objects;
-	std::vector<Material> Materials;
-	Cubemap Skybox;
+	Camera& GetCamera() const;
 
-	AccelerationStructure* AccelStructure;
-	Camera* MainCamera;
+private:
+	friend struct YAML::convert<Scene*>;
+	friend void RunProject(const std::filesystem::path& filePath);
+
+	void SetCameraAspectRatio(float aspectRatio);
+
+	Camera* m_Camera;
+	std::vector<Geometry*> m_Geometry;
 };
 
 template<>

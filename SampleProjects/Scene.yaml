@@ -1,61 +1,24 @@
 ---
+# The camera to use while rendering.
+# Orientation: X+ forward, Y+ up, Z+ forward
 Camera:
   Type: Perspective
   Transform:
     Position: [ 0, 0, -25 ]
     Rotation: [ 0, 0, 0 ]
-    Scale: [ 1, 1, 1 ]
-  FOV: 60
+    Scale: [ 1, 1, 1 ] # Don't even think about setting scale to anything else
 
+# Objects that make up the scene.
+# Hold a reference to geometry
 Objects:
-  - Shape:
-      Type: Sphere
-      Transform:
-        Position: [ 0, 0, 0 ]
-        Rotation: [ -30, 30, 0 ]
-        Scale: [ 1, 1, 1 ]
-      Radius: 5
-    Material: White
-  - Shape:
-      Type: Sphere
-      Transform:
-        Position: [ 5, -10, 0 ]
-        Rotation: [ 0, 0, 0 ]
-        Scale: [ 1, 1, 1 ]
-      Radius: 5
-    Material: White
+  - Geometry: Small Sphere
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
 
-Skybox:
-  Sampler: Bilinear
-  Top:
-    Loader: Standard
-    File: Textures/Skybox/Top.jpg
-  Bottom:
-    Loader: Standard
-    File: Textures/Skybox/Bottom.jpg
-  Left:
-    Loader: Standard
-    File: Textures/Skybox/Left.jpg
-  Right:
-    Loader: Standard
-    File: Textures/Skybox/Right.jpg
-  Front:
-    Loader: Standard
-    File: Textures/Skybox/Front.jpg
-  Back:
-    Loader: Standard
-    File: Textures/Skybox/Back.jpg
-
-Materials:
-  - Name: White
-    Sampler: Bilinear
-    Albedo: [ 1, 1, 1 ]
-    Roughness: 0
-  - Name: Marble
-    Sampler: Bilinear
-    Albedo:
-      Loader: Standard
-      File: Textures/Marble_Albedo.png
-    Roughness:
-      Loader: Standard
-      File: Textures/Marble_Roughness.png
+# Raw Geometry, to be used in objects
+Geometry:
+  - Name: Small Sphere
+    Type: Sphere
+    Radius: 5

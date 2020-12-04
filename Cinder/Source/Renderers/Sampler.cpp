@@ -1,8 +1,6 @@
 #include "PCH.h"
 #include "Sampler.h"
 
-#include "Core/Components/Framebuffer.h"
-
 void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 {
 	m_Scene = &scene;
@@ -33,7 +31,7 @@ void Sampler::Render(const Scene& scene, Framebuffer& framebuffer)
 	}
 }
 
-bool Sampler::ParseSettings(const YAML::Node& node)
+bool Sampler::Parse(const YAML::Node& node)
 {
 	return true;
 }
@@ -41,10 +39,11 @@ bool Sampler::ParseSettings(const YAML::Node& node)
 void Sampler::Thread()
 {
 	unsigned int tile = std::atomic_fetch_add(&m_Tile, 1u);
+	MemoryArena arena;
 	while (tile < m_RenderTiles.size())
 	{
 		Tile& rTile = m_RenderTiles[tile];
-		BufferTile bTile = m_Framebuffer->GetBufferTile(rTile.Xmin, rTile.Xmax, rTile.Ymin, rTile.Ymax);
+		BufferTile* bTile = m_Framebuffer->GetBufferTile(rTile.Xmin, rTile.Xmax, rTile.Ymin, rTile.Ymax);
 
 		for (uint32_t x = rTile.Xmin; x != rTile.Xmax; x++)
 		{
@@ -53,8 +52,9 @@ void Sampler::Thread()
 				float xval = float(x + 0.5f) / m_Framebuffer->Width;
 				float yval = float(y + 0.5f) / m_Framebuffer->Height;
 
-				auto ray = m_Scene->MainCamera->GetRay(xval, yval);
-				bTile.GetPixel(x, y) = TraceRay(ray);
+				auto ray = m_Scene->GetCamera().GetRay(xval, yval);
+				bTile->SetPixel(TraceRay(*m_Scene, ray, arena), x, y);
+				arena.Reset();
 			}
 		}
 

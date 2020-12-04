@@ -10,27 +10,36 @@ int Entry(int argc, char** argv)
 		std::vector<const char*> projectFiles;
 		std::vector<std::string> optionsInput;
 		
+#ifdef CFG_DEBUG
+		CinderColored(R"(** DEBUG BUILD **
+Will be slow, set log level to 0 to see debug information.
+		)");
+#endif
+
 		// Parse command line arguments:
 		// 1. All options start with a '-'.
 		// 2. They must follow the format '-<option>=<value>'
-		// 3. Anything that is not an option is taken as a config file
-		// Cinder can take multiple config files,
-		// and they will be executed in the order of entry
+		// 3. Anything that is not an option is taken as a project file
+		// Cinder can take multiple project files, and they will be rendered in the order of entry
 		bool logo = true;
 		for (int i = 1; i < argc; i++)
 		{
 			// Check if the first character of the argument is a '-',
 			// if it is not then we assume it is a config file
 			if (strcmp(argv[i], "-nologo") == 0) { logo = false; }
-			else if (*argv[i] != '-') { projectFiles.emplace_back(argv[i]); }
-			else { optionsInput.emplace_back(argv[i]); }
+			else if (*argv[i] != '-') 
+			{ 
+				if (std::find(projectFiles.begin(), projectFiles.end(), std::string(argv[i])) != projectFiles.end())
+				{
+					Warning("Duplicate project '{}'. Skipping.", argv[i]);
+				}
+				else { projectFiles.emplace_back(argv[i]); }
+			}
+			else 
+			{
+				optionsInput.emplace_back(argv[i]);
+			}
 		}
-		
-#ifdef CFG_DEBUG
-		CinderColored(R"(** DEBUG BUILD **
-Will be slow, set log level to 0 to see debug information.
-		)");
-#endif
 		
 		if (logo)
 		{

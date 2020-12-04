@@ -4,7 +4,7 @@
 #include "Core/Math/Matrix.h"
 #include "Core/Math/Quaternion.h"
 #include "Core/Math/Vector.h"
-#include "Ray.h"
+#include "Core/Math/Ray.h"
 
 // Transform of an object at an instant in time
 class Transform

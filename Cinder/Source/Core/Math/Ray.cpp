@@ -1,5 +1,5 @@
 #include "PCH.h"
-#include "Ray.h"
+#include "Core/Math/Ray.h"
 
 Ray::Ray(const Point& origin, const Vector& direction, float extent)
 	: Origin(origin), Direction(direction.GetNormalized()), Extent(extent)
@@ -9,6 +9,8 @@ Ray::Ray(const Point& origin, const Vector& direction, float extent)
 
 Point Ray::operator()(float distanceAlong) const
 {
+	ASSERT(distanceAlong > 0.f, "Cannot go backwards along ray!");
+
 	return Origin + Direction * distanceAlong;
 }
 

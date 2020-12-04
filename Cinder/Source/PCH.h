@@ -44,6 +44,5 @@
 #include "Core/Global/OSAL.h"
 #include "Core/Global/Output.h"
 
-#include "Core/Memory/Memory.h"
-
 #include "Core/Math/Math.h"
+#include "Core/Memory/Memory.h"

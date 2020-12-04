@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.h"
+#include "Core/Math/Vector.h"
 
 // Axis-aligned bounding box
 class Bound
