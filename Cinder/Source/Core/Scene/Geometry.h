@@ -15,7 +15,11 @@ public:
 	virtual bool Parse(const YAML::Node& node) = 0;
 
 	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) = 0;
-	virtual bool TestIntersect(const Ray& ray) = 0;
+	virtual bool TestIntersect(const Ray& ray)
+	{
+		RayIntersection dummy;
+		return Intersect(ray, dummy);
+	}
 
 	std::string Name;
 };

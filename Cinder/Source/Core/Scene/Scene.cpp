@@ -17,6 +17,26 @@ void Scene::SetCameraAspectRatio(float aspectRatio)
 	m_Camera->SetAspectRatio(aspectRatio);
 }
 
+void Scene::LinkReferences()
+{
+	for (auto& object : m_Objects)
+	{
+		// Setup object to world transform to object to camera
+		object.m_ToCamera = object.m_ToCamera * m_Camera->ToWorld.GetInverse();
+		//                   object to world         world to camera
+		
+		// Link geometry pointers to the actual geometry
+		for (auto& geometry : m_Geometry)
+		{
+			if (geometry->Name == object.m_GeometryName)
+			{
+				object.m_Geometry = geometry;
+				break;
+			}
+		}
+	}
+}
+
 bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 {
 	scene = new Scene;
@@ -34,6 +54,13 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	{
 		scene->m_Geometry.emplace_back(geometry.as<Geometry*>());
 	}
+	
+	for (auto& object : node["Objects"])
+	{
+		scene->m_Objects.emplace_back(object.as<Object>());
+	}
+	
+	scene->LinkReferences();
 
 	return true;
 }

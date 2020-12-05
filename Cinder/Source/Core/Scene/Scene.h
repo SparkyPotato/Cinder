@@ -2,6 +2,7 @@
 
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
+#include "Core/Scene/Object.h"
 
 class Scene
 {
@@ -16,9 +17,11 @@ private:
 	friend void RunProject(const std::filesystem::path& filePath);
 
 	void SetCameraAspectRatio(float aspectRatio);
+	void LinkReferences();
 
 	Camera* m_Camera;
 	std::vector<Geometry*> m_Geometry;
+	std::vector<Object> m_Objects;
 };
 
 template<>
