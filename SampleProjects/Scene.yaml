@@ -1,4 +1,8 @@
 ---
+# Acceleration Structure to use
+Acceleration:
+  Type: None
+
 # The camera to use while rendering.
 # Orientation: X+ forward, Y+ up, Z+ forward
 Camera:

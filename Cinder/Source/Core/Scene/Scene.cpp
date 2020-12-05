@@ -22,6 +22,16 @@ Camera& Scene::GetCamera() const
 	return *m_Camera;
 }
 
+bool Scene::Intersect(const Ray& ray, RayIntersection& intersection)
+{
+	return m_Acceleration->Intersect(ray, intersection);
+}
+
+bool Scene::TestIntersect(const Ray& ray)
+{
+	return m_Acceleration->TestIntersect(ray);
+}
+
 void Scene::SetCameraAspectRatio(float aspectRatio)
 {
 	m_Camera->SetAspectRatio(aspectRatio);
@@ -45,6 +55,8 @@ void Scene::LinkReferences()
 			}
 		}
 	}
+
+	m_Acceleration->Build(*this);
 }
 
 bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
@@ -59,6 +71,31 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 		Error("Geometry list must be a sequence (line {})!", node["Geometry"].Mark().line + 1);
 		return false;
 	}
+
+	if (!node["Acceleration"])
+	{
+		Error("No Acceleration Structure present (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	if (!node["Acceleration"]["Type"])
+	{
+		Error("No Acceleration Type (line {})!", node["Acceleration"].Mark().line + 1);
+		return false;
+	}
+	std::string aType;
+	try { aType = node["Acceleration"]["Type"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Acceleration type must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+	try { scene->m_Acceleration = Registry::Get()->GAcceleration.at(aType)(); }
+	catch (...)
+	{
+		Error("Acceleration type '{}' does not exist (line {})!", aType, node["Acceleration"]["Type"].Mark().line + 1);
+		return false;
+	}
+	if (!scene->m_Acceleration->Parse(node["Acceleration"])) { return false; }
 
 	for (auto& geometry : node["Geometry"])
 	{

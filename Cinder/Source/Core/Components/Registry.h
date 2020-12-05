@@ -11,6 +11,8 @@ class Geometry;
 using GeometrySpawnFunction = Geometry* (*)(const std::string&);
 class Sampler;
 using SamplerSpawnFunction = Sampler* (*)();
+class AccelerationStructure;
+using AccelerationSpawnFunction = AccelerationStructure* (*)();
 
 class Registry
 {
@@ -22,6 +24,7 @@ public:
 	std::map<std::string, CameraSpawnFunction> GCameras;
 	std::map<std::string, GeometrySpawnFunction> GGeometry;
 	std::map<std::string, SamplerSpawnFunction> GSamplers;
+	std::map<std::string, AccelerationSpawnFunction> GAcceleration;
 
 private:
 	static Registry* s_Registry;

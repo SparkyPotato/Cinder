@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Scene/AccelerationStructure.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
 #include "Core/Scene/Object.h"
@@ -12,6 +13,10 @@ public:
 	static Scene* Load(const std::string& file);
 
 	Camera& GetCamera() const;
+	const std::vector<Object>& GetObjects() const { return m_Objects; }
+
+	bool Intersect(const Ray& ray, RayIntersection& intersection);
+	bool TestIntersect(const Ray& ray);
 
 private:
 	friend struct YAML::convert<Scene*>;
@@ -20,7 +25,8 @@ private:
 	void SetCameraAspectRatio(float aspectRatio);
 	void LinkReferences();
 
-	Camera* m_Camera;
+	AccelerationStructure* m_Acceleration;
+	Camera* m_Camera = nullptr;
 	std::vector<Geometry*> m_Geometry;
 	std::vector<Object> m_Objects;
 };
