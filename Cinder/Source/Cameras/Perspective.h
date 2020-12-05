@@ -10,4 +10,7 @@ public:
 	virtual bool Parse(const YAML::Node& node) override;
 
 	virtual Ray GetRay(float u, float v) override;
+
+private:
+	float m_FOV;
 };

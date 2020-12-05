@@ -9,6 +9,8 @@ class Transform;
 using CameraSpawnFunction = Camera* (*)(const Transform&);
 class Geometry;
 using GeometrySpawnFunction = Geometry* (*)(const std::string&);
+class Sampler;
+using SamplerSpawnFunction = Sampler* (*)();
 
 class Registry
 {
@@ -19,6 +21,7 @@ public:
 	std::map<std::string, FramebufferSpawnFunction> GFramebuffers;
 	std::map<std::string, CameraSpawnFunction> GCameras;
 	std::map<std::string, GeometrySpawnFunction> GGeometry;
+	std::map<std::string, SamplerSpawnFunction> GSamplers;
 
 private:
 	static Registry* s_Registry;

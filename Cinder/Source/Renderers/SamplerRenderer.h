@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Core/Components/Renderer.h"
+#include "Core/Components/Sampler.h"
 #include "Core/Math/Color.h"
 
-class Sampler : public Renderer
+class SamplerRenderer : public Renderer
 {
 public:
-	Sampler() = default;
+	SamplerRenderer() = default;
 
 	virtual void Render(const Scene& scene, Framebuffer& framebuffer) override;
 
@@ -26,9 +27,13 @@ private:
 
 	void Thread();
 
+	uint32_t m_Samples = 8;
 	std::vector<Tile> m_RenderTiles;
 	std::vector<std::thread> m_Threads;
-	std::atomic<unsigned int> m_Tile = 0;
+	std::atomic<uint32_t> m_Tile = 0;
+
 	const Scene* m_Scene = nullptr;
 	Framebuffer* m_Framebuffer = nullptr;
+
+	std::string m_Sampler;
 };

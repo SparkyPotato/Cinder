@@ -35,5 +35,4 @@ public:
 	
 private:
 	Pixel* m_Data;
-	MemoryArena m_Arena;
 };

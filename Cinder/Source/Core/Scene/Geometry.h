@@ -31,7 +31,7 @@ struct YAML::convert<Geometry*>
 };
 
 #define GEOMETRY(type, className) \
-Geometry* Spawn##className(const std::string& name) { return Memory::Get()->Allocate<className>(name); } \
+Geometry* Spawn##className(const std::string& name) { return new className(name); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GGeometry.emplace(#type, &Spawn##className); } \

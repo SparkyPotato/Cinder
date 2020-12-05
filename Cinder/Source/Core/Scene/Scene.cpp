@@ -7,6 +7,16 @@ Scene* Scene::Load(const std::string& file)
 	return node.as<Scene*>();
 }
 
+Scene::~Scene()
+{
+	for (auto geometry : m_Geometry)
+	{
+		delete geometry;
+	}
+
+	delete m_Camera;
+}
+
 Camera& Scene::GetCamera() const
 {
 	return *m_Camera;
@@ -26,7 +36,7 @@ void Scene::LinkReferences()
 		//                   object to world         world to camera
 		
 		// Link geometry pointers to the actual geometry
-		for (auto& geometry : m_Geometry)
+		for (auto geometry : m_Geometry)
 		{
 			if (geometry->Name == object.m_GeometryName)
 			{

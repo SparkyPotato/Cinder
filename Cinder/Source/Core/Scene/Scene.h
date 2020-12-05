@@ -8,6 +8,7 @@ class Scene
 {
 public:
 	Scene() = default;
+	~Scene();
 	static Scene* Load(const std::string& file);
 
 	Camera& GetCamera() const;

@@ -8,7 +8,7 @@
 FRAMEBUFFER(8-bit, EightBitFramebuffer)
 
 EightBitFramebuffer::EightBitFramebuffer(uint32_t width, uint32_t height)
-	: Framebuffer(width, height), m_Arena(((width * height) / (GOptions.TileSize * GOptions.TileSize)) * sizeof(EightBitTile))
+	: Framebuffer(width, height)
 {
 	m_Data = new Pixel[width * height];
 }
@@ -20,12 +20,12 @@ EightBitFramebuffer::~EightBitFramebuffer()
 
 BufferTile* EightBitFramebuffer::GetBufferTile(uint32_t xmin, uint32_t xmax, uint32_t ymin, uint32_t ymax)
 {
-	return m_Arena.Allocate<EightBitTile>(m_Data, xmin, xmax, ymin, ymax, Width);
+	return new EightBitTile(m_Data, xmin, xmax, ymin, ymax, Width);
 }
 
 void EightBitFramebuffer::SaveBufferTile(BufferTile* tile)
 {
-	// Writing directly to buffer, so no saving required
+	delete tile;
 }
 
 bool EightBitFramebuffer::Ouput(const std::string& file)

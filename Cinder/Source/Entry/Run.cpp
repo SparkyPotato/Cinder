@@ -47,9 +47,6 @@ void RunProject(const std::filesystem::path& filePath)
 
 	for (const auto& sceneIt : project["Scenes"])
 	{
-		// Start an allocation range, and deallocate the memory of the last scene
-		Memory::Get()->StartRange();
-
 		std::string file;
 		std::string output;
 		try { file = sceneIt["File"].as<std::string>(); }

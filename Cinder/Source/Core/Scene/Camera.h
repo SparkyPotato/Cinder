@@ -31,7 +31,7 @@ struct YAML::convert<Camera*>
 };
 
 #define CAMERA(type, className) \
-Camera* Spawn##className(const Transform& t) { return Memory::Get()->Allocate<className>(t); } \
+Camera* Spawn##className(const Transform& t) { return new className(t); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GCameras.emplace(#type, &Spawn##className); } \

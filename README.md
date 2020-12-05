@@ -35,4 +35,8 @@ make config=debug/release
 3. Ensure that ` config ` is set to either ` debug ` or ` release `.
 
 ## Using Cinder
-Head over to the wiki
+To run the sample project, call Cinder with
+```
+./Cinder "../../../SampleProjects/Project.yaml"
+```
+For more usage, check the [wiki](https://github.com/SparkyPotato/Cinder/wiki).
