@@ -15,5 +15,5 @@ Renderer:
 # Should be the same format as your output file (*.png -> PNG)
 Framebuffer:
   Type: 8-bit
-  Ouput: PNG
+  Output: PNG
   Resolution: [ 1920, 1080 ]

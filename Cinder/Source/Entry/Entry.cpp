@@ -57,6 +57,7 @@ Will be slow, set log level to 0 to see debug information.
 		{
 			Log("Auto-detecting thread count.");
 			GOptions.ThreadCount = std::thread::hardware_concurrency();
+			// hardware_concurrency can return 0 if it failed to get the thread count from the OS
 			if (GOptions.ThreadCount == 0)
 			{
 				Warning("Could not detect number of threads, using 4 as a reasonable default.");
@@ -83,12 +84,12 @@ Will be slow, set log level to 0 to see debug information.
 			RunProject(path);
 		}
 		
-		Log("Rendering complete.");
+		Log("Complete.");
 		
 		fclose(GLogFile);
 		return EXIT_SUCCESS;
 	}
-	catch (std::exception& e) { Console(e.what()); }
+	catch (std::exception& e) { Console(e.what()); } // This shouldn't ever be hit, but if it does we know what the exception was
 	catch (...) {}
 	
 	fclose(GLogFile);

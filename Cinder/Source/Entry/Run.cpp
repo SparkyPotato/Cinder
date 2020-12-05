@@ -7,9 +7,6 @@
 
 void RunProject(const std::filesystem::path& filePath)
 {
-	std::filesystem::path workingDirectory = std::filesystem::current_path();
-	std::filesystem::current_path(filePath.parent_path());
-
 	auto start = std::chrono::high_resolution_clock().now();
 
 	YAML::Node project;
@@ -20,6 +17,11 @@ void RunProject(const std::filesystem::path& filePath)
 		Error("Skipping project.");
 		return;
 	}
+	
+	// Set the working directory to the directory containing the project,
+	// so we can use relative paths without issues.
+	std::filesystem::path workingDirectory = std::filesystem::current_path();
+	std::filesystem::current_path(filePath.parent_path());
 
 	try { Console("{}", project["Project Name"].as<std::string>()); }
 	catch (YAML::Exception& e)
@@ -35,15 +37,17 @@ void RunProject(const std::filesystem::path& filePath)
 	Framebuffer* framebuffer = nullptr;
 	try { framebuffer = project["Framebuffer"].as<Framebuffer*>(); }
 	catch (...) { return; }
-
+	
+	// Cinder supports a list of Scenes to render per project
 	if (!project["Scenes"].IsSequence())
 	{
 		Error("Scene list must be a sequence (line {})!", project["Scenes"].Mark().line + 1);
 		return;
 	}
 
-	for (auto& sceneIt : project["Scenes"])
+	for (const auto& sceneIt : project["Scenes"])
 	{
+		// Start an allocation range, and deallocate the memory of the last scene
 		Memory::Get()->StartRange();
 
 		std::string file;
@@ -60,18 +64,30 @@ void RunProject(const std::filesystem::path& filePath)
 			Error("Failed to find Scene Ouput (line {})!", e.mark.line + 1);
 			return;
 		}
-
+		
+		// Load the scene and time it
+		auto s = std::chrono::high_resolution_clock().now();
+		Log("Loading Scene.");
 		Scene* scene;
 		try { scene = Scene::Load(file); }
 		catch (...) { return; }
 		scene->SetCameraAspectRatio(float(framebuffer->Width) / framebuffer->Height);
-		Log("Loaded Scene.");
-
+		auto e = std::chrono::high_resolution_clock().now();
+		Log("Loaded Scene. Took {:%M:%S}.", e - s);
+		
+		// Render and time it
+		s = std::chrono::high_resolution_clock().now();
+		Log("Rendering.");
 		renderer->Render(*scene, *framebuffer);
-		Log("Rendered.");
-
+		e = std::chrono::high_resolution_clock().now();
+		Log("Rendered. Took {:%M:%S}.", e - s);
+		
+		// Output and time it
+		s = std::chrono::high_resolution_clock().now();
+		Log("Writing output.");
 		framebuffer->Ouput(output);
-		Log("Written to file.");
+		e = std::chrono::high_resolution_clock().now();
+		Log("Written output. Took {:%M:%S}.", e - s);
 
 		delete scene;
 	}
@@ -82,6 +98,7 @@ void RunProject(const std::filesystem::path& filePath)
 
 	delete renderer;
 	delete framebuffer;
-
+	
+	// Reset the working directory so the next project can be loaded
 	std::filesystem::current_path(workingDirectory);
 }

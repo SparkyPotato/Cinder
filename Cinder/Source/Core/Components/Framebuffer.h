@@ -6,6 +6,8 @@
 class BufferTile
 {
 public:
+	virtual ~BufferTile() {}
+	
 	virtual Color GetPixel(uint32_t x, uint32_t y) = 0;
 	virtual void SetPixel(const Color& color, uint32_t x, uint32_t y) = 0;
 };

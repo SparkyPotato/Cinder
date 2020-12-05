@@ -25,7 +25,13 @@ void Memory::StartRange()
 MemoryArena::MemoryArena()
 {
 	m_Data = reinterpret_cast<uint8_t*>(malloc(1024 * 1024));
-	m_Allocate = m_Data;
+	m_Used = 0;
+}
+
+MemoryArena::MemoryArena(size_t size)
+{
+	m_Data = reinterpret_cast<uint8_t*>(malloc(size));
+	m_Used = 0;
 }
 
 MemoryArena::~MemoryArena()
@@ -35,5 +41,5 @@ MemoryArena::~MemoryArena()
 
 void MemoryArena::Reset()
 {
-	m_Allocate = m_Data;
+	m_Used = 0;
 }
