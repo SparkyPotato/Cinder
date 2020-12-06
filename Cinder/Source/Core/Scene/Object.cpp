@@ -11,7 +11,7 @@ bool Object::Intersect(const Ray& ray, RayIntersection& intersection) const
 		intersection.HitNormal = m_ToCamera(intersection.HitNormal);
 	}
 	
-	return true;
+	return hit;
 }
 
 bool Object::TestIntersect(const Ray& ray) const

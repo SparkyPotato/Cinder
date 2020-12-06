@@ -5,6 +5,12 @@ RENDERER(Preview, PreviewRenderer)
 
 Color PreviewRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, uint16_t depth)
 {
-	return Color(0.5f, 0.f, 0.f);
+ 	RayIntersection intersection;
+	if (scene.Intersect(ray, intersection))
+	{
+		return Color(1.f, 1.f, 1.f);
+	}
+
+	return Color();
 }
 

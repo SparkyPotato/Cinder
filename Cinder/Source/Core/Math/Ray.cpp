@@ -2,7 +2,7 @@
 #include "Core/Math/Ray.h"
 
 Ray::Ray(const Point& origin, const Vector& direction, float extent)
-	: Origin(origin), Direction(direction.GetNormalized()), Extent(extent)
+	: Origin(origin), Direction(direction), Extent(extent)
 {
 	ASSERT(extent > 0.f, "Extent of a ray cannot be negative!");
 }

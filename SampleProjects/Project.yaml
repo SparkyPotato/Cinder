@@ -11,7 +11,7 @@ Scenes:
 Renderer:
   Type: Preview
   Sampler: Random
-  Samples: 1
+  Samples: 8
 
 # Type of framebuffer, and the format of the output.
 # Should be the same format as your output file (*.png -> PNG)

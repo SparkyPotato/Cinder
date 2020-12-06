@@ -14,8 +14,8 @@ public:
 	Camera& GetCamera() const;
 	const std::vector<Object>& GetObjects() const { return m_Objects; }
 
-	bool Intersect(const Ray& ray, RayIntersection& intersection);
-	bool TestIntersect(const Ray& ray);
+	bool Intersect(const Ray& ray, RayIntersection& intersection) const;
+	bool TestIntersect(const Ray& ray) const;
 
 private:
 	friend struct YAML::convert<Scene*>;

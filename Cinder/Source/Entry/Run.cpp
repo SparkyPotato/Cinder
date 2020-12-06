@@ -5,6 +5,8 @@
 
 #include "Core/Components/Renderer.h"
 
+#include "Geometry/Sphere.h"
+
 void RunProject(const std::filesystem::path& filePath)
 {
 	auto start = std::chrono::high_resolution_clock().now();
@@ -17,7 +19,7 @@ void RunProject(const std::filesystem::path& filePath)
 		Error("Skipping project.");
 		return;
 	}
-	
+
 	// Set the working directory to the directory containing the project,
 	// so we can use relative paths without issues.
 	std::filesystem::path workingDirectory = std::filesystem::current_path();

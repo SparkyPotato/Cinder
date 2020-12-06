@@ -44,7 +44,7 @@ bool SamplerRenderer::Parse(const YAML::Node& node)
 		Error("Sampler type must be a string (line {})!", e.mark.line + 1);
 		return false;
 	}
-	try { auto sampler = Registry::Get()->GSamplers.at(m_Sampler)(); }
+	try { auto sampler = Registry::Get()->GSamplers.at(m_Sampler)(0); }
 	catch (...)
 	{
 		Error("Sampler type '{}' does not exist (line {})!", m_Sampler, node["Sampler"].Mark().line + 1);
@@ -70,7 +70,7 @@ bool SamplerRenderer::Parse(const YAML::Node& node)
 
 void SamplerRenderer::Thread()
 {
-	up<Sampler> sampler = Registry::Get()->GSamplers.at(m_Sampler)();
+	up<Sampler> sampler = Registry::Get()->GSamplers.at(m_Sampler)(m_Samples);
 
 	unsigned int tile = std::atomic_fetch_add(&m_Tile, 1u);
 	MemoryArena arena;
@@ -84,15 +84,17 @@ void SamplerRenderer::Thread()
 			for (uint32_t y = rTile.Ymin; y != rTile.Ymax; y++)
 			{
 				Color color;
-
-				for (uint32_t i = 0; i < m_Samples; i++)
+				sampler->StartPixel(x, y);
+				do
 				{
-					float xval = float(sampler->GetSample(x + 0.5f, 0.5f)) / m_Framebuffer->Width;
-					float yval = float(sampler->GetSample(y + 0.5f, 0.5f)) / m_Framebuffer->Height;
-					auto ray = m_Scene->GetCamera().GetRay(xval, yval);
+					auto pair = sampler->Get2D();
+
+					float xval = float(x + pair.first) / m_Framebuffer->Width;
+					float yval = float(y + pair.second) / m_Framebuffer->Height;
+					Ray ray = m_Scene->GetCamera().GetRay(xval, yval);
 
 					color += TraceRay(*m_Scene, ray, arena);
-				}
+				} while (sampler->NextSample());
 				color /= float(m_Samples);
 
 				bTile->SetPixel(color, x, y);

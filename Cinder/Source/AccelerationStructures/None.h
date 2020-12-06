@@ -7,8 +7,8 @@ class None : public AccelerationStructure
 public:
 	virtual bool Parse(const YAML::Node& node) override;
 
-	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) override;
-	virtual bool TestIntersect(const Ray& ray) override;
+	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) const override;
+	virtual bool TestIntersect(const Ray& ray) const override;
 
 	virtual void Build(const Scene& scene) override;
 

@@ -19,7 +19,6 @@ bool SolveQuadratic(float coA, float coB, float coC, float& outA, float& outB)
 
 	double discriminant = b * b - 4 * a * c;
 	if (discriminant < 0) { return false; }
-	if (discriminant == 0) { outA = outB = float(-b / 2 * a); return true; }
 
 	double rootDisc = std::sqrt(discriminant);
 	double quotient;

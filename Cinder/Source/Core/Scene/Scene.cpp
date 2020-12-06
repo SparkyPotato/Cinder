@@ -12,12 +12,12 @@ Camera& Scene::GetCamera() const
 	return *m_Camera;
 }
 
-bool Scene::Intersect(const Ray& ray, RayIntersection& intersection)
+bool Scene::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
 	return m_Acceleration->Intersect(ray, intersection);
 }
 
-bool Scene::TestIntersect(const Ray& ray)
+bool Scene::TestIntersect(const Ray& ray) const
 {
 	return m_Acceleration->TestIntersect(ray);
 }

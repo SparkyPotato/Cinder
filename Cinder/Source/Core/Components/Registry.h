@@ -10,7 +10,7 @@ using CameraSpawnFunction = up<Camera> (*)(const Transform&);
 class Geometry;
 using GeometrySpawnFunction = up<Geometry> (*)(const std::string&);
 class Sampler;
-using SamplerSpawnFunction = up<Sampler> (*)();
+using SamplerSpawnFunction = up<Sampler> (*)(uint32_t);
 class AccelerationStructure;
 using AccelerationSpawnFunction = up<AccelerationStructure>(*)();
 
