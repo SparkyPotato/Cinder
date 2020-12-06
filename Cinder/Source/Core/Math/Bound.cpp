@@ -13,15 +13,15 @@ Bound::Bound(const Point &point)
 Bound::Bound(const Point& point1, const Point& point2)
 {
 	Minimum = Point(
-		std::min(point1.GetX(), point2.GetX()),
-		std::min(point1.GetY(), point2.GetY()),
-		std::min(point1.GetZ(), point2.GetZ())
+		std::min(point1.X(), point2.X()),
+		std::min(point1.Y(), point2.Y()),
+		std::min(point1.Z(), point2.Z())
 	);
 	
 	Maximum = Point(
-		std::max(point1.GetX(), point2.GetX()),
-		std::max(point1.GetY(), point2.GetY()),
-		std::max(point1.GetZ(), point2.GetZ())
+		std::max(point1.X(), point2.X()),
+		std::max(point1.Y(), point2.Y()),
+		std::max(point1.Z(), point2.Z())
 	);
 }
 
@@ -35,9 +35,9 @@ float Bound::GetSurfaceArea() const
 	Vector diagonal = GetDiagonal();
 	
 	return 2 * (
-		diagonal.GetX() * diagonal.GetY() +
-		diagonal.GetY() * diagonal.GetZ() +
-		diagonal.GetZ() * diagonal.GetX()
+		diagonal.X() * diagonal.Y() +
+		diagonal.Y() * diagonal.Z() +
+		diagonal.Z() * diagonal.X()
 	);
 }
 
@@ -52,11 +52,11 @@ uint8_t Bound::MaxExtent() const
 {
 	Vector diagonal = GetDiagonal();
 	
-	if (diagonal.GetX() > diagonal.GetY() && diagonal.GetX() > diagonal.GetZ())
+	if (diagonal.X() > diagonal.Y() && diagonal.X() > diagonal.Z())
 	{
 		return 0;
 	}
-	else if(diagonal.GetY() > diagonal.GetZ())
+	else if(diagonal.Y() > diagonal.Z())
 	{
 		return  1;
 	}
@@ -69,9 +69,9 @@ uint8_t Bound::MaxExtent() const
 Point Bound::Lerp(const Vector& point) const
 {
 	return Point(
-		::Lerp(Minimum.GetX(), Maximum.GetX(), point.GetX()),
-		::Lerp(Minimum.GetY(), Maximum.GetY(), point.GetY()),
-		::Lerp(Minimum.GetZ(), Maximum.GetZ(), point.GetZ())
+		::Lerp(Minimum.X(), Maximum.X(), point.X()),
+		::Lerp(Minimum.Y(), Maximum.Y(), point.Y()),
+		::Lerp(Minimum.Z(), Maximum.Z(), point.Z())
 	);
 }
 
@@ -80,9 +80,9 @@ Vector Bound::Offset(const Point& point) const
 	Vector diagonal = GetDiagonal();
 	
 	return Vector(
-		(point.GetX() - Minimum.GetX()) / diagonal.GetX(),
-		(point.GetY() - Minimum.GetY()) / diagonal.GetY(),
-		(point.GetZ() - Minimum.GetZ()) / diagonal.GetZ()
+		(point.X() - Minimum.X()) / diagonal.X(),
+		(point.Y() - Minimum.Y()) / diagonal.Y(),
+		(point.Z() - Minimum.Z()) / diagonal.Z()
 	);
 }
 
@@ -94,16 +94,16 @@ void Bound::GetBoundingSphere(Point& outCenter, float& outRadius) const
 
 bool Bound::Contains(const Point& point) const
 {
-	return point.GetX() >= Minimum.GetX() && point.GetX() <= Maximum.GetX() &&
-		point.GetY() >= Minimum.GetY() && point.GetY() <= Maximum.GetY() &&
-		point.GetZ() >= Minimum.GetZ() && point.GetZ() <= Maximum.GetZ();
+	return point.X() >= Minimum.X() && point.X() <= Maximum.X() &&
+		point.Y() >= Minimum.Y() && point.Y() <= Maximum.Y() &&
+		point.Z() >= Minimum.Z() && point.Z() <= Maximum.Z();
 }
 
 bool Bound::Contains(const Bound& other) const
 {
-	return other.Minimum.GetX() >= Minimum.GetX() && other.Maximum.GetX() <= Maximum.GetX() &&
-		other.Minimum.GetY() >= Minimum.GetY() && other.Maximum.GetY() <= Maximum.GetY() &&
-		other.Minimum.GetZ() >= Minimum.GetZ() && other.Maximum.GetZ() <= Maximum.GetZ();
+	return other.Minimum.X() >= Minimum.X() && other.Maximum.X() <= Maximum.X() &&
+		other.Minimum.Y() >= Minimum.Y() && other.Maximum.Y() <= Maximum.Y() &&
+		other.Minimum.Z() >= Minimum.Z() && other.Maximum.Z() <= Maximum.Z();
 }
 
 Bound Bound::GetEnlarged(float delta) const
@@ -152,14 +152,14 @@ Bound Union(const Bound& bound, const Point& point)
 {
 	return Bound(
 		{ 
-			std::min(bound.Minimum.GetX(), point.GetX()),
-			std::min(bound.Minimum.GetY(), point.GetY()),
-			std::min(bound.Minimum.GetZ(), point.GetZ()) 
+			std::min(bound.Minimum.X(), point.X()),
+			std::min(bound.Minimum.Y(), point.Y()),
+			std::min(bound.Minimum.Z(), point.Z()) 
 		},
 		{ 
-			std::max(bound.Maximum.GetX(), point.GetX()),
-			std::max(bound.Maximum.GetY(), point.GetY()),
-			std::max(bound.Maximum.GetZ(), point.GetZ()) 
+			std::max(bound.Maximum.X(), point.X()),
+			std::max(bound.Maximum.Y(), point.Y()),
+			std::max(bound.Maximum.Z(), point.Z()) 
 		}
 	);
 }
@@ -168,14 +168,14 @@ Bound Union(const Bound& bound1, const Bound& bound2)
 {
 	return Bound(
 		{
-			std::min(bound1.Minimum.GetX(), bound2.Minimum.GetX()),
-			std::min(bound1.Minimum.GetY(), bound2.Minimum.GetY()),
-			std::min(bound1.Minimum.GetZ(), bound2.Minimum.GetZ())
+			std::min(bound1.Minimum.X(), bound2.Minimum.X()),
+			std::min(bound1.Minimum.Y(), bound2.Minimum.Y()),
+			std::min(bound1.Minimum.Z(), bound2.Minimum.Z())
 		},
 		{
-			std::max(bound1.Maximum.GetX(), bound2.Maximum.GetX()),
-			std::max(bound1.Maximum.GetY(), bound2.Maximum.GetY()),
-			std::max(bound1.Maximum.GetZ(), bound2.Maximum.GetZ())
+			std::max(bound1.Maximum.X(), bound2.Maximum.X()),
+			std::max(bound1.Maximum.Y(), bound2.Maximum.Y()),
+			std::max(bound1.Maximum.Z(), bound2.Maximum.Z())
 		}
 	);
 }
@@ -184,14 +184,14 @@ Bound Intersect(const Bound& bound1, const Bound& bound2)
 {
 	return Bound(
 		{
-			std::max(bound1.Minimum.GetX(), bound2.Minimum.GetX()),
-			std::max(bound1.Minimum.GetY(), bound2.Minimum.GetY()),
-			std::max(bound1.Minimum.GetZ(), bound2.Minimum.GetZ())
+			std::max(bound1.Minimum.X(), bound2.Minimum.X()),
+			std::max(bound1.Minimum.Y(), bound2.Minimum.Y()),
+			std::max(bound1.Minimum.Z(), bound2.Minimum.Z())
 		},
 		{
-			std::min(bound1.Maximum.GetX(), bound2.Maximum.GetX()),
-			std::min(bound1.Maximum.GetY(), bound2.Maximum.GetY()),
-			std::min(bound1.Maximum.GetZ(), bound2.Maximum.GetZ())
+			std::min(bound1.Maximum.X(), bound2.Maximum.X()),
+			std::min(bound1.Maximum.Y(), bound2.Maximum.Y()),
+			std::min(bound1.Maximum.Z(), bound2.Maximum.Z())
 		}
 	);
 }

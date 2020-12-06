@@ -41,13 +41,13 @@ public:
 	bool IsNAN() const;
 
 	// Whether this should be done or not is debatable
-	inline float& GetX() { return reinterpret_cast<float*>(&m_Vector)[0]; }
-	inline float& GetY() { return reinterpret_cast<float*>(&m_Vector)[1]; }
-	inline float& GetZ() { return reinterpret_cast<float*>(&m_Vector)[2]; }
+	inline float& X() { return reinterpret_cast<float*>(&m_Vector)[0]; }
+	inline float& Y() { return reinterpret_cast<float*>(&m_Vector)[1]; }
+	inline float& Z() { return reinterpret_cast<float*>(&m_Vector)[2]; }
 
-	inline const float& GetX() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
-	inline const float& GetY() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
-	inline const float& GetZ() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
+	inline const float& X() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
+	inline const float& Y() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
+	inline const float& Z() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
 
 private:
 	friend class Point;
@@ -99,13 +99,13 @@ public:
 	bool IsNAN() const;
 
 	// Whether this should be done or not is debatable
-	inline float& GetX() { return reinterpret_cast<float*>(&m_Vector)[0]; }
-	inline float& GetY() { return reinterpret_cast<float*>(&m_Vector)[1]; }
-	inline float& GetZ() { return reinterpret_cast<float*>(&m_Vector)[2]; }
+	inline float& X() { return reinterpret_cast<float*>(&m_Vector)[0]; }
+	inline float& Y() { return reinterpret_cast<float*>(&m_Vector)[1]; }
+	inline float& Z() { return reinterpret_cast<float*>(&m_Vector)[2]; }
 
-	inline const float& GetX() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
-	inline const float& GetY() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
-	inline const float& GetZ() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
+	inline const float& X() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
+	inline const float& Y() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
+	inline const float& Z() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
 
 private:
 	Point(const __m128& vector);
@@ -161,13 +161,13 @@ public:
 	bool IsNAN() const;
 
 	// Whether this should be done or not is debatable
-	inline float& GetX() { return reinterpret_cast<float*>(&m_Vector)[0]; }
-	inline float& GetY() { return reinterpret_cast<float*>(&m_Vector)[1]; }
-	inline float& GetZ() { return reinterpret_cast<float*>(&m_Vector)[2]; }
+	inline float& X() { return reinterpret_cast<float*>(&m_Vector)[0]; }
+	inline float& Y() { return reinterpret_cast<float*>(&m_Vector)[1]; }
+	inline float& Z() { return reinterpret_cast<float*>(&m_Vector)[2]; }
 
-	inline const float& GetX() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
-	inline const float& GetY() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
-	inline const float& GetZ() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
+	inline const float& X() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
+	inline const float& Y() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
+	inline const float& Z() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
 
 private:
 	friend float Dot(const Normal& first, const Normal& second);
@@ -214,7 +214,7 @@ struct fmt::formatter<Vector>
 		return format_to(
 			context.out(),
 			ParseString,
-			direction.GetX(), direction.GetY(), direction.GetZ()
+			direction.X(), direction.Y(), direction.Z()
 		);
 	}
 };
@@ -245,7 +245,7 @@ struct fmt::formatter<Point>
 		return format_to(
 			context.out(),
 			ParseString,
-			direction.GetX(), direction.GetY(), direction.GetZ()
+			direction.X(), direction.Y(), direction.Z()
 		);
 	}
 };
@@ -276,7 +276,7 @@ struct fmt::formatter<Normal>
 		return format_to(
 			context.out(),
 			ParseString,
-			direction.GetX(), direction.GetY(), direction.GetZ()
+			direction.X(), direction.Y(), direction.Z()
 		);
 	}
 };

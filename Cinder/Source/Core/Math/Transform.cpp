@@ -65,14 +65,14 @@ Ray Transform::operator()(const Ray& ray) const
 Bound Transform::operator()(const Bound& bound) const
 {
 	const Transform& t = *this;
-	Bound ret(t(Point(bound.Minimum.GetX(), bound.Minimum.GetY(), bound.Minimum.GetZ())));
-	ret = Union(ret, t(Point(bound.Maximum.GetX(), bound.Minimum.GetY(), bound.Minimum.GetZ())));
-	ret = Union(ret, t(Point(bound.Minimum.GetX(), bound.Maximum.GetY(), bound.Minimum.GetZ())));
-	ret = Union(ret, t(Point(bound.Minimum.GetX(), bound.Minimum.GetY(), bound.Maximum.GetZ())));
-	ret = Union(ret, t(Point(bound.Minimum.GetX(), bound.Maximum.GetY(), bound.Maximum.GetZ())));
-	ret = Union(ret, t(Point(bound.Maximum.GetX(), bound.Maximum.GetY(), bound.Minimum.GetZ())));
-	ret = Union(ret, t(Point(bound.Maximum.GetX(), bound.Minimum.GetY(), bound.Maximum.GetZ())));
-	ret = Union(ret, t(Point(bound.Maximum.GetX(), bound.Maximum.GetY(), bound.Maximum.GetZ())));
+	Bound ret(t(Point(bound.Minimum.X(), bound.Minimum.Y(), bound.Minimum.Z())));
+	ret = Union(ret, t(Point(bound.Maximum.X(), bound.Minimum.Y(), bound.Minimum.Z())));
+	ret = Union(ret, t(Point(bound.Minimum.X(), bound.Maximum.Y(), bound.Minimum.Z())));
+	ret = Union(ret, t(Point(bound.Minimum.X(), bound.Minimum.Y(), bound.Maximum.Z())));
+	ret = Union(ret, t(Point(bound.Minimum.X(), bound.Maximum.Y(), bound.Maximum.Z())));
+	ret = Union(ret, t(Point(bound.Maximum.X(), bound.Maximum.Y(), bound.Minimum.Z())));
+	ret = Union(ret, t(Point(bound.Maximum.X(), bound.Minimum.Y(), bound.Maximum.Z())));
+	ret = Union(ret, t(Point(bound.Maximum.X(), bound.Maximum.Y(), bound.Maximum.Z())));
 	
 	return ret;
 }
@@ -155,13 +155,13 @@ Transform Translate(const Vector& delta)
 		1.f,     0.f,     0.f,     0.f,
 		0.f,     1.f,     0.f,     0.f,
 		0.f,     0.f,     1.f,     0.f,
-		delta.GetX(), delta.GetY(), delta.GetZ(), 1.f
+		delta.X(), delta.Y(), delta.Z(), 1.f
 	);
 	Matrix inverse(
 		1.f,      0.f,      0.f,      0.f,
 		0.f,      1.f,      0.f,      0.f,
 		0.f,      0.f,      1.f,      0.f,
-		-delta.GetX(), -delta.GetY(), -delta.GetZ(), 1.f
+		-delta.X(), -delta.Y(), -delta.Z(), 1.f
 	);
 
 	return Transform(matrix, inverse);
@@ -188,15 +188,15 @@ Transform Scale(float scale)
 Transform Scale(const Vector& scale)
 {
 	Matrix matrix(
-		scale.GetX(), 0.f,     0.f,     0.f,
-		0.f,     scale.GetY(), 0.f,     0.f,
-		0.f,     0.f,     scale.GetZ(), 0.f,
+		scale.X(), 0.f,     0.f,     0.f,
+		0.f,     scale.Y(), 0.f,     0.f,
+		0.f,     0.f,     scale.Z(), 0.f,
 		0.f,     0.f,     0.f,     1.f
 	);
 	Matrix inverse(
-		1.f / scale.GetX(), 0.f,           0.f,           0.f,
-		0.f,           1.f / scale.GetY(), 0.f,           0.f,
-		0.f,           0.f,           1.f / scale.GetZ(), 0.f,
+		1.f / scale.X(), 0.f,           0.f,           0.f,
+		0.f,           1.f / scale.Y(), 0.f,           0.f,
+		0.f,           0.f,           1.f / scale.Z(), 0.f,
 		0.f,           0.f,           0.f,           1.f
 	);
 
@@ -206,12 +206,12 @@ Transform Scale(const Vector& scale)
 // https://en.wikipedia.org/wiki/Rotation_matrix
 Transform Rotate(const Vector& eulerDegrees)
 {
-	float cosX = std::cos(ToRadians(eulerDegrees.GetX()));
-	float sinX = std::sin(ToRadians(eulerDegrees.GetX()));
-	float cosY = std::cos(ToRadians(eulerDegrees.GetY()));
-	float sinY = std::sin(ToRadians(eulerDegrees.GetY()));
-	float cosZ = std::cos(ToRadians(eulerDegrees.GetZ()));
-	float sinZ = std::sin(ToRadians(eulerDegrees.GetZ()));
+	float cosX = std::cos(ToRadians(eulerDegrees.X()));
+	float sinX = std::sin(ToRadians(eulerDegrees.X()));
+	float cosY = std::cos(ToRadians(eulerDegrees.Y()));
+	float sinY = std::sin(ToRadians(eulerDegrees.Y()));
+	float cosZ = std::cos(ToRadians(eulerDegrees.Z()));
+	float sinZ = std::sin(ToRadians(eulerDegrees.Z()));
 	
 	Matrix matrix(
 		cosY * cosZ,                      cosY * sinZ,                      -sinY,       0.f,
@@ -230,9 +230,9 @@ Transform Rotate(const Vector& axis, float degreeAngle)
 	Vector normalized = axis.GetNormalized();
 	float cos = std::cos(ToRadians(degreeAngle));
 	float sin = std::sin(ToRadians(degreeAngle));
-	float x = normalized.GetX();
-	float y = normalized.GetY();
-	float z = normalized.GetZ();
+	float x = normalized.X();
+	float y = normalized.Y();
+	float z = normalized.Z();
 	
 	Matrix matrix(
 		cos + x * x * (1.f - cos),     x * y * (1.f - cos) + z * sin, x * z * (1.f - cos) - y * sin, 0.f,
@@ -264,28 +264,28 @@ Transform Rotate(const Quaternion& quaternion)
 Transform LookAt(const Point& location, const Point& focus, const Vector& up)
 {
 	Matrix matrix;
-	matrix[0][3] = location.GetX();
-	matrix[1][3] = location.GetY();
-	matrix[2][3] = location.GetZ();
+	matrix[0][3] = location.X();
+	matrix[1][3] = location.Y();
+	matrix[2][3] = location.Z();
 	matrix[3][3] = 1.f;
 	
 	Vector direction = focus - location;
 	Vector right = Cross(up.GetNormalized(), direction).Normalize();
 	Vector newUp = 	Cross(direction, up);
 	
-	matrix[0][0] = right.GetX();
-	matrix[1][0] = right.GetY();
-	matrix[2][0] = right.GetZ();
+	matrix[0][0] = right.X();
+	matrix[1][0] = right.Y();
+	matrix[2][0] = right.Z();
 	matrix[3][0] = 0.f;
 	
-	matrix[0][1] = newUp.GetX();
-	matrix[1][1] = newUp.GetY();
-	matrix[2][1] = newUp.GetZ();
+	matrix[0][1] = newUp.X();
+	matrix[1][1] = newUp.Y();
+	matrix[2][1] = newUp.Z();
 	matrix[3][1] = 0.f;
 	
-	matrix[0][2] = direction.GetX();
-	matrix[1][2] = direction.GetY();
-	matrix[2][2] = direction.GetZ();
+	matrix[0][2] = direction.X();
+	matrix[1][2] = direction.Y();
+	matrix[2][2] = direction.Z();
 	matrix[3][2] = 0.f;
 	
 	return Transform(matrix.Inverse(), matrix);

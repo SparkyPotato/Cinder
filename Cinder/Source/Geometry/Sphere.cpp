@@ -24,7 +24,7 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 	Point hit;
 
 	float a = Dot(ray.Direction, ray.Direction);
-	auto origin = Vector(ray.Origin.GetX(), ray.Origin.GetY(), ray.Origin.GetZ());
+	auto origin = Vector(ray.Origin.X(), ray.Origin.Y(), ray.Origin.Z());
 	float b = 2 * Dot(ray.Direction, origin);
 	float c = Dot(origin, origin) - m_Radius * m_Radius;
 
@@ -35,10 +35,10 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 	if (t <= 0.f) { t = t1; }
 
 	hit = ray(t);
-	float phi = std::atan2(hit.GetX(), hit.GetZ());
+	float phi = std::atan2(hit.X(), hit.Z());
 	if (phi <= 0.f) { phi += 2 * Pi; }
 	intersection.U = phi / (2 * Pi);
-	float theta = std::acos(hit.GetZ() / m_Radius);
+	float theta = std::acos(hit.Z() / m_Radius);
 	intersection.V = theta * InversePi;
 
 	intersection.HitPoint = hit;
@@ -50,7 +50,7 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 bool Sphere::TestIntersect(const Ray& ray)
 {
 	float a = Dot(ray.Direction, ray.Direction);
-	auto origin = Vector(ray.Origin.GetX(), ray.Origin.GetY(), ray.Origin.GetZ());
+	auto origin = Vector(ray.Origin.X(), ray.Origin.Y(), ray.Origin.Z());
 	float b = 2 * Dot(ray.Direction, origin);
 	float c = Dot(origin, origin) - m_Radius * m_Radius;
 

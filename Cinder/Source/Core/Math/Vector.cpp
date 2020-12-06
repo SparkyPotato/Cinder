@@ -20,7 +20,7 @@ Vector::Vector(const __m128& vector)
 
 Vector::operator Normal() const
 {
-	return Normal(GetX(), GetY(), GetZ());
+	return Normal(X(), Y(), Z());
 }
 
 Vector& Vector::operator=(const Vector& other)
@@ -60,7 +60,7 @@ Vector& Vector::operator+=(const Vector& other)
 
 Vector Vector::operator-() const
 {
-	return Vector(-GetX(), -GetY(), -GetZ());
+	return Vector(-X(), -Y(), -Z());
 }
 
 Vector Vector::operator-(const Vector& other) const
@@ -161,14 +161,14 @@ Vector& Vector::Normalize()
 
 bool Vector::IsNAN() const
 {
-	return std::isnan(GetX()) || std::isnan(GetY()) || std::isnan(GetZ());
+	return std::isnan(X()) || std::isnan(Y()) || std::isnan(Z());
 }
 
 bool operator==(const Vector& first, const Vector& second)
 {
-	return first.GetX() == second.GetX() &&
-		first.GetY() == second.GetY() &&
-		first.GetZ() == second.GetZ();
+	return first.X() == second.X() &&
+		first.Y() == second.Y() &&
+		first.Z() == second.Z();
 }
 
 bool operator!=(const Vector& first, const Vector& second)
@@ -200,15 +200,15 @@ Vector Cross(const Vector& first, const Vector& second)
 
 void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector& outSecond)
 {
-	if (std::abs(normalized.GetX()) > std::abs(normalized.GetY()))
+	if (std::abs(normalized.X()) > std::abs(normalized.Y()))
 	{
-		outFirst = Vector(-normalized.GetZ(), 0, normalized.GetX()) /
-			std::sqrt(normalized.GetX() * normalized.GetX() + normalized.GetZ() * normalized.GetZ());
+		outFirst = Vector(-normalized.Z(), 0, normalized.X()) /
+			std::sqrt(normalized.X() * normalized.X() + normalized.Z() * normalized.Z());
 	}
 	else
 	{
-		outSecond = Vector(0, normalized.GetZ(), -normalized.GetY()) /
-			std::sqrt(normalized.GetY() * normalized.GetY() + normalized.GetZ() * normalized.GetZ());
+		outSecond = Vector(0, normalized.Z(), -normalized.Y()) /
+			std::sqrt(normalized.Y() * normalized.Y() + normalized.Z() * normalized.Z());
 	}
 	outSecond = Cross(normalized, outFirst);
 }
@@ -328,9 +328,9 @@ Point& Point::operator*=(const Matrix& matrix)
 
 bool operator==(const Point& first, const Point& second)
 {
-	return first.GetX() == second.GetX() &&
-		first.GetY() == second.GetY() &&
-		first.GetZ() == second.GetZ();
+	return first.X() == second.X() &&
+		first.Y() == second.Y() &&
+		first.Z() == second.Z();
 }
 
 bool operator!=(const Point& first, const Point& second)
@@ -358,24 +358,24 @@ Point Lerp(const Point& from, const Point& to, float ratio)
 Point Min(const Point& first, const Point& second)
 {
 	return Point(
-		std::min(first.GetX(), second.GetX()),
-		std::min(first.GetY(), second.GetY()),
-		std::min(first.GetZ(), second.GetZ())
+		std::min(first.X(), second.X()),
+		std::min(first.Y(), second.Y()),
+		std::min(first.Z(), second.Z())
 	);
 }
 
 Point Max(const Point& first, const Point& second)
 {
 	return Point(
-		std::max(first.GetX(), second.GetX()),
-		std::max(first.GetY(), second.GetY()),
-		std::max(first.GetZ(), second.GetZ())
+		std::max(first.X(), second.X()),
+		std::max(first.Y(), second.Y()),
+		std::max(first.Z(), second.Z())
 	);
 }
 
 bool Point::IsNAN() const
 {
-	return std::isnan(GetX()) || std::isnan(GetY()) || std::isnan(GetZ());
+	return std::isnan(X()) || std::isnan(Y()) || std::isnan(Z());
 }
 
 Point Shuffle(const Point& point, uint8_t x, uint8_t y, uint8_t z)
@@ -398,7 +398,7 @@ Normal::Normal(const __m128& vector)
 
 Normal::operator Vector() const
 {
-	return Vector(GetX(), GetY(), GetZ());
+	return Vector(X(), Y(), Z());
 }
 
 Normal& Normal::operator=(const Normal& other)
@@ -438,7 +438,7 @@ Normal& Normal::operator+=(const Normal& other)
 
 Normal Normal::operator-() const
 {
-	return Normal(-GetX(), -GetY(), -GetZ());
+	return Normal(-X(), -Y(), -Z());
 }
 
 Normal Normal::operator-(const Normal& other) const
@@ -534,14 +534,14 @@ Normal& Normal::Normalize()
 
 bool Normal::IsNAN() const
 {
-	return std::isnan(GetX()) || std::isnan(GetY()) || std::isnan(GetZ());
+	return std::isnan(X()) || std::isnan(Y()) || std::isnan(Z());
 }
 
 bool operator==(const Normal& first, const Normal& second)
 {
-	return first.GetX() == second.GetX() &&
-		first.GetY() == second.GetY() &&
-		first.GetZ() == second.GetZ();
+	return first.X() == second.X() &&
+		first.Y() == second.Y() &&
+		first.Z() == second.Z();
 }
 
 bool operator!=(const Normal& first, const Normal& second)

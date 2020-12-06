@@ -1,6 +1,8 @@
 #include "PCH.h"
 #include "SamplerRenderer.h"
 
+#include "Core/Global/ProgressBar.h"
+
 void SamplerRenderer::Render(const Scene& scene, Framebuffer& framebuffer)
 {
 	m_Scene = &scene;
@@ -24,6 +26,16 @@ void SamplerRenderer::Render(const Scene& scene, Framebuffer& framebuffer)
 	{
 		m_Threads.emplace_back(&SamplerRenderer::Thread, this);
 	}
+
+	ProgressBar bar(0.f, float(m_RenderTiles.size()), float(m_RenderTiles.size()) / 100.f);
+	while (m_Tile < m_RenderTiles.size())
+	{
+		bar.Update(float(m_Tile));
+
+		using namespace std::literals;
+		std::this_thread::sleep_for(100ms);
+	}
+	bar.End();
 
 	for (auto& thread : m_Threads)
 	{

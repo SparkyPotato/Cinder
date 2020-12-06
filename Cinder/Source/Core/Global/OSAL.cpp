@@ -3,6 +3,8 @@
 
 #ifdef PLATFORM_WINDOWS
 
+#include <Windows.h>
+
 FILE* FileOpen(const char* filename, const char* mode)
 {
 	FILE* file;
@@ -11,6 +13,8 @@ FILE* FileOpen(const char* filename, const char* mode)
 }
 
 #else
+
+#include <unistd.h>
 
 FILE* FileOpen(const char* filename, const char* mode)
 {
