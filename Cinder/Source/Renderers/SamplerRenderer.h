@@ -2,6 +2,7 @@
 
 #include "Core/Components/Renderer.h"
 #include "Core/Components/Sampler.h"
+#include "Core/Components/Filter.h"
 #include "Core/Math/Color.h"
 
 class SamplerRenderer : public Renderer
@@ -36,4 +37,5 @@ private:
 	Framebuffer* m_Framebuffer = nullptr;
 
 	std::string m_Sampler;
+	up<Filter> m_Filter;
 };

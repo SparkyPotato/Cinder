@@ -63,6 +63,25 @@ bool SamplerRenderer::Parse(const YAML::Node& node)
 		return false;
 	}
 
+	if (!node["Filter"])
+	{
+		Error("No Filter specified (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	std::string filter;
+	try { filter = node["Filter"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Filter type must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+	try { m_Filter = Registry::Get()->GFilters.at(filter)(Vector(0.5f, 0.5f, 0.f)); }
+	catch (...)
+	{
+		Error("Filter type '{}' does not exist (line {})!", filter, node["Filter"].Mark().line + 1);
+		return false;
+	}
+
 	if (!node["Samples"])
 	{
 		Warning("Using default sample count ({})", m_Samples);
@@ -101,11 +120,11 @@ void SamplerRenderer::Thread()
 				{
 					auto pair = sampler->Get2D();
 
-					float xval = float(x + pair.first) / m_Framebuffer->Width;
-					float yval = float(y + pair.second) / m_Framebuffer->Height;
+					float xval = (float(x) + pair.first) / m_Framebuffer->Width;
+					float yval = (float(y) + pair.second) / m_Framebuffer->Height;
 					Ray ray = m_Scene->GetCamera().GetRay(xval, yval);
 
-					color += TraceRay(*m_Scene, ray, arena);
+					color += TraceRay(*m_Scene, ray, arena) * m_Filter->Evaluate(Point(pair.first - 0.5f, pair.second - 0.5f, 0.f));
 				} while (sampler->NextSample());
 				color /= float(m_Samples);
 

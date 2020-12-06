@@ -9,6 +9,8 @@ ProgressBar::ProgressBar(float min, float max, float step)
 
 void ProgressBar::Update(float value)
 {
+	if (GQuiet) { return; }
+
 	m_Buffer = "{:.1f}% ";
 
 	float nvalue = value;

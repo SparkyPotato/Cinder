@@ -4,15 +4,18 @@ class Renderer;
 using RendererSpawnFunction = up<Renderer> (*)();
 class Framebuffer;
 using FramebufferSpawnFunction = up<Framebuffer> (*)(uint32_t, uint32_t);
+class Sampler;
+using SamplerSpawnFunction = up<Sampler>(*)(uint32_t);
+class Filter;
+class Vector;
+using FilterSpawnFunction = up<Filter>(*)(const Vector&);
 class Camera;
 class Transform;
 using CameraSpawnFunction = up<Camera> (*)(const Transform&);
 class Geometry;
 using GeometrySpawnFunction = up<Geometry> (*)(const std::string&);
-class Sampler;
-using SamplerSpawnFunction = up<Sampler> (*)(uint32_t);
 class AccelerationStructure;
-using AccelerationSpawnFunction = up<AccelerationStructure>(*)();
+using AccelerationSpawnFunction = up<AccelerationStructure> (*)();
 
 class Registry
 {
@@ -25,6 +28,7 @@ public:
 	std::map<std::string, GeometrySpawnFunction> GGeometry;
 	std::map<std::string, SamplerSpawnFunction> GSamplers;
 	std::map<std::string, AccelerationSpawnFunction> GAcceleration;
+	std::map<std::string, FilterSpawnFunction> GFilters;
 
 private:
 	static Registry* s_Registry;

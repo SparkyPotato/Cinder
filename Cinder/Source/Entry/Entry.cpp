@@ -26,7 +26,7 @@ Will be slow, set log level to 0 to see debug information.
 		{
 			// Check if the first character of the argument is a '-',
 			// if it is not then we assume it is a config file
-			if (strcmp(argv[i], "-nologo") == 0) { logo = false; }
+			if (strcmp(argv[i], "-nologo") == 0 || strcmp(argv[i], "-quiet") == 0 || strcmp(argv[i], "-q") == 0) { logo = false; }
 			else if (*argv[i] != '-') 
 			{ 
 				if (std::find(projectFiles.begin(), projectFiles.end(), std::string(argv[i])) != projectFiles.end())

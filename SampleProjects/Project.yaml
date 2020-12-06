@@ -7,11 +7,12 @@ Scenes:
   - File: Scene.yaml
     Output: Render.png
 
-# Which renderer to use, and the settings for the renderer
+# Renderer to use
 Renderer:
   Type: Preview
   Sampler: Random
-  Samples: 16
+  Filter: Box
+  Samples: 8
 
 # Type of framebuffer, and the format of the output.
 # Should be the same format as your output file (*.png -> PNG)
