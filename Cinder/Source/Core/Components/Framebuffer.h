@@ -31,13 +31,13 @@ public:
 };
 
 template<>
-struct YAML::convert<Framebuffer*>
+struct YAML::convert<up<Framebuffer>>
 {
-	static bool decode(const Node& node, Framebuffer*& renderer);
+	static bool decode(const Node& node, up<Framebuffer>& renderer);
 };
 
 #define FRAMEBUFFER(type, className) \
-Framebuffer* Spawn##className(uint32_t width, uint32_t height) { return new className(width, height); } \
+up<Framebuffer> Spawn##className(uint32_t width, uint32_t height) { return std::make_unique<className>(width, height); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GFramebuffers.emplace(#type, &Spawn##className); } \

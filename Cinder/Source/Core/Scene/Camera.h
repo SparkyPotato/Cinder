@@ -25,13 +25,13 @@ protected:
 };
 
 template<>
-struct YAML::convert<Camera*>
+struct YAML::convert<up<Camera>>
 {
-	static bool decode(const Node& node, Camera*&);
+	static bool decode(const Node& node, up<Camera>&);
 };
 
 #define CAMERA(type, className) \
-Camera* Spawn##className(const Transform& t) { return new className(t); } \
+up<Camera> Spawn##className(const Transform& t) { return std::make_unique<className>(t); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GCameras.emplace(#type, &Spawn##className); } \

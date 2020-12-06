@@ -47,3 +47,8 @@
 
 #include "Core/Math/Math.h"
 #include "Core/Memory/Memory.h"
+
+template<typename T>
+using up = std::unique_ptr<T>;
+template<typename T>
+using sp = std::shared_ptr<T>;

@@ -18,7 +18,7 @@ Registry* Registry::Get()
 
 Registry* Registry::s_Registry = nullptr;
 
-bool YAML::convert<Renderer*>::decode(const Node& node, Renderer*& renderer)
+bool YAML::convert<up<Renderer>>::decode(const Node& node, up<Renderer>& renderer)
 {
 	std::string type;
 	try { type = node["Type"].as<std::string>(); }
@@ -40,7 +40,7 @@ bool YAML::convert<Renderer*>::decode(const Node& node, Renderer*& renderer)
 	return true;
 }
 
-bool YAML::convert<Framebuffer*>::decode(const Node& node, Framebuffer*& framebuffer)
+bool YAML::convert<up<Framebuffer>>::decode(const Node& node, up<Framebuffer>& framebuffer)
 {
 	std::string type;
 	try { type = node["Type"].as<std::string>(); }
@@ -76,7 +76,7 @@ bool YAML::convert<Framebuffer*>::decode(const Node& node, Framebuffer*& framebu
 	return true;
 }
 
-bool YAML::convert<Camera*>::decode(const Node& node, Camera*& camera)
+bool YAML::convert<up<Camera>>::decode(const Node& node, up<Camera>& camera)
 {
 	std::string type;
 	try { type = node["Type"].as<std::string>(); }
@@ -102,7 +102,7 @@ bool YAML::convert<Camera*>::decode(const Node& node, Camera*& camera)
 	return true;
 }
 
-bool YAML::convert<Geometry*>::decode(const Node& node, Geometry*& geometry)
+bool YAML::convert<up<Geometry>>::decode(const Node& node, up<Geometry>& geometry)
 {
 	std::string type;
 	try { type = node["Type"].as<std::string>(); }

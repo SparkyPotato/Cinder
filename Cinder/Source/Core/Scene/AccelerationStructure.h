@@ -21,7 +21,7 @@ public:
 };
 
 #define ACCELERATION(type, className) \
-AccelerationStructure* Spawn##className() { return new className(); } \
+up<AccelerationStructure> Spawn##className() { return std::make_unique<className>(); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GAcceleration.emplace(#type, &Spawn##className); } \

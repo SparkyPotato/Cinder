@@ -25,13 +25,13 @@ public:
 };
 
 template<>
-struct YAML::convert<Geometry*>
+struct YAML::convert<up<Geometry>>
 {
-	static bool decode(const Node& node, Geometry*&);
+	static bool decode(const Node& node, up<Geometry>&);
 };
 
 #define GEOMETRY(type, className) \
-Geometry* Spawn##className(const std::string& name) { return new className(name); } \
+up<Geometry> Spawn##className(const std::string& name) { return std::make_unique<className>(name); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GGeometry.emplace(#type, &Spawn##className); } \

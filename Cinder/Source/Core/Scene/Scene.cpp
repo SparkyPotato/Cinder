@@ -7,16 +7,6 @@ Scene* Scene::Load(const std::string& file)
 	return node.as<Scene*>();
 }
 
-Scene::~Scene()
-{
-	for (auto geometry : m_Geometry)
-	{
-		delete geometry;
-	}
-
-	delete m_Camera;
-}
-
 Camera& Scene::GetCamera() const
 {
 	return *m_Camera;
@@ -46,11 +36,11 @@ void Scene::LinkReferences()
 		//                   object to world         world to camera
 		
 		// Link geometry pointers to the actual geometry
-		for (auto geometry : m_Geometry)
+		for (auto& geometry : m_Geometry)
 		{
 			if (geometry->Name == object.m_GeometryName)
 			{
-				object.m_Geometry = geometry;
+				object.m_Geometry = geometry.get();
 				break;
 			}
 		}
@@ -63,7 +53,7 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 {
 	scene = new Scene;
 
-	try { scene->m_Camera = node["Camera"].as<Camera*>(); }
+	try { scene->m_Camera = node["Camera"].as<up<Camera>>(); }
 	catch (...) { return false; }
 
 	if (!node["Geometry"].IsSequence())
@@ -99,7 +89,7 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 
 	for (auto& geometry : node["Geometry"])
 	{
-		scene->m_Geometry.emplace_back(geometry.as<Geometry*>());
+		scene->m_Geometry.emplace_back(geometry.as<up<Geometry>>());
 	}
 	
 	for (auto& object : node["Objects"])

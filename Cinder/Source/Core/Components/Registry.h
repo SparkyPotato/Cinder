@@ -1,18 +1,18 @@
 #pragma once
 
 class Renderer;
-using RendererSpawnFunction = Renderer* (*)();
+using RendererSpawnFunction = up<Renderer> (*)();
 class Framebuffer;
-using FramebufferSpawnFunction = Framebuffer* (*)(uint32_t, uint32_t);
+using FramebufferSpawnFunction = up<Framebuffer> (*)(uint32_t, uint32_t);
 class Camera;
 class Transform;
-using CameraSpawnFunction = Camera* (*)(const Transform&);
+using CameraSpawnFunction = up<Camera> (*)(const Transform&);
 class Geometry;
-using GeometrySpawnFunction = Geometry* (*)(const std::string&);
+using GeometrySpawnFunction = up<Geometry> (*)(const std::string&);
 class Sampler;
-using SamplerSpawnFunction = Sampler* (*)();
+using SamplerSpawnFunction = up<Sampler> (*)();
 class AccelerationStructure;
-using AccelerationSpawnFunction = AccelerationStructure* (*)();
+using AccelerationSpawnFunction = up<AccelerationStructure>(*)();
 
 class Registry
 {

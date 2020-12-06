@@ -30,12 +30,12 @@ void RunProject(const std::filesystem::path& filePath)
 		return;
 	}
 
-	Renderer* renderer = nullptr;
-	try { renderer = project["Renderer"].as<Renderer*>(); }
+	up<Renderer> renderer = nullptr;
+	try { renderer = project["Renderer"].as<up<Renderer>>(); }
 	catch (...) { return; }
 
-	Framebuffer* framebuffer = nullptr;
-	try { framebuffer = project["Framebuffer"].as<Framebuffer*>(); }
+	up<Framebuffer> framebuffer = nullptr;
+	try { framebuffer = project["Framebuffer"].as<up<Framebuffer>>(); }
 	catch (...) { return; }
 	
 	// Cinder supports a list of Scenes to render per project
@@ -92,9 +92,6 @@ void RunProject(const std::filesystem::path& filePath)
 	auto end = std::chrono::high_resolution_clock().now();
 
 	Console("Took {:%M:%S}.", end - start);
-
-	delete renderer;
-	delete framebuffer;
 	
 	// Reset the working directory so the next project can be loaded
 	std::filesystem::current_path(workingDirectory);

@@ -9,7 +9,6 @@ class Scene
 {
 public:
 	Scene() = default;
-	~Scene();
 	static Scene* Load(const std::string& file);
 
 	Camera& GetCamera() const;
@@ -25,9 +24,9 @@ private:
 	void SetCameraAspectRatio(float aspectRatio);
 	void LinkReferences();
 
-	AccelerationStructure* m_Acceleration;
-	Camera* m_Camera = nullptr;
-	std::vector<Geometry*> m_Geometry;
+	up<AccelerationStructure> m_Acceleration;
+	up<Camera> m_Camera = nullptr;
+	std::vector<up<Geometry>> m_Geometry;
 	std::vector<Object> m_Objects;
 };
 

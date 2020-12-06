@@ -70,7 +70,7 @@ bool SamplerRenderer::Parse(const YAML::Node& node)
 
 void SamplerRenderer::Thread()
 {
-	Sampler* sampler = Registry::Get()->GSamplers.at(m_Sampler)();
+	up<Sampler> sampler = Registry::Get()->GSamplers.at(m_Sampler)();
 
 	unsigned int tile = std::atomic_fetch_add(&m_Tile, 1u);
 	MemoryArena arena;
@@ -104,6 +104,4 @@ void SamplerRenderer::Thread()
 
 		tile = std::atomic_fetch_add(&m_Tile, 1u);
 	}
-
-	delete sampler;
 }

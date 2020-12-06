@@ -11,7 +11,7 @@ public:
 };
 
 #define SAMPLER(type, className) \
-Sampler* Spawn##className() { return new className(); } \
+up<Sampler> Spawn##className() { return std::make_unique<className>(); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GSamplers.emplace(#type, &Spawn##className); } \

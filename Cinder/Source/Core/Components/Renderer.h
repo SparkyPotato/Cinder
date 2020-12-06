@@ -14,13 +14,13 @@ public:
 };
 
 template<>
-struct YAML::convert<Renderer*>
+struct YAML::convert<up<Renderer>>
 {
-	static bool decode(const Node& node, Renderer*& renderer);
+	static bool decode(const Node& node, up<Renderer>& renderer);
 };
 
 #define RENDERER(type, className) \
-Renderer* Spawn##className() { return new className; } \
+up<Renderer> Spawn##className() { return std::make_unique<className>(); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GRenderers.emplace(#type, &Spawn##className); } \
