@@ -9,6 +9,12 @@ Sphere::Sphere(const std::string& name)
 
 bool Sphere::Parse(const YAML::Node& node)
 {
+	if (!node["Radius"])
+	{
+		Error("Sphere must have radius (line {})!", node.Mark().line + 1);
+		return false;
+	}
+
 	try { m_Radius = node["Radius"].as<float>(); }
 	catch (YAML::Exception& e)
 	{
@@ -19,7 +25,15 @@ bool Sphere::Parse(const YAML::Node& node)
 	return true;
 }
 
-bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
+Bound Sphere::GetBound() const
+{
+	return Bound(
+		Point(-m_Radius, -m_Radius, -m_Radius),
+		Point(m_Radius, m_Radius, m_Radius)
+	);
+}
+
+bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
 	Point hit;
 
@@ -47,7 +61,7 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection)
 	return true;
 }
 
-bool Sphere::TestIntersect(const Ray& ray)
+bool Sphere::TestIntersect(const Ray& ray) const
 {
 	float a = Dot(ray.Direction, ray.Direction);
 	auto origin = Vector(ray.Origin.X(), ray.Origin.Y(), ray.Origin.Z());

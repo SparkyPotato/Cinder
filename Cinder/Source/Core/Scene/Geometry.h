@@ -3,6 +3,7 @@
 #include "Core/Components/Registry.h"
 #include "Core/Math/Ray.h"
 #include "Core/Math/RayIntersection.h"
+#include "Core/Math/Bound.h"
 
 class Geometry
 {
@@ -14,8 +15,10 @@ public:
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 
-	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) = 0;
-	virtual bool TestIntersect(const Ray& ray)
+	virtual Bound GetBound() const = 0;
+
+	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) const = 0;
+	virtual bool TestIntersect(const Ray& ray) const
 	{
 		RayIntersection dummy;
 		return Intersect(ray, dummy);

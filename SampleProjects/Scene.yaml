@@ -11,7 +11,7 @@ Camera:
     Position: [ 0, 0, -25 ]
     Rotation: [ 0, 0, 0 ]
     Scale: [ 1, 1, 1 ] # Don't even think about setting scale to anything else
-  FOV: 60
+  FOV: 75
 
 # Objects that make up the scene.
 # Hold a reference to geometry
@@ -21,9 +21,22 @@ Objects:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
+  - Geometry: Small Sphere
+    Transform:
+      Position: [ 10, -5, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: A Box
+    Transform:
+      Position: [ -5, -5, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
 
 # Raw Geometry, to be used in objects
 Geometry:
   - Name: Small Sphere
     Type: Sphere
     Radius: 5
+  - Name: A Box
+    Type: Box
+    Size: [ 5, 5, 5 ]

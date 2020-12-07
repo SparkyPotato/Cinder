@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Math/Vector.h"
+#include "Core/Math/Ray.h"
 
 // Axis-aligned bounding box
 class Bound
@@ -26,6 +26,8 @@ public:
 	// Opposite of Lerp, pretty much
 	Vector Offset(const Point& point) const;
 	
+	bool Intersect(const Ray& ray, float& t0, float& t1) const;
+
 	void GetBoundingSphere(Point& outCenter, float& outRadius) const;
 
 	bool Contains(const Point& point) const;
