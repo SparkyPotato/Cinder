@@ -36,6 +36,8 @@ bool Box::Parse(const YAML::Node& node)
 		Point(-x / 2.f, -y / 2.f, -z / 2.f),
 		Point(x / 2.f, y / 2.f, z / 2.f)
 	);
+	
+	return true;
 }
 
 Bound Box::GetBound() const
@@ -45,5 +47,25 @@ Bound Box::GetBound() const
 
 bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
+	float t0, t1;
+	bool hit = m_Bound.Intersect(ray, t0, t1);
+	if (hit)
+	{
+		intersection.HitPoint = ray(t0);
+		intersection.HitNormal = Normal();
+		float max = 0.f;
+		int i = 0;
+		for (int j = 0; j < 3; j++)
+		{
+			if (std::abs(intersection.HitPoint[j]) > std::abs(max))
+			{ max = intersection.HitPoint[j]; i = j; }
+		}
+		intersection.HitNormal[i] = max / std::abs(max);
+		
+		// TODO: Update intersection U and V
+		
+		return true;
+	}
 	
+	return false;
 }
