@@ -30,7 +30,7 @@ Objects:
     Transform:
       Position: [ -5, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1.5, 1 ]
+      Scale: [ 1, 1, 1 ]
 
 # Raw Geometry, to be used in objects
 Geometry:
