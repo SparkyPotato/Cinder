@@ -1,5 +1,5 @@
 #include "PCH.h"
-#include "Filters/Box.h"
+#include "Filters/BoxFilter.h"
 
 FILTER(Box, BoxFilter)
 

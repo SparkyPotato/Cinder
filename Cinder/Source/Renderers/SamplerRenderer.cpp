@@ -33,7 +33,7 @@ void SamplerRenderer::Render(const Scene& scene, Framebuffer& framebuffer)
 		bar.Update(float(m_Tile));
 
 		using namespace std::literals;
-		std::this_thread::sleep_for(100ms);
+		std::this_thread::sleep_for(200ms);
 	}
 	bar.End();
 

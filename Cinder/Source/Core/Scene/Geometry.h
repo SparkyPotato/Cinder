@@ -24,6 +24,8 @@ public:
 		return Intersect(ray, dummy);
 	}
 
+	virtual float GetArea() const = 0;
+
 	std::string Name;
 };
 

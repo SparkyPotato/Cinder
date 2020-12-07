@@ -9,11 +9,11 @@ Scenes:
 
 # Renderer to use
 Renderer:
-  Type: Preview
+  Type: Whitted
   Sampler: Random
   Filter: Box
   Samples: 8
-
+  
 # Type of framebuffer, and the format of the output.
 # Should be the same format as your output file (*.png -> PNG)
 Framebuffer:

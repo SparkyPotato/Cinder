@@ -54,14 +54,17 @@ bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
 		ray.Extent = t0;
 		intersection.HitPoint = ray(t0);
 		intersection.HitNormal = Normal();
-		
-		float max = 0.f;
-		int i = 0;
-		for (int j = 0; j < 3; j++)
+
+		Vector diagonal = m_Bound.GetDiagonal() / 2.f;
+
+		for (int i = 0; i < 3; i++)
 		{
-			if (std::abs(intersection.HitPoint[j]) > std::abs(max)) { max = intersection.HitPoint[j]; i = j; }
+			if (IsNearlyEqual(std::abs(intersection.HitPoint[i]), diagonal[i]))
+			{
+				intersection.HitNormal[i] = std::copysign(1.f, intersection.HitPoint[i]);
+				break;
+			}
 		}
-		intersection.HitNormal[i] = std::copysign(1.f, max	);
 		
 		// TODO: Update intersection U and V
 		
@@ -75,4 +78,9 @@ bool Box::TestIntersect(const Ray& ray) const
 {
 	float t0, t1;
 	return m_Bound.Intersect(ray, t0, t1);
+}
+
+float Box::GetArea() const
+{
+	return m_Bound.GetSurfaceArea();
 }

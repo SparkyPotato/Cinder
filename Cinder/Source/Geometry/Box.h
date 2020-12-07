@@ -14,6 +14,8 @@ public:
 	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) const override;
 	virtual bool TestIntersect(const Ray& ray) const override;
 
+	virtual float GetArea() const override;
+
 private:
 	Bound m_Bound;
 };

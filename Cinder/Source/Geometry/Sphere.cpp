@@ -73,3 +73,8 @@ bool Sphere::TestIntersect(const Ray& ray) const
 
 	return true;
 }
+
+float Sphere::GetArea() const
+{
+	return 4 * Pi * m_Radius * m_Radius;
+}
