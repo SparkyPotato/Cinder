@@ -27,6 +27,7 @@ public:
 	Vector Offset(const Point& point) const;
 	
 	bool Intersect(const Ray& ray, float& t0, float& t1) const;
+	bool Intersect(const Ray& ray, const Vector& inverseDirection, float& t0, float& t1) const;
 
 	void GetBoundingSphere(Point& outCenter, float& outRadius) const;
 

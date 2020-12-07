@@ -89,20 +89,41 @@ Vector Bound::Offset(const Point& point) const
 bool Bound::Intersect(const Ray& ray, float& t0, float& t1) const
 {
 	t0 = 0.f; t1 = ray.Extent;
-
+	
+	Vector inverseDirection = { 1.f / ray.Direction.X(), 1.f / ray.Direction.Y(), 1.f / ray.Direction.Z() };
+	Vector near = Hadamard((Minimum - ray.Origin), inverseDirection);
+	Vector far = Hadamard((Maximum - ray.Origin), inverseDirection);
+	
+	Vector fars = Max(near, far);
+	Vector nears = Min(near, far);
+	
 	for (int i = 0; i < 3; i++)
 	{
-		float inverseDirection = 1.f / ray.Direction[i];
-
-		float near = (Minimum[i] - ray.Origin[i]) * inverseDirection;
-		float far = (Maximum[i] - ray.Origin[i]) * inverseDirection;
-		if (near > far) { std::swap(near, far); }
-
-		t0 = near > t0 ? near : t0;
-		t1 = far < t1 ? far : t1;
+		t0 = std::max(nears[i], t0);
+		t1 = std::min(fars[i], t1);
 		if (t0 > t1) { return false; }
 	}
+	
+	return true;
+}
 
+bool Bound::Intersect(const Ray& ray, const Vector& inverseDirection, float& t0, float& t1) const
+{
+	t0 = 0.f; t1 = ray.Extent;
+	
+	Vector near = Hadamard((Minimum - ray.Origin), inverseDirection);
+	Vector far = Hadamard((Maximum - ray.Origin), inverseDirection);
+	
+	Vector fars = Max(near, far);
+	Vector nears = Min(near, far);
+	
+	for (int i = 0; i < 3; i++)
+	{
+		t0 = std::max(nears[i], t0);
+		t1 = std::min(fars[i], t1);
+		if (t0 > t1) { return false; }
+	}
+	
 	return true;
 }
 

@@ -56,6 +56,9 @@ private:
 	friend float Dot(const Normal& first, const Vector& second);
 	friend float Dot(const Vector& first, const Normal& second);
 	friend Vector Cross(const Vector& first, const Vector& second);
+	friend Vector Hadamard(const Vector& first, const Vector& second);
+	friend Vector Max(const Vector& first, const Vector& second);
+	friend Vector Min(const Vector& first, const Vector& second);
 
 	Vector(const __m128& vector);
 
@@ -69,9 +72,12 @@ Vector operator*(float scale, const Vector& direction);
 float Dot(const Vector& first, const Vector& second);
 // Only calculates a 3D cross product
 Vector Cross(const Vector& first, const Vector& second);
+Vector Hadamard(const Vector& first, const Vector& second);
 void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector& outSecond);
 Vector Lerp(const Vector& from, const Vector& to, float ratio);
 Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z);
+Vector Max(const Vector& first, const Vector& second);
+Vector Min(const Vector& first, const Vector& second);
 
 // Point in 3D space, with W coordinate of 1
 class Point

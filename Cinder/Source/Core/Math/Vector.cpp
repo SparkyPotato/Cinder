@@ -188,6 +188,11 @@ float Dot(const Vector& first, const Vector& second)
 	return _mm_cvtss_f32(sums);
 }
 
+Vector Hadamard(const Vector& first, const Vector& second)
+{
+	return Vector(_mm_mul_ps(first.m_Vector, second.m_Vector));
+}
+
 Vector Cross(const Vector& first, const Vector& second)
 {
 	__m128 result = _mm_sub_ps(
@@ -223,6 +228,16 @@ Vector Lerp(const Vector& from, const Vector& to, float ratio)
 Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z)
 {
 	return Vector(direction[x], direction[y], direction[z]);
+}
+
+Vector Max(const Vector& first, const Vector& second)
+{
+	return Vector(_mm_max_ps(first.m_Vector, second.m_Vector));
+}
+
+Vector Min(const Vector& first, const Vector& second)
+{
+	return Vector(_mm_min_ps(first.m_Vector, second.m_Vector));
 }
 
 Point::Point(float x, float y, float z)

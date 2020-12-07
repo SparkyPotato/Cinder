@@ -35,8 +35,6 @@ Bound Sphere::GetBound() const
 
 bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
-	Point hit;
-
 	float a = Dot(ray.Direction, ray.Direction);
 	auto origin = Vector(ray.Origin.X(), ray.Origin.Y(), ray.Origin.Z());
 	float b = 2 * Dot(ray.Direction, origin);
@@ -48,11 +46,12 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection) const
 	float t = t0;
 	if (t <= 0.f) { t = t1; }
 
-	hit = ray(t);
+	Point hit = ray(t);
+	ray.Extent = t;
 	float phi = std::atan2(hit.X(), hit.Z());
 	if (phi <= 0.f) { phi += 2 * Pi; }
 	intersection.U = phi / (2 * Pi);
-	float theta = std::acos(hit.Z() / m_Radius);
+	float theta = std::acos(hit.Y() / m_Radius);
 	intersection.V = theta * InversePi;
 
 	intersection.HitPoint = hit;

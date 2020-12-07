@@ -12,6 +12,7 @@ public:
 	virtual Bound GetBound() const override;
 
 	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) const override;
+	virtual bool TestIntersect(const Ray& ray) const override;
 
 private:
 	Bound m_Bound;

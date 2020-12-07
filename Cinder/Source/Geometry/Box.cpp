@@ -51,16 +51,17 @@ bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
 	bool hit = m_Bound.Intersect(ray, t0, t1);
 	if (hit)
 	{
+		ray.Extent = t0;
 		intersection.HitPoint = ray(t0);
 		intersection.HitNormal = Normal();
+		
 		float max = 0.f;
 		int i = 0;
 		for (int j = 0; j < 3; j++)
 		{
-			if (std::abs(intersection.HitPoint[j]) > std::abs(max))
-			{ max = intersection.HitPoint[j]; i = j; }
+			if (std::abs(intersection.HitPoint[j]) > std::abs(max)) { max = intersection.HitPoint[j]; i = j; }
 		}
-		intersection.HitNormal[i] = max / std::abs(max);
+		intersection.HitNormal[i] = std::copysign(1.f, max	);
 		
 		// TODO: Update intersection U and V
 		
@@ -68,4 +69,10 @@ bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
 	}
 	
 	return false;
+}
+
+bool Box::TestIntersect(const Ray& ray) const
+{
+	float t0, t1;
+	return m_Bound.Intersect(ray, t0, t1);
 }
