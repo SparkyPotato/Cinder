@@ -8,7 +8,7 @@ public:
 	Sampler(uint32_t samplesPerPixel)
 		: m_SamplesPerPixel(samplesPerPixel)
 	{}
-	virtual ~Sampler() {}
+	virtual ~Sampler() = default;
 
 	virtual void StartPixel(uint32_t x, uint32_t y) 
 	{ m_CurrentX = x; m_CurrentY = y; m_CurrentSample = 0; }

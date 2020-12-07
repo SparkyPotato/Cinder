@@ -17,6 +17,7 @@ std::string GLog = "Log: ";
 std::string GWarning = "Warning: ";
 std::string GError = "Error: ";
 std::string GFatal = "Fatal: ";
+std::mutex GOutputMutex;
 
 static std::vector<std::string> s_ValidOptions =
 {

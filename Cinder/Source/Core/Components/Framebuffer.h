@@ -6,7 +6,7 @@
 class BufferTile
 {
 public:
-	virtual ~BufferTile() {}
+	virtual ~BufferTile() = default;
 	
 	virtual Color GetPixel(uint32_t x, uint32_t y) = 0;
 	virtual void SetPixel(const Color& color, uint32_t x, uint32_t y) = 0;
@@ -18,7 +18,7 @@ public:
 	Framebuffer(uint32_t width, uint32_t height)
 		: Width(width), Height(height)
 	{}
-	virtual ~Framebuffer() {}
+	virtual ~Framebuffer() = default;
 
 	virtual BufferTile* GetBufferTile(uint32_t xmin, uint32_t xmax, uint32_t ymin, uint32_t ymax) = 0;
 	virtual void SaveBufferTile(BufferTile* tile) = 0;

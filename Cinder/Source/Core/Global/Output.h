@@ -15,6 +15,7 @@ extern std::string GLog;
 extern std::string GWarning;
 extern std::string GError;
 extern std::string GFatal;
+extern std::mutex GOutputMutex;
 
 template<typename... Args>
 inline void Console(const char* format, Args&&... args)
@@ -23,8 +24,10 @@ inline void Console(const char* format, Args&&... args)
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
 	
 	if (GQuiet) { GFormatBuffer.clear(); return; }
-
+	
+	GOutputMutex.lock();
 	fmt::print(GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 }
 
@@ -36,7 +39,9 @@ inline void CinderColored(std::string format, Args&&... args)
 	
 	if (GQuiet) { GFormatBuffer.clear(); return; }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::dark_orange), GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 }
 
@@ -51,7 +56,9 @@ inline void Debug(std::string format, Args&&... args)
 	
 	if (GLogLevel > LogLevel::Verbose) { GFormatBuffer.clear(); return; }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::dark_gray), GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 #endif
 }
@@ -66,7 +73,9 @@ inline void Verbose(std::string format, Args&&... args)
 	
 	if (GLogLevel > LogLevel::Verbose) { GFormatBuffer.clear(); return; }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::light_gray), GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 }
 
@@ -80,7 +89,9 @@ inline void Log(std::string format, Args&&... args)
 	
 	if (GLogLevel > LogLevel::Log) { GFormatBuffer.clear(); return; }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::light_green), GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 }
 
@@ -94,7 +105,9 @@ inline void Warning(std::string format, Args&&... args)
 	
 	if (GLogLevel > LogLevel::Warning) { GFormatBuffer.clear(); return; }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::yellow), GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 }
 
@@ -108,7 +121,9 @@ inline void Error(std::string format, Args&&... args)
 	
 	if (GLogLevel > LogLevel::Error) { GFormatBuffer.clear(); return; }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::red), GFormatBuffer.data());
+	GOutputMutex.unlock();
 	GFormatBuffer.clear();
 }
 
@@ -120,7 +135,9 @@ inline void Fatal(std::string format, Args&&... args)
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);
 	if (GLogFile) { fmt::print(GLogFile, GFormatBuffer.data()); }
 	
+	GOutputMutex.lock();
 	fmt::print(fg(fmt::color::dark_red), GFormatBuffer.data());
+	GOutputMutex.unlock();
 
 	throw -1;
 }

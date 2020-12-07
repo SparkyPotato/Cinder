@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Core/Scene/AccelerationStructure.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
 #include "Core/Scene/Object.h"
+
+class AccelerationStructure;
 
 class Scene
 {
 public:
 	Scene() = default;
+	~Scene();
 	static Scene* Load(const std::string& file);
 
 	Camera& GetCamera() const;

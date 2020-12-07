@@ -1,9 +1,15 @@
 #include "PCH.h"
 #include "Core/Memory/Memory.h"
 
+MemoryArena::MemoryArena()
+{
+	m_Block = new Block;
+	m_AllocationBlock = m_Block;
+}
+
 MemoryArena::~MemoryArena()
 {
-	Block* block = m_Block.Next;
+	Block* block = m_Block;
 	while (block)
 	{
 		Block* prev = block;
@@ -14,7 +20,7 @@ MemoryArena::~MemoryArena()
 
 void MemoryArena::Reset()
 {
-	Block* block = &m_Block;
+	Block* block = m_Block;
 	while (block)
 	{
 		block->Pointer = block->Data;

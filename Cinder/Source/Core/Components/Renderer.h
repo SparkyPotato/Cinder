@@ -7,7 +7,7 @@
 class Renderer
 {
 public:
-	virtual ~Renderer() {}
+	virtual ~Renderer() = default;
 
 	virtual void Render(const Scene& scene, Framebuffer& framebuffer) = 0;
 	virtual bool Parse(const YAML::Node& node) = 0;

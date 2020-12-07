@@ -1,11 +1,11 @@
 #pragma once
 
-constexpr size_t BLOCK_SIZE = 1024 * 128; // 128 KB blocks
+constexpr size_t BLOCK_SIZE = 1024 * 1024; // 1 MB blocks
 
 class MemoryArena
 {
 public:
-	MemoryArena() = default;
+	MemoryArena();
 	~MemoryArena();
 
 	void Reset();
@@ -65,6 +65,6 @@ private:
 		Block* Next = nullptr;
 	};
 
-	Block m_Block;
-	Block* m_AllocationBlock = &m_Block;
+	Block* m_Block;
+	Block* m_AllocationBlock = nullptr;
 };

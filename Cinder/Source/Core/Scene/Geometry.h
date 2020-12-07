@@ -10,7 +10,7 @@ public:
 	Geometry(const std::string name)
 		: Name(name)
 	{}
-	virtual ~Geometry() {}
+	virtual ~Geometry() = default;
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 

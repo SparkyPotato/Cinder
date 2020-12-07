@@ -1,11 +1,15 @@
 #include "PCH.h"
 #include "Scene.h"
 
+#include "Core/Scene/AccelerationStructure.h"
+
 Scene* Scene::Load(const std::string& file)
 {
 	YAML::Node node = YAML::LoadFile(file);
 	return node.as<Scene*>();
 }
+
+Scene::~Scene() = default;
 
 Camera& Scene::GetCamera() const
 {

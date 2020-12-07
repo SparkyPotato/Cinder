@@ -9,6 +9,7 @@ public:
 	Filter(const Vector& radius)
 		: m_Radius(radius), m_InverseRadius(1.f / radius.X(), 1.f / radius.Y(), 0.f)
 	{}
+	virtual ~Filter() = default;
 
 	virtual float Evaluate(const Point& point) = 0;
 

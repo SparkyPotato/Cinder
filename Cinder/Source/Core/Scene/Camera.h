@@ -10,7 +10,7 @@ public:
 	Camera(const Transform& toWorld)
 		: ToWorld(toWorld)
 	{}
-	virtual ~Camera() {}
+	virtual ~Camera() = default;
 
 	void SetAspectRatio(float aspectRatio) { m_AspectRatio = aspectRatio; }
 
