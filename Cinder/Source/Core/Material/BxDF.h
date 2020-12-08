@@ -2,6 +2,7 @@
 
 #include "Core/Math/Color.h"
 #include "Core/Math/Vector.h"
+#include "Core/Math/Sampling.h"
 
 inline float Cos(const Vector& w) { return w.Z(); }
 inline float Cos2(const Vector& w) { return w.Z() * w.Z(); }
@@ -62,14 +63,18 @@ public:
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const = 0;
 	virtual Color EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample, float& pdf) const
 	{
+		incoming = CosineSampleHemisphere(sample);
+		if (incoming.Y() < 0.f) { incoming.Y() *= -1.f; }
+		pdf = Pdf(outgoing, incoming);
 		
+		return Evaluate(outgoing, incoming);
 	}
 
 	virtual Color Reflectance(const Vector& outgoing, uint32_t sampleCount, const std::pair<float, float>* samples) const = 0;
 	
 	virtual float Pdf(const Vector& outgoing, const Vector& incoming) const
 	{
-		
+		return SameHemisphere(outgoing, incoming) ? 0.f : AbsCos(incoming) * InversePi;
 	}
 
 protected:

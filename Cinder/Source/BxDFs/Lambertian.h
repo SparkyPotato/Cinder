@@ -2,7 +2,7 @@
 
 #include "Core/Material/BxDF.h"
 
-class LambertianBRDF : BxDF
+class LambertianBRDF : public BxDF
 {
 public:
 	LambertianBRDF(const Color& base);
