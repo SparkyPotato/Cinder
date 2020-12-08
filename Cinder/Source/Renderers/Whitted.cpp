@@ -23,6 +23,6 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 		return sample * Dot(Vector(0.f, 1.f, 0.f), light);
 	}
 
-	return Color();
+	return scene.GetEnvironment().Sample(ray.Direction);
 }
 

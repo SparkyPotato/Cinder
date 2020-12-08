@@ -50,6 +50,7 @@ void Scene::LinkReferences()
 		}
 	}
 
+	m_Environment.m_CameraToWorld = m_Camera->ToWorld;
 	m_Acceleration->Build(*this);
 }
 
@@ -101,6 +102,14 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 		scene->m_Objects.emplace_back(object.as<Object>());
 	}
 	
+	if (!node["Environment"])
+	{
+		Error("Scene does not have environment!");
+		return false;
+	}
+	try { scene->m_Environment = node["Environment"].as<Environment>(); }
+	catch (...) { return false; }
+
 	scene->LinkReferences();
 
 	return true;

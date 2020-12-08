@@ -2,6 +2,7 @@
 
 #include "Core/Math/Color.h"
 #include "Core/Math/RayIntersection.h"
+#include "Core/Components/Registry.h"
 
 class Texture
 {

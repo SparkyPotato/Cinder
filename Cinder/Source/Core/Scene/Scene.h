@@ -3,6 +3,7 @@
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
 #include "Core/Scene/Object.h"
+#include "Core/Scene/Environment.h"
 
 class AccelerationStructure;
 
@@ -19,6 +20,8 @@ public:
 	bool Intersect(const Ray& ray, RayIntersection& intersection) const;
 	bool TestIntersect(const Ray& ray) const;
 
+	const Environment& GetEnvironment() const { return m_Environment; }
+
 private:
 	friend struct YAML::convert<Scene*>;
 	friend void RunProject(const std::filesystem::path& filePath);
@@ -30,6 +33,8 @@ private:
 	up<Camera> m_Camera = nullptr;
 	std::vector<up<Geometry>> m_Geometry;
 	std::vector<Object> m_Objects;
+
+	Environment m_Environment;
 };
 
 template<>

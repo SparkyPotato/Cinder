@@ -40,3 +40,23 @@ Geometry:
   - Name: A Box
     Type: Box
     Size: [ 5, 5, 5 ]
+
+Environment:
+  Front:
+    Type: 8-bit
+    Source: Textures/Skybox/Front.jpg
+  Back:
+    Type: 8-bit
+    Source: Textures/Skybox/Back.jpg
+  Left:
+    Type: 8-bit
+    Source: Textures/Skybox/Left.jpg
+  Right:
+    Type: 8-bit
+    Source: Textures/Skybox/Right.jpg
+  Top:
+    Type: 8-bit
+    Source: Textures/Skybox/Top.jpg
+  Bottom:
+    Type: 8-bit
+    Source: Textures/Skybox/Bottom.jpg

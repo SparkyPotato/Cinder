@@ -15,10 +15,7 @@ bool ConstantTexture::Parse(const YAML::Node& node)
 	}
 	
 	try { m_Color = node["Color"].as<Color>(); }
-	catch (YAML::Exception& e)
-	{
-		return false;
-	}
+	catch (...) { return false; }
 	
 	return true;
 }
