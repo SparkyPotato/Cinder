@@ -152,6 +152,15 @@ Vector Vector::GetNormalized() const
 	return *this / GetLength();
 }
 
+Vector Vector::TransformTo(const Vector& x, const Vector& y, const Vector& z) const
+{
+	return Vector(
+		Dot(*this, x),
+		Dot(*this, y),
+		Dot(*this, z)
+	);
+}
+
 Vector& Vector::Normalize()
 {
 	*this /= GetLength();
