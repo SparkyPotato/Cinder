@@ -212,7 +212,7 @@ void GenerateCoordinateSystem(const Vector& normalized, Vector& outFirst, Vector
 	}
 	else
 	{
-		outSecond = Vector(0, normalized.Z(), -normalized.Y()) /
+		outFirst = Vector(0, normalized.Z(), -normalized.Y()) /
 			std::sqrt(normalized.Y() * normalized.Y() + normalized.Z() * normalized.Z());
 	}
 	outSecond = Cross(normalized, outFirst);

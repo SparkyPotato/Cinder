@@ -14,7 +14,12 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 
 		auto view = (Point() - intersection.HitPoint).GetNormalized();
 
-		return brdf->Evaluate(view, Vector(0.f, -1.f, 0.f)) * Dot(intersection.HitNormal, view);
+		Vector s, t;
+		GenerateCoordinateSystem(Vector(intersection.HitNormal), s, t);
+		view = Vector(Dot(view, s), Dot(view, intersection.HitNormal), Dot(view, t));
+		Vector light = Vector(Dot(Vector(0.f, 1.f, 0.f), s), Dot(Vector(0.f, 1.f, 0.f), intersection.HitNormal), Dot(Vector(0.f, 1.f, 0.f), t));
+		
+		return brdf->Evaluate(view, light) * Dot(Vector(0.f, 1.f, 0.f), light);
 	}
 
 	return Color();
