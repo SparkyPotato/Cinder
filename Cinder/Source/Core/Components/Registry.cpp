@@ -5,6 +5,7 @@
 #include "Core/Components/Renderer.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
+#include "Core/Material/Texture.h"
 
 Registry* Registry::Get()
 {
@@ -128,5 +129,27 @@ bool YAML::convert<up<Geometry>>::decode(const Node& node, up<Geometry>& geometr
 
 	if (!geometry->Parse(node)) { return false; }
 
+	return true;
+}
+
+bool YAML::convert<up<Texture>>::decode(const Node& node, up<Texture>& texture)
+{
+	std::string type;
+	try { type = node["Type"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Texture type must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+	
+	try { texture = Registry::Get()->GTextures.at(type)(); }
+	catch (...)
+	{
+		Error("Texture type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);
+		return false;
+	}
+	
+	if (!texture->Parse(node)) { return false; }
+	
 	return true;
 }
