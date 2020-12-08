@@ -1,30 +1,27 @@
 #include "PCH.h"
-#include "Textures/8BitTexture.h"
+#include "Textures/HDRTexture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-TEXTURE(8-bit, EightBitTexture)
+TEXTURE(HDR, HDRTexture)
 
-EightBitTexture::EightBitTexture(Color* data, uint32_t width, uint32_t height)
+HDRTexture::HDRTexture(Color* data, uint32_t width, uint32_t height)
 	: m_Width(width), m_Height(height)
 {
-	m_Data = new Pixel[width * height];
+	m_Data = new Color[width * height];
 
 	for (uint32_t i = 0; i < width * height; i++)
 	{
-		m_Data[i].R = uint8_t(std::max(0.f, std::min(1.f, data[i].R)) / 255.f);
-		m_Data[i].G = uint8_t(std::max(0.f, std::min(1.f, data[i].G)) / 255.f);
-		m_Data[i].B = uint8_t(std::max(0.f, std::min(1.f, data[i].B)) / 255.f);
+		m_Data[i] = data[i];
 	}
 }
 
-EightBitTexture::~EightBitTexture()
+HDRTexture::~HDRTexture()
 {
 	delete m_Data;
 }
 
-Color EightBitTexture::Evaluate(const RayIntersection& intersection)
+Color HDRTexture::Evaluate(const RayIntersection& intersection)
 {
 	float u = intersection.U;
 	float v = intersection.V;
@@ -50,17 +47,14 @@ Color EightBitTexture::Evaluate(const RayIntersection& intersection)
 	return Lerp(utLerp, ubLerp, vRatio);
 }
 
-Color EightBitTexture::GetPixel(uint32_t x, uint32_t y)
+Color HDRTexture::GetPixel(uint32_t x, uint32_t y)
 {
-	Pixel& pixel = m_Data[y * m_Width + x];
-
-	auto c =  Color(float(pixel.R), float(pixel.G), float(pixel.B));
-	c /= 255.f;
+	auto c = m_Data[y * m_Width + x];
 
 	return c;
 }
 
-bool EightBitTexture::Parse(const YAML::Node& node)
+bool HDRTexture::Parse(const YAML::Node& node)
 {
 	std::string file;
 	try { file = node["Source"].as<std::string>(); }
@@ -75,7 +69,7 @@ bool EightBitTexture::Parse(const YAML::Node& node)
 
 	m_Width = width; m_Height = height;
 
-	m_Data = new Pixel[width * height];
+	m_Data = new Color[width * height];
 	for (int i = 0; i < width * height; i++)
 	{
 		auto c = Color(
@@ -84,9 +78,7 @@ bool EightBitTexture::Parse(const YAML::Node& node)
 			float(data[i * 3] + 2) / 255.f
 		);
 
-		c = Color(std::pow(c.R, 2.2f), std::pow(c.G, 2.2f), std::pow(c.B, 2.2f));
-
-		m_Data[i] = { uint8_t(c.R * 255.f), uint8_t(c.G * 255.f), uint8_t(c.B * 255.f) };
+		m_Data[i] = Color(std::pow(c.R, 2.2f), std::pow(c.G, 2.2f), std::pow(c.B, 2.2f));
 	}
 
 	stbi_image_free(data);

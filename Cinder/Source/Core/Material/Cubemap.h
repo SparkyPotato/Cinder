@@ -6,6 +6,7 @@ class Cubemap
 {
 public:
 	Cubemap() = default;
+	Cubemap(up<Texture> faces[6]);
 	
 	Color operator()(const Vector& direction) const;
 	

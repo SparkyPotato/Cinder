@@ -48,30 +48,30 @@ Bound Box::GetBound() const
 bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
 	float t0, t1;
-	bool hit = m_Bound.Intersect(ray, t0, t1);
-	if (hit)
+	if (!m_Bound.Intersect(ray, t0, t1)) { return false; }
+	if (t0 > ray.Extent || t1 <= 0.f) { return false; }
+
+	float t = t0;
+	if (t <= 0.f) { t = t1; }
+
+	ray.Extent = t;
+	intersection.HitPoint = ray(t);
+	intersection.HitNormal = Normal();
+
+	Vector diagonal = m_Bound.GetDiagonal() / 2.f;
+
+	for (int i = 0; i < 3; i++)
 	{
-		ray.Extent = t0;
-		intersection.HitPoint = ray(t0);
-		intersection.HitNormal = Normal();
-
-		Vector diagonal = m_Bound.GetDiagonal() / 2.f;
-
-		for (int i = 0; i < 3; i++)
+		if (IsNearlyEqual(std::abs(intersection.HitPoint[i]), diagonal[i]))
 		{
-			if (IsNearlyEqual(std::abs(intersection.HitPoint[i]), diagonal[i]))
-			{
-				intersection.HitNormal[i] = std::copysign(1.f, intersection.HitPoint[i]);
-				break;
-			}
+			intersection.HitNormal[i] = std::copysign(1.f, intersection.HitPoint[i]);
+			break;
 		}
-		
-		// TODO: Update intersection U and V
-		
-		return true;
 	}
-	
-	return false;
+
+	// TODO: Update intersection U and V
+
+	return true;
 }
 
 bool Box::TestIntersect(const Ray& ray) const

@@ -28,7 +28,7 @@ Objects:
       Scale: [ 1, 1, 1 ]
   - Geometry: A Box
     Transform:
-      Position: [ -5, -5, 0 ]
+      Position: [ -7.5, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
 
@@ -42,6 +42,7 @@ Geometry:
     Size: [ 5, 5, 5 ]
 
 Environment:
+  Radiance Map Resolution: 256
   Front:
     Type: 8-bit
     Source: Textures/Skybox/Front.jpg

@@ -93,11 +93,15 @@ void EightBitTile::SetPixel(const Color& color, uint32_t x, uint32_t y)
 	ASSERT(y >= m_Ymin && y < m_Ymax, "Out of buffer tile range!");
 	
 	Pixel& pixel = m_FramebufferData[m_Stride * y + x];
+	Color c = color;
+	c.R = std::pow(c.R, 1.f / 2.2f);
+	c.G = std::pow(c.G, 1.f / 2.2f);
+	c.B = std::pow(c.B, 1.f / 2.2f);
 	
 	pixel = {
 		// Clamp all color values from 0.f - 1.f
-		uint8_t(std::max(std::min(color.R, 1.f), 0.f) * 255.f),
-		uint8_t(std::max(std::min(color.G, 1.f), 0.f) * 255.f),
-		uint8_t(std::max(std::min(color.B, 1.f), 0.f) * 255.f)
+		uint8_t(std::max(std::min(c.R, 1.f), 0.f) * 255.f),
+		uint8_t(std::max(std::min(c.G, 1.f), 0.f) * 255.f),
+		uint8_t(std::max(std::min(c.B, 1.f), 0.f) * 255.f)
 	};
 }

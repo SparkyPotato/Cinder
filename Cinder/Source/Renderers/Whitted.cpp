@@ -13,14 +13,13 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 		Vector s, t;
 		GenerateCoordinateSystem(Vector(intersection.HitNormal), s, t);
 		
-		auto brdf = arena.Allocate<LambertianBRDF>(Color(1.f, 0.f, 0.f));
+		auto brdf = arena.Allocate<LambertianBRDF>(Color(1.f));
 
 		auto view = (Point() - intersection.HitPoint).GetNormalized();
 		view = view.TransformTo(s, Vector(intersection.HitNormal), t);
-		Vector light = Vector(0.f, 1.f, 0.f).TransformTo(s, Vector(intersection.HitNormal), t);
 
-		Color sample = brdf->Evaluate(view, light);
-		return sample * Dot(Vector(0.f, 1.f, 0.f), light);
+		Color sample = brdf->Evaluate(view, Vector(0.f, 1.f, 0.f));
+		return sample * scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
 	}
 
 	return scene.GetEnvironment().Sample(ray.Direction);

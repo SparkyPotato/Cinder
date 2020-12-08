@@ -3,9 +3,11 @@
 
 bool Object::Intersect(const Ray& ray, RayIntersection& intersection) const
 {
-	bool hit = m_Geometry->Intersect(m_ToCamera.GetInverse()(ray), intersection);
+	Ray r = m_ToCamera.GetInverse()(ray);
+	bool hit = m_Geometry->Intersect(r, intersection);
 	if (hit)
 	{
+		ray.Extent = r.Extent;
 		intersection.HitObject = this;
 		intersection.HitPoint = m_ToCamera(intersection.HitPoint);
 		intersection.HitNormal = m_ToCamera(intersection.HitNormal);

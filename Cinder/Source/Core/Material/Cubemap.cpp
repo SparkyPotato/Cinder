@@ -1,6 +1,14 @@
 #include "PCH.h"
 #include "Core/Material/Cubemap.h"
 
+Cubemap::Cubemap(up<Texture> faces[6])
+{
+	for (int i = 0; i < 6; i++)
+	{
+		m_Faces[i] = std::move(faces[i]);
+	}
+}
+
 Color Cubemap::operator()(const Vector& direction) const
 {
 	Vector normalized = direction.GetNormalized();

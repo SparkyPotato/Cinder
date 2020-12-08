@@ -2,12 +2,12 @@
 
 #include "Core/Material/Texture.h"
 
-class EightBitTexture : public Texture
+class HDRTexture : public Texture
 {
 public:
-	EightBitTexture() = default;
-	EightBitTexture(Color* data, uint32_t width, uint32_t height);
-	virtual ~EightBitTexture();
+	HDRTexture() = default;
+	HDRTexture(Color* data, uint32_t width, uint32_t height);
+	virtual ~HDRTexture();
 
 	virtual Color Evaluate(const RayIntersection& intersection) override;
 
@@ -16,11 +16,6 @@ public:
 private:
 	Color GetPixel(uint32_t x, uint32_t y);
 
-	struct Pixel
-	{
-		uint8_t R, G, B;
-	};
-
-	Pixel* m_Data;
+	Color* m_Data;
 	uint32_t m_Width, m_Height;
 };
