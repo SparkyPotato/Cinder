@@ -33,6 +33,11 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 		Error("Object does not have geometry (line {})!", node.Mark().line + 1);
 		return false;
 	}
+	if (!node["Material"])
+	{
+		Error("Object does not have a material (line {})!", node.Mark().line + 1);
+		return false;
+	}
 	
 	// Just store object to world, scene will later set it to object to camera
 	object.m_ToCamera = node["Transform"].as<Transform>();
@@ -41,6 +46,13 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 	catch (YAML::Exception& e)
 	{
 		Error("Geometry reference must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	try { object.m_MaterialName = node["Material"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Material reference must be a string (line {})!", e.mark.line + 1);
 		return false;
 	}
 	

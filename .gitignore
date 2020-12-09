@@ -27,3 +27,4 @@ Cinder/Dependencies/ProjectFiles/*
 *.jpg
 *jpeg
 !SampleProjects/Textures/**
+*.DS_Store

@@ -4,6 +4,7 @@
 #include "Core/Scene/Geometry.h"
 #include "Core/Scene/Object.h"
 #include "Core/Scene/Environment.h"
+#include "Core/Material/Material.h"
 
 class AccelerationStructure;
 
@@ -27,11 +28,12 @@ private:
 	friend void RunProject(const std::filesystem::path& filePath);
 
 	void SetCameraAspectRatio(float aspectRatio);
-	void LinkReferences();
+	bool LinkReferences();
 
 	up<AccelerationStructure> m_Acceleration;
 	up<Camera> m_Camera = nullptr;
 	std::vector<up<Geometry>> m_Geometry;
+	std::vector<up<Material>> m_Materials;
 	std::vector<Object> m_Objects;
 
 	Environment m_Environment;

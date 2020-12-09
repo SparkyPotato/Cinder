@@ -11,13 +11,16 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
  	RayIntersection intersection;
 	if (scene.Intersect(ray, intersection))
 	{
-		BSDF bsdf(intersection, intersection.HitNormal);
-		bsdf.Add(arena.Allocate<LambertianBRDF>(Color(1.f)), 1.f);
+		BSDF* bsdf = intersection.HitObject->GetMaterial()->GetBSDF(intersection, arena);
+		Vector outgoing = (Point() - intersection.HitPoint).GetNormalized();
 		
-		Color sample = bsdf.Evaluate(Point() - intersection.HitPoint, Vector(intersection.HitNormal));
-		sample *= scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
+		Color out;
+
+		// Environment Map IBL
+		out += bsdf->Evaluate(outgoing, Vector(intersection.HitNormal)) * 
+			scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
 		
-		return sample;
+		return out;
 	}
 
 	return scene.GetEnvironment().Sample(ray.Direction);

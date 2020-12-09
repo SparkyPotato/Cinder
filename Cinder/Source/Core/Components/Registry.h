@@ -18,6 +18,8 @@ class AccelerationStructure;
 using AccelerationSpawnFunction = up<AccelerationStructure> (*)();
 class Texture;
 using TextureSpawnFunction = up<Texture> (*)();
+class Material;
+using MaterialSpawnFunction = up<Material> (*)(const std::string&);
 
 class Registry
 {
@@ -32,6 +34,7 @@ public:
 	std::map<std::string, AccelerationSpawnFunction> GAcceleration;
 	std::map<std::string, FilterSpawnFunction> GFilters;
 	std::map<std::string, TextureSpawnFunction> GTextures;
+	std::map<std::string, MaterialSpawnFunction> GMaterials;
 
 private:
 	static Registry* s_Registry;

@@ -31,7 +31,7 @@ void Scene::SetCameraAspectRatio(float aspectRatio)
 	m_Camera->SetAspectRatio(aspectRatio);
 }
 
-void Scene::LinkReferences()
+bool Scene::LinkReferences()
 {
 	for (auto& object : m_Objects)
 	{
@@ -48,10 +48,23 @@ void Scene::LinkReferences()
 				break;
 			}
 		}
+		if (!object.m_Geometry) { Error("Geometry '{}' does not exist!", object.m_GeometryName); return false; }
+
+		for (auto& material : m_Materials)
+		{
+			if (material->Name == object.m_MaterialName)
+			{
+				object.m_Material = material.get();
+				break;
+			}
+		}
+		if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
 	}
 
 	m_Environment.m_CameraToWorld = m_Camera->ToWorld;
 	m_Acceleration->Build(*this);
+
+	return true;
 }
 
 bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
@@ -61,9 +74,19 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	try { scene->m_Camera = node["Camera"].as<up<Camera>>(); }
 	catch (...) { return false; }
 
-	if (!node["Geometry"].IsSequence())
+	if (!node["Geometry"] || !node["Geometry"].IsSequence())
 	{
-		Error("Geometry list must be a sequence (line {})!", node["Geometry"].Mark().line + 1);
+		Error("Geometry list must be a sequence (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	if (!node["Objects"] || !node["Objects"].IsSequence())
+	{
+		Error("Object list must be a sequence (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	if (!node["Materials"] || !node["Materials"].IsSequence())
+	{
+		Error("Material list must be a sequence (line {})!", node.Mark().line + 1);
 		return false;
 	}
 
@@ -96,6 +119,11 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	{
 		scene->m_Geometry.emplace_back(geometry.as<up<Geometry>>());
 	}
+
+	for (auto& material : node["Materials"])
+	{
+		scene->m_Materials.emplace_back(material.as<up<Material>>());
+	}
 	
 	for (auto& object : node["Objects"])
 	{
@@ -110,7 +138,5 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	try { scene->m_Environment = node["Environment"].as<Environment>(); }
 	catch (...) { return false; }
 
-	scene->LinkReferences();
-
-	return true;
+	return scene->LinkReferences();
 }

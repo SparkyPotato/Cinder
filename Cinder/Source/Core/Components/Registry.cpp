@@ -7,6 +7,8 @@
 #include "Core/Scene/Geometry.h"
 #include "Core/Material/Texture.h"
 
+Registry* Registry::s_Registry = nullptr;
+
 Registry* Registry::Get()
 {
 	if (!s_Registry)
@@ -16,8 +18,6 @@ Registry* Registry::Get()
 
 	return s_Registry;
 }
-
-Registry* Registry::s_Registry = nullptr;
 
 bool YAML::convert<up<Renderer>>::decode(const Node& node, up<Renderer>& renderer)
 {
@@ -36,9 +36,7 @@ bool YAML::convert<up<Renderer>>::decode(const Node& node, up<Renderer>& rendere
 		return false;
 	}
 
-	if (!renderer->Parse(node)) { return false; }
-
-	return true;
+	return renderer->Parse(node);
 }
 
 bool YAML::convert<up<Framebuffer>>::decode(const Node& node, up<Framebuffer>& framebuffer)
@@ -72,9 +70,7 @@ bool YAML::convert<up<Framebuffer>>::decode(const Node& node, up<Framebuffer>& f
 		return false;
 	}
 
-	if (!framebuffer->Parse(node)) { return false; }
-
-	return true;
+	return framebuffer->Parse(node);
 }
 
 bool YAML::convert<up<Camera>>::decode(const Node& node, up<Camera>& camera)
@@ -98,9 +94,7 @@ bool YAML::convert<up<Camera>>::decode(const Node& node, up<Camera>& camera)
 		return false;
 	}
 
-	if (!camera->Parse(node)) { return false; }
-	
-	return true;
+	return camera->Parse(node);
 }
 
 bool YAML::convert<up<Geometry>>::decode(const Node& node, up<Geometry>& geometry)
@@ -127,9 +121,34 @@ bool YAML::convert<up<Geometry>>::decode(const Node& node, up<Geometry>& geometr
 		return false;
 	}
 
-	if (!geometry->Parse(node)) { return false; }
+	return geometry->Parse(node);
+}
 
-	return true;
+bool YAML::convert<up<Material>>::decode(const Node& node, up<Material>& material)
+{
+	std::string type;
+	try { type = node["Type"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Material type must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+	std::string name;
+	try { name = node["Name"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Material name must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	try { material = Registry::Get()->GMaterials.at(type)(name); }
+	catch (...)
+	{
+		Error("Material type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);
+		return false;
+	}
+
+	return material->Parse(node);
 }
 
 bool YAML::convert<up<Texture>>::decode(const Node& node, up<Texture>& texture)

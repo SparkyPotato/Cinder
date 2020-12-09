@@ -17,16 +17,19 @@ Camera:
 # Hold a reference to geometry
 Objects:
   - Geometry: Small Sphere
+    Material: Red Diffuse
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Small Sphere
+    Material: Red Diffuse
     Transform:
       Position: [ 10, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: A Box
+    Material: Red Diffuse
     Transform:
       Position: [ -7.5, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
@@ -40,6 +43,13 @@ Geometry:
   - Name: A Box
     Type: Box
     Size: [ 5, 5, 5 ]
+
+Materials:
+  - Name: Red Diffuse
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 1, 0, 0 ]
 
 Environment:
   Radiance Map Resolution: 256
