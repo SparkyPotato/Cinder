@@ -91,7 +91,7 @@ Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::
 	std::pair<float, float> remapped = { std::min(sample.first * matching - comp, 1.f), sample.second };
 	
 	Vector in, out = ToLocal(outgoing);
-	if (out.Z() == 0.f) { return Color(); }
+	if (out.Y() == 0.f) { return Color(); }
 	pdf = 0.f;
 	
 	if (sampled) { *sampled = bxdf->GetType(); }
@@ -155,7 +155,7 @@ float BSDF::Pdf(const Vector& outgoing, const Vector& incoming, BxDF::Type type)
 	ASSERT(IsNearlyEqual(m_TotalWeight, 1.f), "BSDF weight must be 1");
 	
 	Vector out = ToLocal(outgoing), in = ToLocal(incoming);
-	if (out.Z() == 0.f) { return 0.f; }
+	if (out.Y() == 0.f) { return 0.f; }
 	
 	float pdf = 0.f;
 	uint16_t matching = 0;
