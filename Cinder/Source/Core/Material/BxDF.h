@@ -57,8 +57,10 @@ public:
 
 	bool IsType(Type type)
 	{
-		return (m_Type & type) == m_Type;
+		return m_Type & type;
 	}
+	
+	Type GetType() const { return m_Type; }
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const = 0;
 	virtual Color EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample, float& pdf) const

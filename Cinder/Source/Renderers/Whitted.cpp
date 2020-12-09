@@ -2,6 +2,7 @@
 #include "Renderers/Whitted.h"
 
 #include "BxDFs/Lambertian.h"
+#include "Core/Material/BSDF.h"
 
 RENDERER(Whitted, WhittedRenderer)
 
@@ -10,15 +11,10 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
  	RayIntersection intersection;
 	if (scene.Intersect(ray, intersection))
 	{
-		Vector s, t;
-		GenerateCoordinateSystem(Vector(intersection.HitNormal), s, t);
+		BSDF bsdf(intersection, intersection.HitNormal);
+		bsdf.Add(arena.Allocate<LambertianBRDF>(Color(1.f)), 1.f);
 		
-		auto brdf = arena.Allocate<LambertianBRDF>(Color(1.f));
-
-		auto view = (Point() - intersection.HitPoint).GetNormalized();
-		view = view.TransformTo(s, Vector(intersection.HitNormal), t);
-
-		Color sample = brdf->Evaluate(view, Vector(0.f, 1.f, 0.f));
+		Color sample = bsdf.Evaluate(Point() - intersection.HitPoint, Vector(intersection.HitNormal));
 		sample *= scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
 		
 		return sample;
