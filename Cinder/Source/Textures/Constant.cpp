@@ -1,6 +1,8 @@
 #include "PCH.h"
 #include "Textures/Constant.h"
 
+TEXTURE(Constant, ConstantTexture)
+
 Color ConstantTexture::Evaluate(const RayIntersection& intersection)
 {
 	return m_Color;

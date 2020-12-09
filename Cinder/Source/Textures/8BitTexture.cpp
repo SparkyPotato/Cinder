@@ -13,9 +13,9 @@ EightBitTexture::EightBitTexture(Color* data, uint32_t width, uint32_t height)
 
 	for (uint32_t i = 0; i < width * height; i++)
 	{
-		m_Data[i].R = uint8_t(std::max(0.f, std::min(1.f, data[i].R)) / 255.f);
-		m_Data[i].G = uint8_t(std::max(0.f, std::min(1.f, data[i].G)) / 255.f);
-		m_Data[i].B = uint8_t(std::max(0.f, std::min(1.f, data[i].B)) / 255.f);
+		m_Data[i].R = uint8_t(std::max(0.f, std::min(1.f, data[i].R)) * 255.f);
+		m_Data[i].G = uint8_t(std::max(0.f, std::min(1.f, data[i].G)) * 255.f);
+		m_Data[i].B = uint8_t(std::max(0.f, std::min(1.f, data[i].B)) * 255.f);
 	}
 }
 
@@ -78,15 +78,7 @@ bool EightBitTexture::Parse(const YAML::Node& node)
 	m_Data = new Pixel[width * height];
 	for (int i = 0; i < width * height; i++)
 	{
-		auto c = Color(
-			float(data[i * 3]) / 255.f,
-			float(data[i * 3 + 1]) / 255.f,
-			float(data[i * 3] + 2) / 255.f
-		);
-
-		c = Color(std::pow(c.R, 2.2f), std::pow(c.G, 2.2f), std::pow(c.B, 2.2f));
-
-		m_Data[i] = { uint8_t(c.R * 255.f), uint8_t(c.G * 255.f), uint8_t(c.B * 255.f) };
+		m_Data[i] = { uint8_t(data[i * 3]), uint8_t(data[i * 3 + 1]), uint8_t(data[i * 3 + 2]) };
 	}
 
 	stbi_image_free(data);

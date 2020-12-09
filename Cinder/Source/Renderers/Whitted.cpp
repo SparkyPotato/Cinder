@@ -19,7 +19,9 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 		view = view.TransformTo(s, Vector(intersection.HitNormal), t);
 
 		Color sample = brdf->Evaluate(view, Vector(0.f, 1.f, 0.f));
-		return sample * scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
+		sample *= scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
+		
+		return sample;
 	}
 
 	return scene.GetEnvironment().Sample(ray.Direction);
