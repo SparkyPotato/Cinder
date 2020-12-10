@@ -71,6 +71,16 @@ Color& Color::operator/=(const Color& other)
 	return *this;
 }
 
+bool operator==(const Color& first, const Color& second)
+{
+	return first.R == second.R && first.G == second.G && first.B == second.B;
+}
+
+bool operator!=(const Color& first, const Color& second)
+{
+	return !(first == second);
+}
+
 Color Lerp(const Color& from, const Color& to, float ratio)
 {
 	return from + (to - from) * Color(ratio, ratio, ratio);

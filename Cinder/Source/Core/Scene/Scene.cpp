@@ -61,6 +61,12 @@ bool Scene::LinkReferences()
 		if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
 	}
 
+	for (auto& light : m_Lights)
+	{
+		light->ToCamera = light->ToCamera * m_Camera->ToWorld.GetInverse();
+		light->Preprocess(*this);
+	}
+
 	m_Environment.m_CameraToWorld = m_Camera->ToWorld;
 	m_Acceleration->Build(*this);
 
@@ -87,6 +93,11 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	if (!node["Materials"] || !node["Materials"].IsSequence())
 	{
 		Error("Material list must be a sequence (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	if (!node["Lights"] || !node["Lights"].IsSequence())
+	{
+		Error("Light list must be a sequence (line {})!", node.Mark().line + 1);
 		return false;
 	}
 
@@ -124,6 +135,11 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	{
 		scene->m_Materials.emplace_back(material.as<up<Material>>());
 	}
+
+	for (auto& light : node["Lights"])
+	{
+		scene->m_Lights.emplace_back(light.as<up<Light>>());
+	}
 	
 	for (auto& object : node["Objects"])
 	{
@@ -139,4 +155,9 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	catch (...) { return false; }
 
 	return scene->LinkReferences();
+}
+
+bool Occlusion::operator()(const Scene& scene)
+{
+	return scene.TestIntersect(Point1.SpawnRayTo(Point2));
 }

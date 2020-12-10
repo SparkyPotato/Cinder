@@ -69,7 +69,7 @@ void RunProject(const std::filesystem::path& filePath)
 		Log("Loading Scene.");
 		Scene* scene;
 		try { scene = Scene::Load(file); }
-		catch (...) { return; }
+		catch (YAML::Exception& e) { Error(e.what()); return; }
 		scene->SetCameraAspectRatio(float(framebuffer->Width) / framebuffer->Height);
 		auto e = std::chrono::high_resolution_clock().now();
 		Log("Loaded Scene. Took {:%M:%S}.", e - s);

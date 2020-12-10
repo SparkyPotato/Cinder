@@ -20,6 +20,8 @@ class Texture;
 using TextureSpawnFunction = up<Texture> (*)();
 class Material;
 using MaterialSpawnFunction = up<Material> (*)(const std::string&);
+class Light;
+using LightSpawnFunction = up<Light>(*)(const Transform&);
 
 class Registry
 {
@@ -35,6 +37,7 @@ public:
 	std::map<std::string, FilterSpawnFunction> GFilters;
 	std::map<std::string, TextureSpawnFunction> GTextures;
 	std::map<std::string, MaterialSpawnFunction> GMaterials;
+	std::map<std::string, LightSpawnFunction> GLights;
 
 private:
 	static Registry* s_Registry;

@@ -32,6 +32,9 @@ private:
 	__m128 m_Vector = _mm_set_ps(0.f, 0.f, 0.f, 0.f);
 };
 
+bool operator==(const Color& first, const Color& second);
+bool operator!=(const Color& first, const Color& second);
+
 Color Lerp(const Color& from, const Color& to, float ratio);
 
 template<>
