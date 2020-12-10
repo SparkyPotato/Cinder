@@ -55,15 +55,33 @@ Materials:
       Color: [ 1, 0, 0 ]
     Normal:
       Type: Constant
-      Color: [ 0, 0.2, 1 ]
+      Color: [ 0, 0, 1 ]
 
 Lights:
   - Type: Point
     Transform:
-      Position: [ 0, 10, 0 ]
+      Position: [ 0, 8, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 100, 100, 100 ]
+    Color: [ 50, 50, 50 ]
+  - Type: Point
+    Transform:
+      Position: [ 10, 3, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+    Color: [ 50, 50, 50 ]
+  - Type: Point
+    Transform:
+      Position: [ 0, -9, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+    Color: [ 50, 50, 50 ]
+  - Type: Point
+    Transform:
+      Position: [ 0, 0, -10 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+    Color: [ 50, 50, 50 ]
 
 Environment:
   Radiance Map Resolution: 256
