@@ -12,7 +12,6 @@ void BSDF::Add(BxDF* bxdf, float weight)
 	ASSERT(m_BxDFCount + 1 < m_Max, "Too many BxDFs!");
 	
 	m_BxDFs[m_BxDFCount] = { bxdf, weight };
-	m_TotalWeight += weight;
 	m_BxDFCount++;
 
 }
@@ -35,15 +34,11 @@ Vector BSDF::ToLocal(const Vector& vector) const
 
 Vector BSDF::ToWorld(const Vector& vector) const
 {
-	return vector.X() * m_X +
-		vector.Y() * m_SNormal +
-		vector.Z() * m_Z;
+	return vector.TransformFrom(m_X, m_SNormal, m_Z);
 }
 
 Color BSDF::Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type type) const
 {
-	ASSERT(IsNearlyEqual(m_TotalWeight, 1.f), "BSDF weight must be 1");
-	
 	Vector inc = ToLocal(incoming), out = ToLocal(outgoing);
 	bool reflect = Dot(incoming, m_GNormal) * Dot(outgoing, m_GNormal) > 0;
 	
@@ -66,8 +61,6 @@ Color BSDF::Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type 
 Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample,
 		float& pdf, BxDF::Type* sampled, BxDF::Type type) const
 {
-	ASSERT(IsNearlyEqual(m_TotalWeight, 1.f), "BSDF weight must be 1");
-	
 	uint16_t matching = Components(type);
 	if (matching == 0)
 	{
@@ -135,8 +128,6 @@ Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::
 
 Color BSDF::Reflectance(const Vector& outgoing, uint32_t sampleCount, const std::pair<float, float>* samples, BxDF::Type type) const
 {
-	ASSERT(IsNearlyEqual(m_TotalWeight, 1.f), "BSDF weight must be 1");
-	
 	Vector o = ToLocal(outgoing);
 	Color c;
 	for (uint16_t i = 0; i < m_BxDFCount; i++)
@@ -152,8 +143,6 @@ Color BSDF::Reflectance(const Vector& outgoing, uint32_t sampleCount, const std:
 
 float BSDF::Pdf(const Vector& outgoing, const Vector& incoming, BxDF::Type type) const
 {
-	ASSERT(IsNearlyEqual(m_TotalWeight, 1.f), "BSDF weight must be 1");
-	
 	Vector out = ToLocal(outgoing), in = ToLocal(incoming);
 	if (out.Y() == 0.f) { return 0.f; }
 	

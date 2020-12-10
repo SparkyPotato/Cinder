@@ -161,6 +161,13 @@ Vector Vector::TransformTo(const Vector& x, const Vector& y, const Vector& z) co
 	);
 }
 
+Vector Vector::TransformFrom(const Vector& x, const Vector& y, const Vector& z) const
+{
+	return X() * x +
+		Y() * y +
+		Z() * z;
+}
+
 Vector& Vector::Normalize()
 {
 	*this /= GetLength();

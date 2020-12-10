@@ -27,6 +27,5 @@ private:
 
 	static constexpr uint16_t m_Max = 8;
 	uint16_t m_BxDFCount = 0;
-	float m_TotalWeight = 0.f;
 	std::pair<BxDF*, float> m_BxDFs[m_Max];
 };

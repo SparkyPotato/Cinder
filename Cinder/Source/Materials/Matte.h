@@ -14,4 +14,5 @@ public:
 private:
 	up<Texture> m_Color;
 	up<Texture> m_Roughness;
+	up<Texture> m_Normal;
 };

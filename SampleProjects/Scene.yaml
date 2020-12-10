@@ -53,6 +53,9 @@ Materials:
     Roughness:
       Type: Constant
       Color: [ 1, 0, 0 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
 
 Environment:
   Radiance Map Resolution: 256

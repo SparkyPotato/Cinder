@@ -39,6 +39,7 @@ public:
 	Vector& Normalize();
 	
 	Vector TransformTo(const Vector& x, const Vector& y, const Vector& z) const;
+	Vector TransformFrom(const Vector& x, const Vector& y, const Vector& z) const;
 
 	bool IsNAN() const;
 

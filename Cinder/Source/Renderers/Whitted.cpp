@@ -1,9 +1,6 @@
 #include "PCH.h"
 #include "Renderers/Whitted.h"
 
-#include "BxDFs/Lambertian.h"
-#include "Core/Material/BSDF.h"
-
 RENDERER(Whitted, WhittedRenderer)
 
 Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth)
