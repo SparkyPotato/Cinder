@@ -1,15 +1,15 @@
 #include "PCH.h"
-#include "Materials/Mirror.h"
+#include "Materials/Glass.h"
 
 #include "BxDFs/Specular.h"
 
-MATERIAL(Mirror, MirrorMaterial)
+MATERIAL(Glass, Glass)
 
-MirrorMaterial::MirrorMaterial(const std::string& name)
+Glass::Glass(const std::string& name)
 	: Material(name)
 {}
 
-void MirrorMaterial::Compute(Interaction& interaction, MemoryArena& arena) const
+void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
 {
 	Vector gX, gZ;
 	GenerateCoordinateSystem(Vector(interaction.GNormal), gX, gZ);
@@ -18,10 +18,12 @@ void MirrorMaterial::Compute(Interaction& interaction, MemoryArena& arena) const
 
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, m_Eta);
-	interaction.Bsdf->Add(arena.Allocate<SpecularReflection>(m_Color->Evaluate(interaction), fresnel), 1.f);
+	Color c = m_Color->Evaluate(interaction);
+	interaction.Bsdf->Add(arena.Allocate<SpecularReflection>(c, fresnel), 1.f);
+	interaction.Bsdf->Add(arena.Allocate<SpecularTransmission>(c, 1.f, m_Eta), 1.f);
 }
 
-bool MirrorMaterial::Parse(const YAML::Node& node)
+bool Glass::Parse(const YAML::Node& node)
 {
 	if (!node["Color"])
 	{

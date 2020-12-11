@@ -2,10 +2,10 @@
 
 #include "Core/Material/Material.h"
 
-class MirrorMaterial : public Material
+class Glass : public Material
 {
 public:
-	MirrorMaterial(const std::string& name);
+	Glass(const std::string& name);
 
 	virtual void Compute(Interaction& interaction, MemoryArena& arena) const override;
 

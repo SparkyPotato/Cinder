@@ -33,6 +33,19 @@ inline Vector Reflect(const Vector& wo, const Vector& n)
 	return -wo + 2 * Dot(wo, n) * n;
 }
 
+inline bool Refract(const Vector& incoming, const Normal& normal, float eta, Vector& transmitted)
+{
+	float cosI = Dot(normal, incoming);
+	float sin2I = std::max(0.f, 1.f - cosI * cosI);
+	float sin2T = eta * eta * sin2I;
+	if (sin2T >= 1.f) { return false; }
+	
+	float cosT = std::sqrt(1 - sin2T);
+	
+	transmitted = eta * -incoming + (eta * cosI - cosT) * Vector(normal);
+	return true;
+}
+
 inline bool SameHemisphere(const Vector& w, const Vector& wp) { return w.Y() * wp.Y() > 0; }
 inline bool SameHemisphere(const Vector& w, const Normal& wp) { return w.Y() * wp.Y() > 0; }
 

@@ -6,7 +6,7 @@ class Fresnel
 {
 public:
 	virtual ~Fresnel() {}
-	virtual Color Evaluate(float cosI) = 0;
+	virtual Color Evaluate(float cosI) const = 0;
 };
 
 class FresnelDielectric : public Fresnel
@@ -16,23 +16,24 @@ public:
 		: m_EtaI(etaOut), m_EtaT(etaIn)
 	{}
 
-	virtual Color Evaluate(float cosI) override
+	virtual Color Evaluate(float cosI) const override
 	{
 		bool entering = cosI > 0.f;
+		float etaI = m_EtaI, etaT = m_EtaT;
 		if (!entering) 
 		{
-			std::swap(m_EtaT, m_EtaI);
-			cosI = -cosI;
+			std::swap(etaI, etaT);
+			cosI *= -1;
 		}
 
 		float sinI = std::sqrt(std::max(0.f, 1.f - cosI * cosI));
-		float sinT = m_EtaI / m_EtaT * sinI;
+		float sinT = etaI / etaT * sinI;
 		if (sinT >= 1.f) { return 1.f; }
 
 		float cosT = std::sqrt(std::max(0.f, 1.f - sinT * sinT));
 
-		float Rparl = ((m_EtaT * cosI) - (m_EtaI * cosT)) / ((m_EtaT * cosI) + (m_EtaI * cosT));
-		float Rperp = ((m_EtaI * cosI) - (m_EtaT * cosT)) / ((m_EtaI * cosI) + (m_EtaT * cosT));
+		float Rparl = ((etaT * cosI) - (etaI * cosT)) / ((etaT * cosI) + (etaI * cosT));
+		float Rperp = ((etaI * cosI) - (etaT * cosT)) / ((etaI * cosI) + (etaT * cosT));
 
 		return (Rparl * Rparl + Rperp * Rperp) / 2.f;
 	}

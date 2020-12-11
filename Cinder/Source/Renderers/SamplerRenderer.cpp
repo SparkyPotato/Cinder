@@ -157,3 +157,21 @@ Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& in
 	}
 	else { return Color(); }
 }
+
+Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& interaction, MemoryArena& arena,
+	Sampler* sampler, uint16_t depth)
+{
+	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
+	float pdf;
+	BxDF::Type type = BxDF::Type(BxDF::Transmission | BxDF::Specular);
+	Color c = interaction.Bsdf->EvaluateSample(outgoing, incoming, sampler->Get2D(), pdf, type);
+	
+	const Normal& normal = interaction.SNormal;
+	if (pdf > 0.f && c != Color() && std::abs(Dot(incoming, normal)) != 0.f)
+	{
+		Ray ray = Ray(interaction.HitPoint, incoming);
+		return c * TraceRay(scene, ray, arena, sampler, depth + 1) *
+		std::abs(Dot(incoming, normal)) * pdf;
+	}
+	else { return Color(); }
+}

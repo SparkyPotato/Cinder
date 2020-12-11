@@ -23,13 +23,13 @@ Objects:
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Small Sphere
-    Material: Mirror
+    Material: Glass
     Transform:
       Position: [ 10, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: A Box
-    Material: Mirror
+    Material: Glass
     Transform:
       Position: [ -7.5, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
@@ -56,15 +56,15 @@ Materials:
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
-  - Name: Mirror
-    Type: Mirror
+  - Name: Glass
+    Type: Glass
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
-    Refractive Index: 3
+    Refractive Index: 2
 
 Lights:
   - Type: Point

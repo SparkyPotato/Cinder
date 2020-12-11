@@ -16,6 +16,7 @@ public:
 
 protected:
 	Color SpecularReflect(const Scene& scene, const Interaction& interaction, MemoryArena& arena, Sampler* sampler, uint16_t depth);
+	Color SpecularTransmit(const Scene& scene, const Interaction& interaction, MemoryArena& arena, Sampler* sampler, uint16_t depth);
 	
 private:
 	struct Tile

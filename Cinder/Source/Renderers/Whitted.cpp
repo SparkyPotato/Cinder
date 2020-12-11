@@ -43,6 +43,7 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 	if (depth + 1 < m_Depth)
 	{
 		out += SpecularReflect(scene, interaction, arena, sampler, depth);
+		out += SpecularTransmit(scene, interaction, arena, sampler, depth);
 	}
 
 	return out;
@@ -62,7 +63,7 @@ bool WhittedRenderer::Parse(const YAML::Node& node)
 	catch (YAML::Exception& e)
 	{
 		Error("Ray depth must be an unsigned integer (line {})!", e.mark.line + 1);
-		return false;;
+		return false;
 	}
 	
 	return true;
