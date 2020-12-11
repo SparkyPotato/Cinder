@@ -7,7 +7,7 @@ class MatteMaterial : public Material
 public:
 	MatteMaterial(const std::string& name);
 
-	virtual BSDF* GetBSDF(const RayIntersection& intersection, MemoryArena& arena) const override;
+	virtual void Compute(Interaction& interaction, MemoryArena& arena) const override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 

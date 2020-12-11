@@ -1,16 +1,16 @@
 #include "PCH.h"
 #include "Core/Scene/Object.h"
 
-bool Object::Intersect(const Ray& ray, RayIntersection& intersection) const
+bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	Ray r = m_ToCamera.GetInverse()(ray);
-	bool hit = m_Geometry->Intersect(r, intersection);
+	bool hit = m_Geometry->Intersect(r, interaction);
 	if (hit)
 	{
 		ray.Extent = r.Extent;
-		intersection.HitObject = this;
-		intersection.HitPoint = m_ToCamera(intersection.HitPoint);
-		intersection.HitNormal = m_ToCamera(intersection.HitNormal);
+		interaction.HitObject = this;
+		interaction.HitPoint = m_ToCamera(interaction.HitPoint);
+		interaction.GNormal = m_ToCamera(interaction.GNormal);
 	}
 	
 	return hit;

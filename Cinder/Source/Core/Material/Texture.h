@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Math/Color.h"
-#include "Core/Math/RayIntersection.h"
+#include "Core/Scene/Interaction.h"
 #include "Core/Components/Registry.h"
 
 class Texture
@@ -9,7 +9,7 @@ class Texture
 public:
 	virtual ~Texture() = default;
 	
-	virtual Color Evaluate(const RayIntersection& intersection) = 0;
+	virtual Color Evaluate(const Interaction& interaction) = 0;
 	
 	virtual bool Parse(const YAML::Node& node) = 0;
 };

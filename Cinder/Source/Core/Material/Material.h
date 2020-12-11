@@ -12,7 +12,7 @@ public:
 	{}
 	virtual ~Material() = default;
 
-	virtual BSDF* GetBSDF(const RayIntersection& intersection, MemoryArena& arena) const = 0;
+	virtual void Compute(Interaction& interaction, MemoryArena& arena) const = 0;
 	virtual bool Parse(const YAML::Node& node) = 0;
 
 	std::string Name;

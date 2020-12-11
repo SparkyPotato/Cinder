@@ -14,8 +14,9 @@ public:
 
 	virtual bool Parse(const YAML::Node& node) override;
 
-	virtual Color TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth = 0) = 0;
-
+protected:
+	Color SpecularReflect(const Scene& scene, const Interaction& interaction, MemoryArena& arena, Sampler* sampler, uint16_t depth);
+	
 private:
 	struct Tile
 	{
@@ -26,6 +27,8 @@ private:
 		uint32_t Ymin, Ymax;
 	};
 
+	virtual Color TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth = 0) = 0;
+	
 	void Thread();
 
 	uint32_t m_Samples = 8;

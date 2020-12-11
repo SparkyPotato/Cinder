@@ -9,7 +9,7 @@ public:
 	EightBitTexture(Color* data, uint32_t width, uint32_t height);
 	virtual ~EightBitTexture();
 
-	virtual Color Evaluate(const RayIntersection& intersection) override;
+	virtual Color Evaluate(const Interaction& interaction) override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 

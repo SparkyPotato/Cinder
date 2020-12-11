@@ -5,20 +5,21 @@ RENDERER(Whitted, WhittedRenderer)
 
 Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth)
 {
- 	RayIntersection intersection;
-	if (!scene.Intersect(ray, intersection))
+ 	Interaction interaction;
+	if (!scene.Intersect(ray, interaction))
 	{
 		return scene.GetEnvironment().Sample(ray.Direction);
 	}
 
-	BSDF* bsdf = intersection.HitObject->GetMaterial()->GetBSDF(intersection, arena);
-	Vector outgoing = (Point() - intersection.HitPoint).GetNormalized();
+	interaction.HitObject->GetMaterial()->Compute(interaction, arena);
+	const BSDF* bsdf = interaction.Bsdf;
+	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized();
 
 	Color out;
 
 	// Environment Map IBL
-	out += bsdf->Evaluate(outgoing, Vector(intersection.HitNormal)) *
-		scene.GetEnvironment().SampleIrradiance(Vector(intersection.HitNormal));
+	out += bsdf->Evaluate(outgoing, Vector(interaction.SNormal)) *
+		scene.GetEnvironment().SampleIrradiance(Vector(interaction.SNormal));
 
 	// Lights
 	for (auto& light : scene.GetLights())
@@ -27,17 +28,42 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 		float pdf;
 		Occlusion occlusion;
 
-		Color lightColor = light->EvaluateSample(intersection, sampler->Get2D(), incoming, pdf, occlusion);
+		Color lightColor = light->EvaluateSample(interaction, sampler->Get2D(), incoming, pdf, occlusion);
 
 		if (lightColor == Color() || pdf == 0.f) { continue; }
 
 		Color c = bsdf->Evaluate(outgoing, incoming);
 		if (c != Color() && !occlusion(scene))
 		{
-			out += c * lightColor * std::abs(Dot(incoming, intersection.HitNormal)) / pdf;
+			out += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
 		}
+	}
+	
+	// Reflect
+	if (depth + 1 < m_Depth)
+	{
+		out += SpecularReflect(scene, interaction, arena, sampler, depth);
 	}
 
 	return out;
 }
 
+bool WhittedRenderer::Parse(const YAML::Node& node)
+{
+	bool b = SamplerRenderer::Parse(node);
+	if (!b) { return b; }
+	
+	if (!node["Ray Depth"])
+	{
+		Error("No ray depth present (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	try { m_Depth = node["Ray Depth"].as<uint16_t>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Ray depth must be an unsigned integer (line {})!", e.mark.line + 1);
+		return false;;
+	}
+	
+	return true;
+}

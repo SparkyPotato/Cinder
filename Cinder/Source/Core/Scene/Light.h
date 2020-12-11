@@ -2,7 +2,7 @@
 
 #include "Core/Components/Registry.h"
 #include "Core/Math/Transform.h"
-#include "Core/Math/RayIntersection.h"
+#include "Core/Scene/Interaction.h"
 #include "Core/Math/Color.h"
 
 class Scene;
@@ -14,7 +14,7 @@ public:
 
 	bool operator()(const Scene& scene);
 
-	RayIntersection Point1, Point2;
+	Interaction Point1, Point2;
 };
 
 class Light
@@ -23,8 +23,9 @@ public:
 	Light(const Transform& toCamera)
 		: ToCamera(toCamera)
 	{}
+	virtual ~Light() {}
 
-	virtual Color EvaluateSample(const RayIntersection& intersection, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const = 0;
+	virtual Color EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const = 0;
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 

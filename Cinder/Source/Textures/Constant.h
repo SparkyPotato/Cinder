@@ -7,7 +7,7 @@ class ConstantTexture : public Texture
 public:
 	virtual ~ConstantTexture() = default;
 	
-	virtual Color Evaluate(const RayIntersection& intersection) override;
+	virtual Color Evaluate(const Interaction& interaction) override;
 	
 	virtual bool Parse(const YAML::Node& node) override;
 	

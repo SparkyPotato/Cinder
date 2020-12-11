@@ -10,10 +10,10 @@ public:
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 
-	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) const = 0;
+	virtual bool Intersect(const Ray& ray, Interaction& interaction) const = 0;
 	virtual bool TestIntersect(const Ray& ray) const
 	{
-		RayIntersection dummy;
+		Interaction dummy;
 		return Intersect(ray, dummy);
 	}
 

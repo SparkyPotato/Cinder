@@ -45,7 +45,7 @@ Bound Box::GetBound() const
 	return m_Bound;
 }
 
-bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
+bool Box::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	float t0, t1;
 	if (!m_Bound.Intersect(ray, t0, t1)) { return false; }
@@ -55,16 +55,16 @@ bool Box::Intersect(const Ray& ray, RayIntersection& intersection) const
 	if (t <= 0.f) { t = t1; }
 
 	ray.Extent = t;
-	intersection.HitPoint = ray(t);
-	intersection.HitNormal = Normal();
+	interaction.HitPoint = ray(t);
+	interaction.GNormal = Normal();
 
 	Vector diagonal = m_Bound.GetDiagonal() / 2.f;
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (IsNearlyEqual(std::abs(intersection.HitPoint[i]), diagonal[i]))
+		if (IsNearlyEqual(std::abs(interaction.HitPoint[i]), diagonal[i]))
 		{
-			intersection.HitNormal[i] = std::copysign(1.f, intersection.HitPoint[i]);
+			interaction.GNormal[i] = std::copysign(1.f, interaction.HitPoint[i]);
 			break;
 		}
 	}

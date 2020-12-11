@@ -8,7 +8,7 @@ class Object
 public:
 	Object() = default;
 	
-	bool Intersect(const Ray& ray, RayIntersection& intersection) const;
+	bool Intersect(const Ray& ray, Interaction& interaction) const;
 	bool TestIntersect(const Ray& ray) const;
 	
 	const Material* GetMaterial() const { return m_Material; }

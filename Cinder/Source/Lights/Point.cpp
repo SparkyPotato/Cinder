@@ -7,17 +7,17 @@ PointLight::PointLight(const Transform& transform)
 	: Light(transform)
 {}
 
-Color PointLight::EvaluateSample(const RayIntersection& intersection, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const
+Color PointLight::EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const
 {
-	incoming = (m_Position - intersection.HitPoint).Normalize();
+	incoming = (m_Position - interaction.HitPoint).Normalize();
 	pdf = 1.f;
 
-	tester.Point1 = intersection;
-	RayIntersection r;
+	tester.Point1 = interaction;
+	Interaction r;
 	r.HitPoint = m_Position;
 	tester.Point2 = r;
 
-	return m_Color / (m_Position - intersection.HitPoint).GetLengthSquare();
+	return m_Color / (m_Position - interaction.HitPoint).GetLengthSquare();
 }
 
 bool PointLight::Parse(const YAML::Node& node)

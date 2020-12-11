@@ -33,7 +33,7 @@ Bound Sphere::GetBound() const
 	);
 }
 
-bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection) const
+bool Sphere::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	float a = Dot(ray.Direction, ray.Direction);
 	auto origin = Vector(ray.Origin.X(), ray.Origin.Y(), ray.Origin.Z());
@@ -50,12 +50,12 @@ bool Sphere::Intersect(const Ray& ray, RayIntersection& intersection) const
 	ray.Extent = t;
 	float phi = std::atan2(hit.X(), hit.Z());
 	if (phi <= 0.f) { phi += 2 * Pi; }
-	intersection.U = phi / (2 * Pi);
+	interaction.U = phi / (2 * Pi);
 	float theta = std::acos(hit.Y() / m_Radius);
-	intersection.V = theta * InversePi;
+	interaction.V = theta * InversePi;
 
-	intersection.HitPoint = hit;
-	intersection.HitNormal = Normal(hit - Point()).GetNormalized();
+	interaction.HitPoint = hit;
+	interaction.GNormal = Normal(hit - Point()).GetNormalized();
 
 	return true;
 }

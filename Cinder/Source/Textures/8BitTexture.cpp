@@ -24,10 +24,10 @@ EightBitTexture::~EightBitTexture()
 	delete m_Data;
 }
 
-Color EightBitTexture::Evaluate(const RayIntersection& intersection)
+Color EightBitTexture::Evaluate(const Interaction& interaction)
 {
-	float u = intersection.U;
-	float v = intersection.V;
+	float u = interaction.U;
+	float v = interaction.V;
 
 	if (u > 1.f || v > 1.f || u < 0.f || v < 0.f)
 	{

@@ -9,17 +9,15 @@ MatteMaterial::MatteMaterial(const std::string& name)
 	: Material(name)
 {}
 
-BSDF* MatteMaterial::GetBSDF(const RayIntersection& intersection, MemoryArena& arena) const
+void MatteMaterial::Compute(Interaction& interaction, MemoryArena& arena) const
 {
 	Vector gX, gZ;
-	GenerateCoordinateSystem(Vector(intersection.HitNormal), gX, gZ);
-	Color n = m_Normal->Evaluate(intersection);
-	Vector normal = Vector(n.R, n.B, n.G);
+	GenerateCoordinateSystem(Vector(interaction.GNormal), gX, gZ);
+	Color n = m_Normal->Evaluate(interaction);
+	interaction.SNormal = Normal(Vector(n.R, n.B, n.G).TransformFrom(gX, Vector(interaction.GNormal), gZ));
 	
-	auto bsdf = arena.Allocate<BSDF>(intersection, Normal(normal.TransformFrom(gX, Vector(intersection.HitNormal), gZ)));
-	bsdf->Add(arena.Allocate<OrenNayar>(m_Color->Evaluate(intersection), m_Roughness->Evaluate(intersection).R), 1.f);
-
-	return bsdf;
+	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
+	interaction.Bsdf->Add(arena.Allocate<OrenNayar>(m_Color->Evaluate(interaction), m_Roughness->Evaluate(interaction).R), 1.f);
 }
 
 bool MatteMaterial::Parse(const YAML::Node& node)

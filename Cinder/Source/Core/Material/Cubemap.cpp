@@ -27,8 +27,8 @@ Color Cubemap::operator()(const Vector& direction) const
 	float v = 0.5f * Dot(uv, CubemapFaceData[index].VVector) + 0.5f;
 	
 	
-	RayIntersection r;
-	r.HitNormal = CubemapFaceData[index].FaceNormal;
+	Interaction r;
+	r.GNormal = CubemapFaceData[index].FaceNormal;
 	r.HitPoint = Point() + normalized;
 	r.HitObject = nullptr;
 	r.U = u;

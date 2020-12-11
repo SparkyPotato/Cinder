@@ -4,21 +4,24 @@
 #include "Core/Math/Ray.h"
 
 class Object;
+class BSDF;
 
 constexpr float ShadowEpsilon = 0.001f;
 
-class RayIntersection
+class Interaction
 {
 public:
 	Point HitPoint;
-	Normal HitNormal;
+	Normal GNormal;
+	Normal SNormal;
 	const Object* HitObject  = nullptr;
+	BSDF* Bsdf = nullptr;
 
 	float U = 0.f, V = 0.f;
 
-	Ray SpawnRayTo(const RayIntersection& other)
+	Ray SpawnRayTo(const Interaction& other)
 	{
-		Point origin = HitPoint + Vector(HitNormal) * ShadowEpsilon;
+		Point origin = HitPoint + Vector(GNormal) * ShadowEpsilon;
 		Vector direction = other.HitPoint - origin;
 
 		return Ray(origin, direction);

@@ -2,7 +2,7 @@
 
 #include "Core/Components/Registry.h"
 #include "Core/Math/Ray.h"
-#include "Core/Math/RayIntersection.h"
+#include "Core/Scene/Interaction.h"
 #include "Core/Math/Bound.h"
 
 class Geometry
@@ -17,10 +17,10 @@ public:
 
 	virtual Bound GetBound() const = 0;
 
-	virtual bool Intersect(const Ray& ray, RayIntersection& intersection) const = 0;
+	virtual bool Intersect(const Ray& ray, Interaction& interaction) const = 0;
 	virtual bool TestIntersect(const Ray& ray) const
 	{
-		RayIntersection dummy;
+		Interaction dummy;
 		return Intersect(ray, dummy);
 	}
 

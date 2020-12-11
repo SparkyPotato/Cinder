@@ -3,7 +3,7 @@
 
 TEXTURE(Constant, ConstantTexture)
 
-Color ConstantTexture::Evaluate(const RayIntersection& intersection)
+Color ConstantTexture::Evaluate(const Interaction& interaction)
 {
 	return m_Color;
 }

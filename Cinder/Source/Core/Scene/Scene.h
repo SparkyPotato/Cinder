@@ -20,7 +20,7 @@ public:
 	const std::vector<Object>& GetObjects() const { return m_Objects; }
 	const std::vector<up<Light>>& GetLights() const { return m_Lights; }
 
-	bool Intersect(const Ray& ray, RayIntersection& intersection) const;
+	bool Intersect(const Ray& ray, Interaction& interaction) const;
 	bool TestIntersect(const Ray& ray) const;
 
 	const Environment& GetEnvironment() const { return m_Environment; }

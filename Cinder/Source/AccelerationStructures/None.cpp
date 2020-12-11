@@ -8,13 +8,13 @@ bool None::Parse(const YAML::Node& node)
 	return true;
 }
 
-bool None::Intersect(const Ray& ray, RayIntersection& intersection) const
+bool None::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	int ret = 0;
 
 	for (const auto& object : *m_Objects)
 	{
-		if (object.Intersect(ray, intersection)) { ret++; }
+		if (object.Intersect(ray, interaction)) { ret++; }
 	}
 
 	return ret > 0;

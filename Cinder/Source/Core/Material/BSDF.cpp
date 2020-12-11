@@ -1,8 +1,8 @@
 #include "PCH.h"
 #include "Core/Material/BSDF.h"
 
-BSDF::BSDF(const RayIntersection& intersection, const Normal& shadingNormal)
-	: m_GNormal(Vector(intersection.HitNormal)), m_SNormal(Vector(shadingNormal))
+BSDF::BSDF(const Interaction& interaction)
+	: m_GNormal(Vector(interaction.GNormal)), m_SNormal(Vector(interaction.SNormal))
 {
 	GenerateCoordinateSystem(m_SNormal, m_X, m_Z);
 }
@@ -59,7 +59,7 @@ Color BSDF::Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type 
 }
 
 Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample,
-		float& pdf, BxDF::Type* sampled, BxDF::Type type) const
+		float& pdf, BxDF::Type type, BxDF::Type* sampled) const
 {
 	uint16_t matching = Components(type);
 	if (matching == 0)
