@@ -19,7 +19,19 @@ Objects:
   - Geometry: Small Sphere
     Material: Red Diffuse
     Transform:
-      Position: [ 0, 0, 0 ]
+      Position: [ 0, 2.5, 5 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Small Sphere
+    Material: White Diffuse
+    Transform:
+      Position: [ -5, 0, -30 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Small Sphere
+    Material: Green Diffuse
+    Transform:
+      Position: [ 8, 6, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Small Sphere
@@ -31,7 +43,19 @@ Objects:
   - Geometry: A Box
     Material: Glass
     Transform:
-      Position: [ -7.5, -5, 0 ]
+      Position: [ -9, -2.5, -1.5 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: A Box
+    Material: Blue Mirror
+    Transform:
+      Position: [ -2, -8, -5 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: A Box
+    Material: Yellow Glass
+    Transform:
+      Position: [ -7, 6, -5 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
 
@@ -52,7 +76,29 @@ Materials:
       Color: [ 1, 0, 0 ]
     Roughness:
       Type: Constant
-      Color: [ 1, 0, 0 ]
+      Color: [ 0.4, 0, 0 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+  - Name: White Diffuse
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 1, 1, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+  - Name: Green Diffuse
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 0.2, 1, 0.1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0.8, 0, 0 ]
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
@@ -73,32 +119,49 @@ Materials:
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
+  - Name: Blue Mirror
+    Type: Mirror
+    Color:
+      Type: Constant
+      Color: [ 0.3, 0.3, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+  - Name: Yellow Glass
+    Type: Glass
+    Color:
+      Type: Constant
+      Color: [ 0.2, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Refractive Index: 2
 
 Lights:
   - Type: Point
     Transform:
-      Position: [ 0, 8, 0 ]
+      Position: [ 0, -1.5, -3 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 50, 50, 50 ]
+    Color: [ 15, 15, 15 ]
   - Type: Point
     Transform:
-      Position: [ 10, 3, 0 ]
+      Position: [ 0, 10, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 50, 50, 50 ]
+    Color: [ 30, 30, 30 ]
   - Type: Point
     Transform:
-      Position: [ 0, -9, 0 ]
+      Position: [ 12, 6, -7.5 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 50, 50, 50 ]
+    Color: [ 15, 15, 15 ]
   - Type: Point
     Transform:
-      Position: [ 0, 0, -10 ]
+      Position: [ 0, 4, -30 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 50, 50, 50 ]
+    Color: [ 20, 20, 20 ]
 
 Environment:
   Radiance Map Resolution: 256

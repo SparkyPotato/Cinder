@@ -23,7 +23,8 @@ public:
 	{
 		Point origin = HitPoint + Vector(GNormal) * ShadowEpsilon;
 		Vector direction = other.HitPoint - origin;
+		float extent = direction.GetLength() - ShadowEpsilon;
 
-		return Ray(origin, direction);
+		return Ray(origin, direction, extent);
 	}
 };

@@ -8,6 +8,19 @@ and should support any other POSIX-complaint OS. It has been tested on:
 2. macOS Catalina (version 10.15.7)
 3. Ubuntu 20 (version 20.04.1)
 
+## Features
+1. Easily-extendable component system composed of several simple interfaces.
+2. Project and scene deserialization from YAML.
+3. Sampler Renderer as a base for tile-based multithreaded raytracing.
+4. Geometry-instancing, sphere and box primitives.
+5. Interface for object-ray intersection acceleration structures.
+6. BRDF and BTDF interfaces, with Lambertian and Oren-Nayar diffuse BRDFs. Perfect specular reflection and transmission
+   has also been implemented, with Fresnel reflectance (assuming unpolarized light) and refraction.
+7. Texture interface, with constant-value, 8-bit, and floating-point textures.
+8. Material interface for computing BSDFs. Perfect mirrors, glass, and matte materials have been implemented.
+9. Light interface, with a point light implemented.
+10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL in the Whitted Renderer.
+
 ## Getting Started
 1. Clone the repository, and fetch submodules:
 ``` 
