@@ -23,13 +23,13 @@ Objects:
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Small Sphere
-    Material: Red Diffuse
+    Material: Mirror
     Transform:
       Position: [ 10, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: A Box
-    Material: Red Diffuse
+    Material: Mirror
     Transform:
       Position: [ -7.5, -5, 0 ]
       Rotation: [ 0, 0, 0 ]
@@ -56,6 +56,15 @@ Materials:
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
+  - Name: Mirror
+    Type: Mirror
+    Color:
+      Type: Constant
+      Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Refractive Index: 3
 
 Lights:
   - Type: Point

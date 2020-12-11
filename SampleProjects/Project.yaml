@@ -12,7 +12,7 @@ Renderer:
   Type: Whitted
   Sampler: Random
   Filter: Box
-  Samples: 8
+  Samples: 32
   Ray Depth: 5
   
 # Type of framebuffer, and the format of the output.

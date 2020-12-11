@@ -24,7 +24,7 @@ bool MatteMaterial::Parse(const YAML::Node& node)
 {
 	if (!node["Color"])
 	{
-		Error("Matte Material does not have color (line {})!", node.Mark().line + 1);
+		Error("Matte material does not have color (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_Color = node["Color"].as<up<Texture>>(); }
@@ -32,7 +32,7 @@ bool MatteMaterial::Parse(const YAML::Node& node)
 
 	if (!node["Roughness"])
 	{
-		Error("Matte Material does not have roughness (line {})!", node.Mark().line + 1);
+		Error("Matte material does not have roughness (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_Roughness = node["Roughness"].as<up<Texture>>(); }
