@@ -41,3 +41,12 @@ public:
 private:
 	float m_EtaI, m_EtaT;
 };
+
+class PerfectFresnel : public Fresnel
+{
+public:
+	virtual Color Evaluate(float cosI) const override
+	{
+		return Color(1.f);
+	}
+};

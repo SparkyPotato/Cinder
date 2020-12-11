@@ -70,7 +70,7 @@ public:
 
 	bool IsType(Type type)
 	{
-		return m_Type & type;
+		return (m_Type & type) == m_Type;
 	}
 	
 	Type GetType() const { return m_Type; }

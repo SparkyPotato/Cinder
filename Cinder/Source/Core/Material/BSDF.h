@@ -8,7 +8,7 @@ class BSDF
 public:
 	BSDF(const Interaction& interaction);
 
-	void Add(BxDF* bxdf, float weight);
+	void Add(BxDF* bxdf);
 	uint16_t Components(BxDF::Type type = BxDF::All) const;
 
 	Vector ToLocal(const Vector& vector) const;
@@ -27,5 +27,5 @@ private:
 
 	static constexpr uint16_t m_Max = 8;
 	uint16_t m_BxDFCount = 0;
-	std::pair<BxDF*, float> m_BxDFs[m_Max];
+	BxDF* m_BxDFs[m_Max];
 };

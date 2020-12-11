@@ -33,7 +33,7 @@ Color SpecularTransmission::EvaluateSample(const Vector& outgoing, Vector& incom
 	float etaI = entering ? m_EtaOut : m_EtaIn;
 	float etaT = entering ? m_EtaIn : m_EtaOut;
 	
-	if (!Refract(outgoing, FlipAlong(Normal(0.f, 1.f, 0.f), outgoing), etaI / etaT, incoming)) { return Color(); }
+	if (!Refract(outgoing, FlipAlong(Normal(0.f, 1.f, 0.f), outgoing), etaI / etaT, incoming)) { pdf = 0.f; return Color(); }
 	
 	pdf = 1.f;
 	Color c = m_Color * (Color(1.f) - m_Fresnel.Evaluate(Cos(incoming)));

@@ -145,15 +145,14 @@ Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& in
 {
 	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
 	float pdf;
-	BxDF::Type type = BxDF::Type(BxDF::Reflection | BxDF::Specular);
+	auto type = BxDF::Type(BxDF::Reflection | BxDF::Specular);
 	Color c = interaction.Bsdf->EvaluateSample(outgoing, incoming, sampler->Get2D(), pdf, type);
 	
 	const Normal& normal = interaction.SNormal;
-	if (pdf > 0.f && c != Color() && std::abs(Dot(incoming, normal)) != 0.f)
+	if (pdf > 0.f && c != Color() && Dot(incoming, normal) != 0.f)
 	{
-		Ray ray = Ray(interaction.HitPoint, incoming);
-		return c * TraceRay(scene, ray, arena, sampler, depth + 1) *
-			std::abs(Dot(incoming, normal)) * pdf;
+		Ray ray = Ray(interaction.HitPoint + 1.f * Vector(interaction.GNormal) * ShadowEpsilon, incoming);
+		return c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
 	}
 	else { return Color(); }
 }
@@ -163,15 +162,17 @@ Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& i
 {
 	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
 	float pdf;
-	BxDF::Type type = BxDF::Type(BxDF::Transmission | BxDF::Specular);
+	auto type = BxDF::Type(BxDF::Transmission | BxDF::Specular);
 	Color c = interaction.Bsdf->EvaluateSample(outgoing, incoming, sampler->Get2D(), pdf, type);
 	
 	const Normal& normal = interaction.SNormal;
-	if (pdf > 0.f && c != Color() && std::abs(Dot(incoming, normal)) != 0.f)
+	float dot = Dot(incoming, normal);
+	if (pdf > 0.f && c != Color() && dot != 0.f)
 	{
-		Ray ray = Ray(interaction.HitPoint, incoming);
-		return c * TraceRay(scene, ray, arena, sampler, depth + 1) *
-		std::abs(Dot(incoming, normal)) * pdf;
+		float x = 1.f;
+		if (dot < 0.f) { x = -1.f; }
+		Ray ray = Ray(interaction.HitPoint + x * Vector(interaction.GNormal) * ShadowEpsilon, incoming);
+		return c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
 	}
 	else { return Color(); }
 }
