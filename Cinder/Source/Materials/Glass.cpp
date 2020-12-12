@@ -12,18 +12,20 @@ Glass::Glass(const std::string& name)
 void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
 {
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
-	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, m_Eta);
+
+	float eta = m_Eta->Evaluate(interaction).R;
+	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, eta);
 	Color c = m_Color->Evaluate(interaction);
 
 	interaction.Bsdf->Add(arena.Allocate<SpecularReflection>(c, fresnel));
-	interaction.Bsdf->Add(arena.Allocate<SpecularTransmission>(c, 1.f, m_Eta));
+	interaction.Bsdf->Add(arena.Allocate<SpecularTransmission>(c, 1.f, eta));
 }
 
 bool Glass::Parse(const YAML::Node& node)
 {
 	if (!node["Color"])
 	{
-		Error("Mirror material does not have color (line {})!", node.Mark().line + 1);
+		Error("Glass material does not have color (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_Color = node["Color"].as<up<Texture>>(); }
@@ -31,15 +33,11 @@ bool Glass::Parse(const YAML::Node& node)
 
 	if (!node["Refractive Index"])
 	{
-		Error("Mirror material does not have an index of refraction (line {})!", node.Mark().line + 1);
+		Error("Glass material does not have an index of refraction (line {})!", node.Mark().line + 1);
 		return false;
 	}
-	try { m_Eta = node["Refractive Index"].as<float>(); }
-	catch (YAML::Exception& e)
-	{
-		Error("Mirror material index of refraction must be a float (line {})!", e.mark.line + 1);
-		return false;
-	}
+	try { m_Eta = node["Refractive Index"].as<up<Texture>>(); }
+	catch (YAML::Exception& e) { return false; }
 
 	return true;
 }

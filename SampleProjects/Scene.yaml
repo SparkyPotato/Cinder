@@ -47,7 +47,7 @@ Objects:
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: A Box
-    Material: Blue Mirror
+    Material: Purple Plastic
     Transform:
       Position: [ -2, -8, -5 ]
       Rotation: [ 0, 0, 0 ]
@@ -104,23 +104,36 @@ Materials:
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
-    Refractive Index: 2
+    Refractive Index:
+      Type: Constant
+      Color: [ 2, 0, 0 ]
   - Name: Mirror
     Type: Mirror
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
-  - Name: Blue Mirror
-    Type: Mirror
-    Color:
+  - Name: Purple Plastic
+    Type: Plastic
+    Diffuse Color:
       Type: Constant
       Color: [ 0.3, 0.3, 1 ]
+    Specular Color:
+      Type: Constant
+      Color: [ 1, 0.8, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0.2, 0, 0 ]
+    Refractive Index:
+      Type: Constant
+      Color: [ 2, 0, 0 ]
   - Name: Yellow Glass
     Type: Glass
     Color:
       Type: Constant
       Color: [ 0.2, 1, 1 ]
-    Refractive Index: 2
+    Refractive Index:
+      Type: Constant
+      Color: [ 2, 0, 0 ]
 
 Lights:
   - Type: Point

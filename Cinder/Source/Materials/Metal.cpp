@@ -3,13 +3,13 @@
 
 #include "BxDFs/Microfacet.h"
 
-MATERIAL(Metal, MetalMaterial)
+MATERIAL(Metal, Metal)
 
-MetalMaterial::MetalMaterial(const std::string& name)
+Metal::Metal(const std::string& name)
 	: Material(name)
 {}
 
-void MetalMaterial::Compute(Interaction& interaction, MemoryArena& arena) const
+void Metal::Compute(Interaction& interaction, MemoryArena& arena) const
 {
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 
@@ -21,11 +21,11 @@ void MetalMaterial::Compute(Interaction& interaction, MemoryArena& arena) const
 	interaction.Bsdf->Add(arena.Allocate<MicrofacetReflection>(m_Color->Evaluate(interaction), microfacet, fresnel));
 }
 
-bool MetalMaterial::Parse(const YAML::Node& node)
+bool Metal::Parse(const YAML::Node& node)
 {
 	if (!node["Color"])
 	{
-		Error("Matte material does not have color (line {})!", node.Mark().line + 1);
+		Error("Metal material does not have color (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_Color = node["Color"].as<up<Texture>>(); }
@@ -33,7 +33,7 @@ bool MetalMaterial::Parse(const YAML::Node& node)
 
 	if (!node["Roughness"])
 	{
-		Error("Matte material does not have roughness (line {})!", node.Mark().line + 1);
+		Error("Metal material does not have roughness (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_Roughness = node["Roughness"].as<up<Texture>>(); }
@@ -41,7 +41,7 @@ bool MetalMaterial::Parse(const YAML::Node& node)
 
 	if (!node["Refractive Index"])
 	{
-		Error("Matte material does not have refractive index (line {})!", node.Mark().line + 1);
+		Error("Metal material does not have refractive index (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_Eta = node["Refractive Index"].as<up<Texture>>(); }
@@ -49,7 +49,7 @@ bool MetalMaterial::Parse(const YAML::Node& node)
 
 	if (!node["Absorption"])
 	{
-		Error("Matte material does not have absorption (line {})!", node.Mark().line + 1);
+		Error("Metal material does not have absorption (line {})!", node.Mark().line + 1);
 		return false;
 	}
 	try { m_K = node["Absorption"].as<up<Texture>>(); }

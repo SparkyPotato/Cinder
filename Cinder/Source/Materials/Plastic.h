@@ -2,16 +2,17 @@
 
 #include "Core/Material/Material.h"
 
-class Glass : public Material
+class Plastic : public Material
 {
 public:
-	Glass(const std::string& name);
+	Plastic(const std::string& name);
 
 	virtual void Compute(Interaction& interaction, MemoryArena& arena) const override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 
 private:
-	up<Texture> m_Color;
+	up<Texture> m_DiffuseColor, m_SpecularColor;
 	up<Texture> m_Eta;
+	up<Texture> m_Roughness;
 };

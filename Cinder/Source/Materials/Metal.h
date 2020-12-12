@@ -2,10 +2,10 @@
 
 #include "Core/Material/Material.h"
 
-class MetalMaterial : public Material
+class Metal : public Material
 {
 public:
-	MetalMaterial(const std::string& name);
+	Metal(const std::string& name);
 
 	virtual void Compute(Interaction& interaction, MemoryArena& arena) const override;
 
