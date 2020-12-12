@@ -27,9 +27,23 @@ bool PointLight::Parse(const YAML::Node& node)
 		Error("Point light does not have color (line {})!", node.Mark().line + 1);
 		return false;
 	}
+	if (!node["Intensity"])
+	{
+		Error("Point light does not have intensity (line {})!", node.Mark().line + 1);
+		return false;
+	}
 
 	try { m_Color = node["Color"].as<Color>(); }
 	catch (...) { return false; }
+	
+	try { m_Intensity = node["Intensity"].as<float>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Point light intensity must be a float (line {})!", e.mark.line + 1);
+		return false;
+	}
+	
+	m_Color *= m_Intensity;
 
 	return true;
 }

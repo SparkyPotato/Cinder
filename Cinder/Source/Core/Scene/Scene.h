@@ -19,6 +19,8 @@ public:
 	Camera& GetCamera() const;
 	const std::vector<Object>& GetObjects() const { return m_Objects; }
 	const std::vector<up<Light>>& GetLights() const { return m_Lights; }
+	
+	const Bound& GetBound() const { return m_Bound; }
 
 	bool Intersect(const Ray& ray, Interaction& interaction) const;
 	bool TestIntersect(const Ray& ray) const;
@@ -40,6 +42,8 @@ private:
 	std::vector<Object> m_Objects;
 
 	Environment m_Environment;
+	
+	Bound m_Bound = Bound({ 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f });
 };
 
 template<>

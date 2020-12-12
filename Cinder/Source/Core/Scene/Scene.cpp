@@ -59,6 +59,8 @@ bool Scene::LinkReferences()
 			}
 		}
 		if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
+		
+		m_Bound = Union(m_Bound, object.GetBound());
 	}
 
 	for (auto& light : m_Lights)

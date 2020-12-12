@@ -143,25 +143,36 @@ Lights:
       Position: [ 0, -1.5, -3 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 15, 15, 15 ]
+    Color: [ 1, 1, 1 ]
+    Intensity: 15
   - Type: Point
     Transform:
       Position: [ 0, 10, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 30, 30, 30 ]
+    Color: [ 1, 1, 1 ]
+    Intensity: 30
   - Type: Point
     Transform:
       Position: [ 12, 6, -7.5 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 15, 15, 15 ]
+    Color: [ 1, 1, 1 ]
+    Intensity: 15
   - Type: Point
     Transform:
       Position: [ 0, 4, -30 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 20, 20, 20 ]
+    Color: [ 1, 1, 1 ]
+    Intensity: 20
+  - Type: Directional
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, -20, 0 ]
+      Scale: [ 1, 1, 1 ]
+    Color: [ 1, 1, 1 ]
+    Intensity: 0.25
 
 Environment:
   Radiance Map Resolution: 256
