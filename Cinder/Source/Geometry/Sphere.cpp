@@ -55,7 +55,7 @@ bool Sphere::Intersect(const Ray& ray, Interaction& interaction) const
 	interaction.V = theta * InversePi;
 
 	interaction.HitPoint = hit;
-	interaction.GNormal = Normal(hit - Point()).GetNormalized();
+	interaction.GNormal = interaction.SNormal = Normal(hit - Point()).GetNormalized();
 
 	return true;
 }

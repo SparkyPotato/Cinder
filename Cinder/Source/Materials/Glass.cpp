@@ -11,11 +11,6 @@ Glass::Glass(const std::string& name)
 
 void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
 {
-	Vector gX, gZ;
-	GenerateCoordinateSystem(Vector(interaction.GNormal), gX, gZ);
-	Color n = m_Normal->Evaluate(interaction);
-	interaction.SNormal = Normal(Vector(n.R, n.B, n.G).TransformFrom(gX, Vector(interaction.GNormal), gZ));
-
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, m_Eta);
 	Color c = m_Color->Evaluate(interaction);
@@ -32,14 +27,6 @@ bool Glass::Parse(const YAML::Node& node)
 		return false;
 	}
 	try { m_Color = node["Color"].as<up<Texture>>(); }
-	catch (...) { return false; }
-
-	if (!node["Normal"])
-	{
-		Error("Mirror material does not have a normal map (line {})!", node.Mark().line + 1);
-		return false;
-	}
-	try { m_Normal = node["Normal"].as<up<Texture>>(); }
 	catch (...) { return false; }
 
 	if (!node["Refractive Index"])

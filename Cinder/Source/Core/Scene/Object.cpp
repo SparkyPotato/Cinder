@@ -11,6 +11,7 @@ bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 		interaction.HitObject = this;
 		interaction.HitPoint = m_ToCamera(interaction.HitPoint);
 		interaction.GNormal = m_ToCamera(interaction.GNormal);
+		interaction.SNormal = m_ToCamera(interaction.GNormal);
 	}
 	
 	return hit;

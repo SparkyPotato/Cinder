@@ -77,9 +77,6 @@ Materials:
     Roughness:
       Type: Constant
       Color: [ 0.4, 0, 0 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
   - Name: White Diffuse
     Type: Matte
     Color:
@@ -88,9 +85,6 @@ Materials:
     Roughness:
       Type: Constant
       Color: [ 0, 0, 0 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
   - Name: Green Diffuse
     Type: Matte
     Color:
@@ -99,42 +93,27 @@ Materials:
     Roughness:
       Type: Constant
       Color: [ 0.8, 0, 0 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
   - Name: Glass
     Type: Glass
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
     Refractive Index: 2
   - Name: Mirror
     Type: Mirror
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
   - Name: Blue Mirror
     Type: Mirror
     Color:
       Type: Constant
       Color: [ 0.3, 0.3, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
   - Name: Yellow Glass
     Type: Glass
     Color:
       Type: Constant
       Color: [ 0.2, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
     Refractive Index: 2
 
 Lights:

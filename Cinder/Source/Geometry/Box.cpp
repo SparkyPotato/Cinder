@@ -69,6 +69,8 @@ bool Box::Intersect(const Ray& ray, Interaction& interaction) const
 		}
 	}
 
+	interaction.SNormal = interaction.GNormal;
+
 	// TODO: Update intersection U and V
 
 	return true;
