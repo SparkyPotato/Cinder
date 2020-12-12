@@ -26,6 +26,8 @@ void ProgressBar::Update(float value)
 
 void ProgressBar::End()
 {
+	if (GQuiet) { return; }
+	
 	m_Buffer = "{:.1f}% ";
 
 	while (m_Max > m_Min)

@@ -169,10 +169,10 @@ Lights:
   - Type: Directional
     Transform:
       Position: [ 0, 0, 0 ]
-      Rotation: [ 0, -20, 0 ]
+      Rotation: [ 90, 0, 20 ]
       Scale: [ 1, 1, 1 ]
     Color: [ 1, 1, 1 ]
-    Intensity: 0.25
+    Intensity: 1
 
 Environment:
   Radiance Map Resolution: 256

@@ -11,7 +11,7 @@ public:
 	bool Intersect(const Ray& ray, Interaction& interaction) const;
 	bool TestIntersect(const Ray& ray) const;
 	
-	Bound GetBound() { return m_Geometry->GetBound(); }
+	Bound GetBound() { return m_ToCamera(m_Geometry->GetBound()); }
 	
 	const Material* GetMaterial() const { return m_Material; }
 

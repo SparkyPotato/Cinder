@@ -16,7 +16,7 @@ Color DirectionalLight::EvaluateSample(const Interaction& interaction, const std
 	
 	tester.Point1 = interaction;
 	Interaction r;
-	r.HitPoint = m_Center + m_Incoming * m_Radius;
+	r.HitPoint = interaction.HitPoint + m_Incoming * m_Radius;
 	tester.Point2 = r;
 	
 	return m_Color;
