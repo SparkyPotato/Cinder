@@ -35,4 +35,3 @@ bool MatteMaterial::Parse(const YAML::Node& node)
 
 	return true;
 }
-

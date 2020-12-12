@@ -2,7 +2,7 @@
 #include "BxDFs/Specular.h"
 
 SpecularReflection::SpecularReflection(const Color& base, Fresnel* fresnel)
-	: BxDF(BxDF::Type(BxDF::Reflection | BxDF::Specular)), m_Base(base), m_Fresnel(fresnel)
+	: BxDF(Type(Reflection | Specular)), m_Base(base), m_Fresnel(fresnel)
 {}
 
 Color SpecularReflection::Evaluate(const Vector& outgoing, const Vector& incoming) const

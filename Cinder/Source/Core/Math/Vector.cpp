@@ -256,6 +256,16 @@ Vector Min(const Vector& first, const Vector& second)
 	return Vector(_mm_min_ps(first.m_Vector, second.m_Vector));
 }
 
+Vector SphericalDirection(float sin, float cos, float phi)
+{
+	return Vector(sin * std::cos(phi), cos, cos * std::sin(phi));
+}
+
+Vector SphericalDirection(float sin, float cos, float phi, const Vector& x, const Vector& y, const Vector& z)
+{
+	return sin * std::cos(phi) * x + cos * y + sin * std::sin(phi) * z;
+}
+
 Point::Point(float x, float y, float z)
 {
 	m_Vector = _mm_set_ps(1.f, z, y, x);

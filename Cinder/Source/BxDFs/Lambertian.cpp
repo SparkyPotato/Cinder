@@ -2,7 +2,7 @@
 #include "BxDFs/Lambertian.h"
 
 LambertianBRDF::LambertianBRDF(const Color& base)
-	: BxDF(BxDF::Type(BxDF::Reflection | BxDF::Diffuse)), m_Base(base)
+	: BxDF(Type(Reflection | Diffuse)), m_Base(base)
 {}
 
 Color LambertianBRDF::Evaluate(const Vector& outgoing, const Vector& incoming) const

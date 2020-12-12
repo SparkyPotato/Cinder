@@ -20,11 +20,19 @@ private:
 	float m_EtaI, m_EtaT;
 };
 
+class FresnelConductor : public Fresnel
+{
+public:
+	FresnelConductor(Color etaOut, Color etaIn, Color absorption);
+
+	virtual Color Evaluate(float cosI) const override;
+
+private:
+	Color m_EtaI, m_EtaT, m_K;
+};
+
 class PerfectFresnel : public Fresnel
 {
 public:
-	virtual Color Evaluate(float cosI) const override
-	{
-		return Color(1.f);
-	}
+	virtual Color Evaluate(float cosI) const override;
 };

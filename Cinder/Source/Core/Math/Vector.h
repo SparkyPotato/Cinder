@@ -82,6 +82,9 @@ Vector Shuffle(const Vector& direction, uint8_t x, uint8_t y, uint8_t z);
 Vector Max(const Vector& first, const Vector& second);
 Vector Min(const Vector& first, const Vector& second);
 
+Vector SphericalDirection(float sin, float cos, float phi);
+Vector SphericalDirection(float sin, float cos, float phi, const Vector& x, const Vector& y, const Vector& z);
+
 // Point in 3D space, with W coordinate of 1
 class Point
 {

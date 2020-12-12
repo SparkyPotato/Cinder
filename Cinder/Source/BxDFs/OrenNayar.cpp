@@ -2,7 +2,7 @@
 #include "BxDFs/OrenNayar.h"
 
 OrenNayar::OrenNayar(const Color& color, float roughness)
-	: BxDF(BxDF::Type(BxDF::Reflection | BxDF::Diffuse)), m_Color(color)
+	: BxDF(Type(Reflection | Diffuse)), m_Color(color)
 {
 	float sigma2 = roughness * roughness;
 	m_A = 1.f - (sigma2 / (2.f * (sigma2 + 0.33f)));

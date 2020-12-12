@@ -17,7 +17,7 @@ Camera:
 # Hold a reference to geometry
 Objects:
   - Geometry: Small Sphere
-    Material: Red Diffuse
+    Material: Silver
     Transform:
       Position: [ 0, 2.5, 5 ]
       Rotation: [ 0, 0, 0 ]
@@ -69,14 +69,20 @@ Geometry:
     Size: [ 5, 5, 5 ]
 
 Materials:
-  - Name: Red Diffuse
-    Type: Matte
+  - Name: Silver
+    Type: Metal
     Color:
       Type: Constant
-      Color: [ 1, 0, 0 ]
+      Color: [ 1, 1, 1 ]
     Roughness:
       Type: Constant
-      Color: [ 0.4, 0, 0 ]
+      Color: [ 0.05, 0, 0 ]
+    Refractive Index:
+      Type: Constant
+      Color: [ 0.051585, 0.051585, 0.051585 ]
+    Absorption:
+      Type: Constant
+      Color: [ 3.9046, 3.9046, 3.9046 ]
   - Name: White Diffuse
     Type: Matte
     Color:
@@ -150,8 +156,8 @@ Lights:
       Position: [ 0, 0, 0 ]
       Rotation: [ 90, 0, 20 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 1 ]
-    Intensity: 1
+    Color: [ 1, 1, 0 ]
+    Intensity: 0.4
 
 Environment:
   Radiance Map Resolution: 256
