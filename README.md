@@ -21,6 +21,14 @@ and should support any other POSIX-complaint OS. It has been tested on:
 9. Light interface, with a point light implemented.
 10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL in the Whitted Renderer.
 
+### Upcoming
+1. BVH acceleration structure.
+2. Monte Carlo path tracing.
+
+## Performance
+![](Content/Renders/Render1.png)
+8K image rendered with 256 samples per pixel, in 136 minutes on an i7-4790K(4.6GHz all cores).
+
 ## Getting Started
 Cinder uses CMake.
 1. Clone the repository, and fetch submodules:
@@ -38,6 +46,12 @@ git clone --recursive https://github.com/SparkyPotato/Cinder
 
 ### Linux/POSIX
 1. Run CMake for Ninja or Make.
+
+## Dependencies
+1. [fmt](https://github.com/fmtlib/fmt)
+2. [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+
+All dependencies are added as git submodules.
 
 ## Using Cinder
 To run the sample project, call Cinder with (assuming the build folder is located in the root folder):
