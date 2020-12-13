@@ -28,7 +28,7 @@ Cinder uses CMake.
 git clone --recursive https://github.com/SparkyPotato/Cinder 
 ```
 2. Run the CMake generator for your platform.
-3. The binaries will be found the root build folder.
+3. The binaries will be found in `Exectuable`, within the build folder.
 
 ### Windows
 1. Open the folder with Visual Studio and create the desired configuration. Note that Cinder does not support x86.
@@ -40,8 +40,8 @@ git clone --recursive https://github.com/SparkyPotato/Cinder
 1. Run CMake for Ninja or Make.
 
 ## Using Cinder
-To run the sample project, call Cinder with
+To run the sample project, call Cinder with (assuming the build folder is located in the root folder):
 ```
-./Cinder "../../../SampleProjects/Project.yaml"
+./Cinder "../../SampleProjects/Project.yaml"
 ```
 For more usage, check the [wiki](https://github.com/SparkyPotato/Cinder/wiki).
