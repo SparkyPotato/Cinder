@@ -22,30 +22,22 @@ and should support any other POSIX-complaint OS. It has been tested on:
 10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL in the Whitted Renderer.
 
 ## Getting Started
+Cinder uses CMake.
 1. Clone the repository, and fetch submodules:
 ``` 
 git clone --recursive https://github.com/SparkyPotato/Cinder 
 ```
-2. Follow platform-specific steps
-3. The binaries will be found in ` Binaries/Cinder/ `.
+2. Run the CMake generator for your platform.
+3. The binaries will be found the root build folder.
 
 ### Windows
-1. Navigate to the ` Scripts/ ` directory, and run ` GenerateWindows.bat `.
-2. Open the generated Visual Studio 2019 solution, and build normally.
+1. Open the folder with Visual Studio and create the desired configuration. Note that Cinder does not support x86.
 
 ### macOS
-1. Navigate to the ` Scripts/ ` directory, and run ` GenerateMac.command `.
-2. Open the Xcode workspace.
-3. Ensure the target is set to ` Cinder `.
-4. Build.
+1. Run the CMake Xcode generator, or generate a Makefile. You can also use Ninja.
 
 ### Linux/POSIX
-1. Navigate to the ` Scripts/ ` directory, and run ` GenerateLinux.sh `.
-2. Navigate back to the repository root and run make:
-```
-make config=debug/release
-```
-3. Ensure that ` config ` is set to either ` debug ` or ` release `.
+1. Run CMake for Ninja or Make.
 
 ## Using Cinder
 To run the sample project, call Cinder with

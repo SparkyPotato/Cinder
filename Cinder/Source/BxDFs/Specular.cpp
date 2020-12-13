@@ -17,6 +17,11 @@ Color SpecularReflection::EvaluateSample(const Vector& outgoing, Vector& incomin
 	return m_Fresnel->Evaluate(Cos(incoming)) * m_Base / AbsCos(incoming);
 }
 
+float SpecularReflection::Pdf(const Vector& outgoing, const Vector& incoming) const
+{
+	return 0.f;
+}
+
 SpecularTransmission::SpecularTransmission(const Color& base, float etaOut, float etaIn)
 	: BxDF(BxDF::Type(BxDF::Transmission | BxDF::Specular)), m_Color(base), m_EtaIn(etaIn), m_EtaOut(etaOut),
 	m_Fresnel(etaOut, etaIn)
@@ -40,4 +45,9 @@ Color SpecularTransmission::EvaluateSample(const Vector& outgoing, Vector& incom
 	
 	c *= (etaI * etaI) / (etaT * etaT);
 	return c / AbsCos(incoming);
+}
+
+float SpecularTransmission::Pdf(const Vector& outgoing, const Vector& incoming) const
+{
+	return 0.f;
 }

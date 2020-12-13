@@ -48,7 +48,7 @@ inline void CinderColored(std::string format, Args&&... args)
 template<typename... Args>
 inline void Debug(std::string format, Args&&... args)
 {
-#ifdef CFG_DEBUG
+#ifndef NDEBUG
 	GFormatBuffer.append(GDebug);
 	fmt::format_to(GFormatBuffer, format, std::forward<Args>(args)...);
 	GFormatBuffer.append(GNewLineStart, GNewLineEnd);

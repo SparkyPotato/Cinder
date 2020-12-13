@@ -1,23 +1,19 @@
-# Visual Studio files
-.vs/*
-*.sln
-*.vcxproj*
+# CMake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
 
-# Mac files
-*.DS_Store
-*.Trashes
-*.xcworkspace
-*.xcodeproj
-
-# Makefiles
-*Makefile
-
-# Build results
-Binaries/*
-Intermediate/*
-
-# Dependencies Project files
-Cinder/Dependencies/ProjectFiles/*
+[Oo]ut
+[Bb]uild
+[Cc][Mm]ake
 
 # Log files
 */Log.txt
@@ -26,5 +22,13 @@ Cinder/Dependencies/ProjectFiles/*
 *.png
 *.jpg
 *jpeg
-!SampleProjects/Textures/**
+!SampleProjects/Textures
+!Content
+
+# Mac files
 *.DS_Store
+*.Trashes
+
+# Visual Studio
+.vs
+CMakeSettings.json
