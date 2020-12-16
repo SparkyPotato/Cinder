@@ -27,6 +27,8 @@ bool Sphere::Parse(const YAML::Node& node)
 		Point(m_Radius, m_Radius, m_Radius)
 	);
 
+	m_Area = 4 * Pi * m_Radius * m_Radius;
+
 	return true;
 }
 
@@ -52,7 +54,7 @@ bool Sphere::Intersect(const Ray& ray, Interaction& interaction) const
 	interaction.V = theta * InversePi;
 
 	interaction.HitPoint = hit;
-	interaction.GNormal = interaction.SNormal = Normal(hit - Point()).GetNormalized();
+	interaction.GNormal = Normal(hit - Point()).GetNormalized();
 
 	return true;
 }
@@ -73,5 +75,5 @@ bool Sphere::TestIntersect(const Ray& ray) const
 
 float Sphere::GetArea() const
 {
-	return 4 * Pi * m_Radius * m_Radius;
+	return m_Area;
 }

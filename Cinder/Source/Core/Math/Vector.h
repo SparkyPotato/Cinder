@@ -37,6 +37,9 @@ public:
 
 	Vector GetNormalized() const;
 	Vector& Normalize();
+
+	Vector GetAbs() const;
+	uint8_t GetMaxDimension() const;
 	
 	Vector TransformTo(const Vector& x, const Vector& y, const Vector& z) const;
 	Vector TransformFrom(const Vector& x, const Vector& y, const Vector& z) const;

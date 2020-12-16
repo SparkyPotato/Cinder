@@ -12,22 +12,25 @@ and should support any other POSIX-complaint OS. It has been tested on:
 1. Easily-extendable component system composed of several simple interfaces.
 2. Project and scene deserialization from YAML.
 3. Sampler Renderer as a base for tile-based multithreaded raytracing.
-4. Geometry-instancing, sphere and box primitives.
+4. Geometry-instancing, with spheres and triangle meshes.
 5. Interface for object-ray intersection acceleration structures.
 6. BRDF and BTDF interfaces, with Lambertian and Oren-Nayar diffuse BRDFs. Perfect specular reflection and transmission
    has also been implemented, with Fresnel reflectance (assuming unpolarized light) and refraction.
 7. Texture interface, with constant-value, 8-bit, and floating-point textures.
 8. Material interface for computing BSDFs. Perfect mirrors, glass, and matte materials have been implemented.
-9. Light interface, with a point light implemented.
+9. Light interface, with a point and directional light implemented.
 10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL in the Whitted Renderer.
 
 ### Upcoming
 1. BVH acceleration structure.
+2. Area lights.
 2. Monte Carlo path tracing.
 
 ## Performance
 ![](Content/Renders/Render1.png)
 8K image rendered with 256 samples per pixel, in 136 minutes on an i7-4790K(4.6GHz all cores).
+![](Content/Renders/Render2.png)
+Blender's Suzanne, rendered in 4K with 8 samples per pixel, in 16 minutes on the same hardware as above.
 
 ## Getting Started
 Cinder uses CMake.

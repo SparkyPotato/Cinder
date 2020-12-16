@@ -5,38 +5,28 @@ bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	Ray r = m_ToCamera.GetInverse()(ray);
 	
+	int hit = 0;
 	if (m_Geometry->GetSubGeometry().empty())
 	{
-		bool hit = m_Geometry->Intersect(r, interaction);
-		if (hit)
-		{
-			ray.Extent = r.Extent;
-			interaction.HitObject = this;
-			interaction.HitPoint = m_ToCamera(interaction.HitPoint);
-			interaction.GNormal = m_ToCamera(interaction.GNormal);
-			interaction.SNormal = m_ToCamera(interaction.GNormal);
-		}
-
-		return hit;
+		hit = m_Geometry->Intersect(r, interaction);
 	}
 	else
 	{
-		int hit = 0;
 		for (auto geometry : m_Geometry->GetSubGeometry())
 		{
-			if (geometry->Intersect(ray, interaction)) 
-			{
-				hit++; 
-				ray.Extent = r.Extent;
-				interaction.HitObject = this;
-				interaction.HitPoint = m_ToCamera(interaction.HitPoint);
-				interaction.GNormal = m_ToCamera(interaction.GNormal);
-				interaction.SNormal = m_ToCamera(interaction.GNormal);
-			}
+			if (geometry->Intersect(r, interaction)) { hit++; }
 		}
-
-		return hit;
 	}
+
+	if (hit)
+	{
+		ray.Extent = r.Extent;
+		interaction.HitObject = this;
+		interaction.HitPoint = m_ToCamera(interaction.HitPoint);
+		interaction.GNormal = interaction.SNormal = m_ToCamera(interaction.GNormal).Normalize();
+	}
+
+	return hit;
 }
 
 bool Object::TestIntersect(const Ray& ray) const

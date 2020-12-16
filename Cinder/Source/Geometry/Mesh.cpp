@@ -51,16 +51,38 @@ bool Mesh::Parse(const YAML::Node& node)
 		{ mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z }
 	);
 
+	m_Vertices.reserve(mesh->mNumVertices);
 	for (uint32_t i = 0; i < mesh->mNumVertices; i++)
 	{
-		m_Vertices.push_back(
-			{ Point(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z),
-			Normal(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z),
-			Vector(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z),
-			Vector(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z),
-			mesh->mTextureCoords[i]->x, mesh->mTextureCoords[i]->y }
-		);
+		auto& v = m_Vertices.emplace_back();
+		v.Position = Point(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		v.VNormal = Normal(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+		v.Tangent = Vector(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+		v.Bitangent = Vector(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
+		v.U = mesh->mTextureCoords[0][i].x;
+		v.V = mesh->mTextureCoords[0][i].y;
 	}
+
+	m_Area = 0.f;
+
+	m_Triangles.reserve(mesh->mNumFaces);
+	for (uint32_t i = 0; i < mesh->mNumFaces; i++)
+	{
+		if (mesh->mFaces[i].mNumIndices == 3)
+		{
+			auto& t = m_Triangles.emplace_back(
+				mesh->mFaces[i].mIndices[0],
+				mesh->mFaces[i].mIndices[1],
+				mesh->mFaces[i].mIndices[2],
+				this
+			);
+
+			m_Area += t.GetArea();
+			m_Sub.push_back(&t);
+		}
+	}
+
+	return true;
 }
 
 bool Mesh::Intersect(const Ray& ray, Interaction& interaction) const
@@ -77,5 +99,139 @@ bool Mesh::TestIntersect(const Ray& ray) const
 
 float Mesh::GetArea() const
 {
+	return m_Area;
+}
 
+Triangle::Triangle(uint32_t i0, uint32_t i1, uint32_t i2, Mesh* mesh)
+	: Geometry(""),
+	m_V0(mesh->m_Vertices[i0]), m_V1(mesh->m_Vertices[i1]), m_V2(mesh->m_Vertices[i2])
+{
+	m_Area = 0.5f * Cross(m_V1.Position - m_V0.Position, m_V2.Position - m_V0.Position).GetLength();
+
+	m_Bound = Bound(m_V0.Position, m_V1.Position);
+	m_Bound = Union(m_Bound, m_V2.Position);
+}
+
+template<typename T>
+T BarycentricInterp(float u, float v, float w, const T& v0, const T& v1, const T& v2)
+{
+	return u * v0 + v * v1 + w * v2;
+}
+
+bool Triangle::Intersect(const Ray& ray, Interaction& interaction) const
+{
+	Vector p0t = m_V0.Position - ray.Origin;
+	Vector p1t = m_V1.Position - ray.Origin;
+	Vector p2t = m_V2.Position - ray.Origin;
+
+	int kz = ray.Direction.GetAbs().GetMaxDimension();
+	int kx = kz + 1; if (kx == 3) { kx = 0; }
+	int ky = kx + 1; if (ky == 3) { ky = 0; }
+	Vector d = Shuffle(ray.Direction, kx, ky, kz);
+	p0t = Shuffle(p0t, kx, ky, kz);
+	p1t = Shuffle(p1t, kx, ky, kz);
+	p2t = Shuffle(p2t, kx, ky, kz);
+
+	float Sx = -d.X() / d.Z();
+	float Sy = -d.Y() / d.Z();
+	float Sz = 1.f / d.Z();
+	p0t.X() += Sx * p0t.Z();
+	p0t.Y() += Sy * p0t.Z();
+	p1t.X() += Sx * p1t.Z();
+	p1t.Y() += Sy * p1t.Z();
+	p2t.X() += Sx * p2t.Z();
+	p2t.Y() += Sy * p2t.Z();
+
+	double p2txp1ty = (double)p2t.X() * (double)p1t.Y();
+	double p2typ1tx = (double)p2t.Y() * (double)p1t.X();
+	float e0 = (float)(p2typ1tx - p2txp1ty);
+	double p0txp2ty = (double)p0t.X() * (double)p2t.Y();
+	double p0typ2tx = (double)p0t.Y() * (double)p2t.X();
+	float e1 = (float)(p0typ2tx - p0txp2ty);
+	double p1txp0ty = (double)p1t.X() * (double)p0t.Y();
+	double p1typ0tx = (double)p1t.Y() * (double)p0t.X();
+	float e2 = (float)(p1typ0tx - p1txp0ty);
+
+	if ((e0 < 0.f || e1 < 0.f || e2 < 0.f) && (e0 > 0.f || e1 > 0.f || e2 > 0.f)) { return false; }
+	float det = e0 + e1 + e2;
+	if (det == 0.f) { return false; }
+
+	p0t.Z() *= Sz;
+	p1t.Z() *= Sz;
+	p2t.Z() *= Sz;
+	float tScaled = e0 * p0t.Z() + e1 * p1t.Z() + e2 * p2t.Z();
+	if (det < 0 && (tScaled >= 0 || tScaled < ray.Extent * det)) { return false; }
+	else if (det > 0 && (tScaled <= 0 || tScaled > ray.Extent * det)) { return false; }
+
+	float invDet = 1 / det;
+	float u = e0 * invDet;
+	float v = e1 * invDet;
+	float w = e2 * invDet;
+	float t = tScaled * invDet;
+	if (t > ray.Extent) { return false; }
+	ray.Extent = t;
+
+	interaction.HitPoint = ray.Origin + ray.Direction * t;
+	interaction.GNormal = Normal(BarycentricInterp(u, v, w, Vector(m_V0.VNormal), Vector(m_V1.VNormal), Vector(m_V2.VNormal)));
+	interaction.Tangent = BarycentricInterp(u, v, w, m_V0.Tangent, m_V1.Tangent, m_V2.Tangent);
+	interaction.Bitangent = BarycentricInterp(u, v, w, m_V0.Bitangent, m_V1.Bitangent, m_V2.Bitangent);
+	interaction.U = BarycentricInterp(u, v, w, m_V0.U, m_V1.U, m_V2.U);
+	interaction.V = BarycentricInterp(u, v, w, m_V0.V, m_V1.V, m_V2.V);
+
+	return true;
+}
+
+bool Triangle::TestIntersect(const Ray& ray) const
+{
+	Vector p0t = m_V0.Position - ray.Origin;
+	Vector p1t = m_V1.Position - ray.Origin;
+	Vector p2t = m_V2.Position - ray.Origin;
+
+	int kz = ray.Direction.GetAbs().GetMaxDimension();
+	int kx = kz + 1; if (kx == 3) { kx = 0; }
+	int ky = kx + 1; if (ky == 3) { ky = 0; }
+	Vector d = Shuffle(ray.Direction, kx, ky, kz);
+	p0t = Shuffle(p0t, kx, ky, kz);
+	p1t = Shuffle(p1t, kx, ky, kz);
+	p2t = Shuffle(p2t, kx, ky, kz);
+
+	float Sx = -d.X() / d.Z();
+	float Sy = -d.Y() / d.Z();
+	float Sz = 1.f / d.Z();
+	p0t.X() += Sx * p0t.Z();
+	p0t.Y() += Sy * p0t.Z();
+	p1t.X() += Sx * p1t.Z();
+	p1t.Y() += Sy * p1t.Z();
+	p2t.X() += Sx * p2t.Z();
+	p2t.Y() += Sy * p2t.Z();
+
+	double p2txp1ty = (double)p2t.X() * (double)p1t.Y();
+	double p2typ1tx = (double)p2t.Y() * (double)p1t.X();
+	float e0 = (float)(p2typ1tx - p2txp1ty);
+	double p0txp2ty = (double)p0t.X() * (double)p2t.Y();
+	double p0typ2tx = (double)p0t.Y() * (double)p2t.X();
+	float e1 = (float)(p0typ2tx - p0txp2ty);
+	double p1txp0ty = (double)p1t.X() * (double)p0t.Y();
+	double p1typ0tx = (double)p1t.Y() * (double)p0t.X();
+	float e2 = (float)(p1typ0tx - p1txp0ty);
+
+	if ((e0 < 0.f || e1 < 0.f || e2 < 0.f) && (e0 > 0.f || e1 > 0.f || e2 > 0.f)) { return false; }
+	float det = e0 + e1 + e2;
+	if (det == 0.f) { return false; }
+
+	p0t.Z() *= Sz;
+	p1t.Z() *= Sz;
+	p2t.Z() *= Sz;
+	float tScaled = e0 * p0t.Z() + e1 * p1t.Z() + e2 * p2t.Z();
+	if (det < 0 && (tScaled >= 0 || tScaled < ray.Extent * det)) { return false; }
+	else if (det > 0 && (tScaled <= 0 || tScaled > ray.Extent * det)) { return false; }
+
+	float invDet = 1 / det;
+	float u = e0 * invDet;
+	float v = e1 * invDet;
+	float w = e2 * invDet;
+	float t = tScaled * invDet;
+	if (t > ray.Extent) { return false; }
+
+	return true;
 }

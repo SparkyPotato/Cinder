@@ -9,7 +9,7 @@ int Entry(int argc, char** argv)
 	{
 		std::vector<const char*> projectFiles;
 		std::vector<std::string> optionsInput;
-		
+
 #ifndef NDEBUG
 		CinderColored(R"(** DEBUG BUILD **
 Will be slow, set log level to 0 to see debug information.

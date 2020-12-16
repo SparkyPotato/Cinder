@@ -18,8 +18,8 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 	Color out;
 
 	// Environment Map IBL
-	out += bsdf->Evaluate(outgoing, Vector(interaction.SNormal)) *
-		scene.GetEnvironment().SampleIrradiance(Vector(interaction.SNormal));
+	out += bsdf->Evaluate(outgoing, Vector(interaction.GNormal)) *
+		scene.GetEnvironment().SampleIrradiance(Vector(interaction.GNormal));
 
 	// Lights
 	for (auto& light : scene.GetLights())

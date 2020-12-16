@@ -175,6 +175,17 @@ Vector& Vector::Normalize()
 	return *this;
 }
 
+Vector Vector::GetAbs() const
+{
+	return Vector(std::abs(X()), std::abs(Y()), std::abs(Z()));
+}
+
+uint8_t Vector::GetMaxDimension() const
+{
+	return (X() > Y()) ? ((X() > Z()) ? 0 : 2) :
+		((Y() > Z()) ? 1 : 2);
+}
+
 bool Vector::IsNAN() const
 {
 	return std::isnan(X()) || std::isnan(Y()) || std::isnan(Z());

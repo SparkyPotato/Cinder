@@ -20,6 +20,7 @@ public:
 
 private:
 	float m_Radius = 0.f;
+	float m_Area;
 	std::vector<Geometry*> m_Sub;
     Bound m_Bound;
 };

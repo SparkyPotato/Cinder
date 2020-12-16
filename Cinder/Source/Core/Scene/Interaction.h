@@ -13,10 +13,11 @@ class Interaction
 public:
 	Point HitPoint;
 	Normal GNormal;
-	Normal SNormal;
 	const Object* HitObject  = nullptr;
 	BSDF* Bsdf = nullptr;
 
+	Normal SNormal;
+	Vector Tangent, Bitangent;
 	float U = 0.f, V = 0.f;
 
 	Ray SpawnRayTo(const Interaction& other)
