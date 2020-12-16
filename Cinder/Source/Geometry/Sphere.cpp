@@ -22,15 +22,12 @@ bool Sphere::Parse(const YAML::Node& node)
 		return false;
 	}
 
-	return true;
-}
-
-Bound Sphere::GetBound() const
-{
-	return Bound(
+    m_Bound = Bound(
 		Point(-m_Radius, -m_Radius, -m_Radius),
 		Point(m_Radius, m_Radius, m_Radius)
 	);
+
+	return true;
 }
 
 bool Sphere::Intersect(const Ray& ray, Interaction& interaction) const

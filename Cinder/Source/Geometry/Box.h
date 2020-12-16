@@ -9,7 +9,7 @@ public:
 
 	virtual bool Parse(const YAML::Node& node) override;
 
-	virtual Bound GetBound() const override;
+	virtual const Bound& GetBound() const override { return m_Bound; }
 
 	virtual bool Intersect(const Ray& ray, Interaction& interaction) const override;
 	virtual bool TestIntersect(const Ray& ray) const override;

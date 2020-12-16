@@ -2,10 +2,10 @@
 
 #include "Core/Scene/Geometry.h"
 
-class Sphere : public Geometry
+class Mesh : public Geometry
 {
 public:
-	Sphere(const std::string& name);
+	Mesh(const std::string& name);
 
 	virtual bool Parse(const YAML::Node& node) override;
 
@@ -18,8 +18,16 @@ public:
 
 	virtual const std::vector<Geometry*>& GetSubGeometry() override { return m_Sub; }
 
+	struct Vertex
+	{
+		Point Position;
+		Normal VNormal;
+		Vector Tangent, Bitangent;
+		float U, V;
+	};
+	
 private:
-	float m_Radius = 0.f;
 	std::vector<Geometry*> m_Sub;
-    Bound m_Bound;
+	std::vector<Vertex> m_Vertices;
+	Bound m_Bound;
 };

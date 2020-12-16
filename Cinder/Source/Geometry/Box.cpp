@@ -40,11 +40,6 @@ bool Box::Parse(const YAML::Node& node)
 	return true;
 }
 
-Bound Box::GetBound() const
-{
-	return m_Bound;
-}
-
 bool Box::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	float t0, t1;

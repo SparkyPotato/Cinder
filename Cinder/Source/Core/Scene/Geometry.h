@@ -15,7 +15,7 @@ public:
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 
-	virtual Bound GetBound() const = 0;
+	virtual const Bound& GetBound() const = 0;
 
 	virtual bool Intersect(const Ray& ray, Interaction& interaction) const = 0;
 	virtual bool TestIntersect(const Ray& ray) const
