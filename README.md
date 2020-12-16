@@ -22,9 +22,10 @@ and should support any other POSIX-complaint OS. It has been tested on:
 10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL in the Whitted Renderer.
 
 ### Upcoming
-1. BVH acceleration structure.
-2. Area lights.
-2. Monte Carlo path tracing.
+1. Normal mapping
+2. BVH acceleration structure.
+3. Area lights.
+4. Monte Carlo path tracing.
 
 ## Performance
 ![](Content/Renders/Render1.png)

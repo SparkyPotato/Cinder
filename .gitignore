@@ -19,11 +19,8 @@ _deps
 */Log.txt
 
 # Render Results
-*.png
-*.jpg
-*jpeg
-!SampleProjects/Textures
-!Content
+*Render.png
+*Model.png
 
 # Logs
 *Log.txt
