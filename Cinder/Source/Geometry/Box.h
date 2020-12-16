@@ -16,6 +16,9 @@ public:
 
 	virtual float GetArea() const override;
 
+	virtual const std::vector<Geometry*>& GetSubGeometry() override { return m_Sub; }
+
 private:
 	Bound m_Bound;
+	std::vector<Geometry*> m_Sub;
 };

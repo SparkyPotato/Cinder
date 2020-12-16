@@ -26,6 +26,8 @@ public:
 
 	virtual float GetArea() const = 0;
 
+	virtual const std::vector<Geometry*>& GetSubGeometry() = 0;
+
 	std::string Name;
 };
 

@@ -4,22 +4,58 @@
 bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 {
 	Ray r = m_ToCamera.GetInverse()(ray);
-	bool hit = m_Geometry->Intersect(r, interaction);
-	if (hit)
-	{
-		ray.Extent = r.Extent;
-		interaction.HitObject = this;
-		interaction.HitPoint = m_ToCamera(interaction.HitPoint);
-		interaction.GNormal = m_ToCamera(interaction.GNormal);
-		interaction.SNormal = m_ToCamera(interaction.GNormal);
-	}
 	
-	return hit;
+	if (m_Geometry->GetSubGeometry().empty())
+	{
+		bool hit = m_Geometry->Intersect(r, interaction);
+		if (hit)
+		{
+			ray.Extent = r.Extent;
+			interaction.HitObject = this;
+			interaction.HitPoint = m_ToCamera(interaction.HitPoint);
+			interaction.GNormal = m_ToCamera(interaction.GNormal);
+			interaction.SNormal = m_ToCamera(interaction.GNormal);
+		}
+
+		return hit;
+	}
+	else
+	{
+		int hit = 0;
+		for (auto geometry : m_Geometry->GetSubGeometry())
+		{
+			if (geometry->Intersect(ray, interaction)) 
+			{
+				hit++; 
+				ray.Extent = r.Extent;
+				interaction.HitObject = this;
+				interaction.HitPoint = m_ToCamera(interaction.HitPoint);
+				interaction.GNormal = m_ToCamera(interaction.GNormal);
+				interaction.SNormal = m_ToCamera(interaction.GNormal);
+			}
+		}
+
+		return hit;
+	}
 }
 
 bool Object::TestIntersect(const Ray& ray) const
 {
-	return m_Geometry->TestIntersect(m_ToCamera.GetInverse()(ray));
+	Ray r = m_ToCamera.GetInverse()(ray);
+
+	if (m_Geometry->GetSubGeometry().empty())
+	{
+		return m_Geometry->TestIntersect(r);
+	}
+	else
+	{
+		for (auto geometry : m_Geometry->GetSubGeometry())
+		{
+			if (m_Geometry->TestIntersect(r)) { return true; }
+		}
+
+		return false;
+	}
 }
 
 bool YAML::convert<Object>::decode(const Node& node, Object& object)
