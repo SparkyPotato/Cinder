@@ -25,6 +25,9 @@ _deps
 !SampleProjects/Textures
 !Content
 
+# Logs
+*Log.txt
+
 # Mac files
 *.DS_Store
 *.Trashes
@@ -32,3 +35,5 @@ _deps
 # Visual Studio
 .vs
 CMakeSettings.json
+.vscode
+

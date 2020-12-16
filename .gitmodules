@@ -7,3 +7,6 @@
 [submodule "Cinder/Dependencies/fmt"]
 	path = Cinder/Dependencies/fmt
 	url = https://github.com/fmtlib/fmt
+[submodule "Cinder/Dependencies/Assimp"]
+	path = Cinder/Dependencies/Assimp
+	url = https://github.com/assimp/assimp
