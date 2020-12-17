@@ -24,7 +24,7 @@ EightBitTexture::~EightBitTexture()
 	delete m_Data;
 }
 
-Color EightBitTexture::Evaluate(const Interaction& interaction)
+Color EightBitTexture::Evaluate(const Interaction& interaction) const
 {
 	float u = interaction.U;
 	float v = interaction.V;
@@ -50,7 +50,7 @@ Color EightBitTexture::Evaluate(const Interaction& interaction)
 	return Lerp(utLerp, ubLerp, vRatio);
 }
 
-Color EightBitTexture::GetPixel(uint32_t x, uint32_t y)
+Color EightBitTexture::GetPixel(uint32_t x, uint32_t y) const
 {
 	Pixel& pixel = m_Data[y * m_Width + x];
 

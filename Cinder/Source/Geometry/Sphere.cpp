@@ -56,6 +56,9 @@ bool Sphere::Intersect(const Ray& ray, Interaction& interaction) const
 	interaction.HitPoint = hit;
 	interaction.GNormal = Normal(hit - Point()).GetNormalized();
 
+    interaction.Tangent = Cross(Vector(0.f, 1.f, 0.f), hit - Point()).Normalize();
+    interaction.Bitangent = Cross(interaction.Tangent, Vector(interaction.GNormal));
+
 	return true;
 }
 

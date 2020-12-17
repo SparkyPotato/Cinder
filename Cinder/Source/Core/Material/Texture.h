@@ -9,7 +9,7 @@ class Texture
 public:
 	virtual ~Texture() = default;
 	
-	virtual Color Evaluate(const Interaction& interaction) = 0;
+	virtual Color Evaluate(const Interaction& interaction) const = 0;
 	
 	virtual bool Parse(const YAML::Node& node) = 0;
 };

@@ -12,6 +12,8 @@ public:
 	{}
 	virtual ~Material() = default;
 
+    void NormalMap(const up<Texture>& map, Interaction& interaction) const;
+
 	virtual void Compute(Interaction& interaction, MemoryArena& arena) const = 0;
 	virtual bool Parse(const YAML::Node& node) = 0;
 

@@ -5,7 +5,7 @@ Project Name: Sample Cinder Project
 # A list of scenes to render in the project, with its corresponding output file
 Scenes:
   - File: Model.yaml
-    Output: Model.png
+    Output: Render.png
 
 # Renderer to use
 Renderer:
@@ -20,4 +20,4 @@ Renderer:
 Framebuffer:
   Type: 8-bit
   Output: PNG
-  Resolution: [ 3840, 2160 ]
+  Resolution: [ 1920, 1080 ]

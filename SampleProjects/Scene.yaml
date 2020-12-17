@@ -74,6 +74,9 @@ Materials:
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
       Color: [ 0.05, 0, 0 ]
@@ -88,6 +91,9 @@ Materials:
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
       Color: [ 0, 0, 0 ]
@@ -96,6 +102,9 @@ Materials:
     Color:
       Type: Constant
       Color: [ 0.2, 1, 0.1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
       Color: [ 0.8, 0, 0 ]
@@ -104,6 +113,9 @@ Materials:
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
     Refractive Index:
       Type: Constant
       Color: [ 2, 0, 0 ]
@@ -112,6 +124,9 @@ Materials:
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
   - Name: Purple Plastic
     Type: Plastic
     Diffuse Color:
@@ -120,6 +135,9 @@ Materials:
     Specular Color:
       Type: Constant
       Color: [ 1, 0.8, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
       Color: [ 0.2, 0, 0 ]
@@ -131,6 +149,9 @@ Materials:
     Color:
       Type: Constant
       Color: [ 0.2, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
     Refractive Index:
       Type: Constant
       Color: [ 2, 0, 0 ]

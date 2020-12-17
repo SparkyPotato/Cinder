@@ -21,7 +21,7 @@ HDRTexture::~HDRTexture()
 	delete m_Data;
 }
 
-Color HDRTexture::Evaluate(const Interaction& interaction)
+Color HDRTexture::Evaluate(const Interaction& interaction) const
 {
 	float u = interaction.U;
 	float v = interaction.V;
@@ -47,11 +47,9 @@ Color HDRTexture::Evaluate(const Interaction& interaction)
 	return Lerp(utLerp, ubLerp, vRatio);
 }
 
-Color HDRTexture::GetPixel(uint32_t x, uint32_t y)
+const Color& HDRTexture::GetPixel(uint32_t x, uint32_t y) const
 {
-	auto c = m_Data[y * m_Width + x];
-
-	return c;
+	return m_Data[y * m_Width + x];
 }
 
 bool HDRTexture::Parse(const YAML::Node& node)

@@ -12,5 +12,5 @@ public:
 	virtual bool Parse(const YAML::Node& node) override;
 
 private:
-	up<Texture> m_Color;
+	up<Texture> m_Color, m_Normal;
 };

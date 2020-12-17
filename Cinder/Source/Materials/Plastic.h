@@ -13,6 +13,6 @@ public:
 
 private:
 	up<Texture> m_DiffuseColor, m_SpecularColor;
+    up<Texture> m_Normal, m_Roughness;
 	up<Texture> m_Eta;
-	up<Texture> m_Roughness;
 };

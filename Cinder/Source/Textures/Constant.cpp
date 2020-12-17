@@ -3,7 +3,7 @@
 
 TEXTURE(Constant, ConstantTexture)
 
-Color ConstantTexture::Evaluate(const Interaction& interaction)
+Color ConstantTexture::Evaluate(const Interaction& interaction) const
 {
 	return m_Color;
 }

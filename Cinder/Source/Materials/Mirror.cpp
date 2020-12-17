@@ -12,10 +12,11 @@ Mirror::Mirror(const std::string& name)
 
 void Mirror::Compute(Interaction& interaction, MemoryArena& arena) const
 {
+    NormalMap(m_Normal, interaction);
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
+
 	auto fresnel = arena.Allocate<PerfectFresnel>();
 	Color c = m_Color->Evaluate(interaction);
-
 	interaction.Bsdf->Add(arena.Allocate<SpecularReflection>(c, fresnel));
 }
 
@@ -27,6 +28,14 @@ bool Mirror::Parse(const YAML::Node& node)
 		return false;
 	}
 	try { m_Color = node["Color"].as<up<Texture>>(); }
+	catch (...) { return false; }
+
+    if (!node["Normal"])
+	{
+		Error("Glass material does not have a normal map (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	try { m_Normal = node["Normal"].as<up<Texture>>(); }
 	catch (...) { return false; }
 
 	return true;

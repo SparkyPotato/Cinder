@@ -35,6 +35,9 @@ Materials:
     Color:
       Type: 8-bit
       Source: Textures/Gold/Albedo.png
+    Normal:
+      Type: 8-bit
+      Source: Textures/Gold/Normal.png
     Roughness:
       Type: 8-bit
       Source: Textures/Gold/Roughness.png

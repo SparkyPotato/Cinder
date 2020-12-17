@@ -11,6 +11,7 @@ Glass::Glass(const std::string& name)
 
 void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
 {
+    NormalMap(m_Normal, interaction);
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 
 	float eta = m_Eta->Evaluate(interaction).R;
@@ -29,6 +30,14 @@ bool Glass::Parse(const YAML::Node& node)
 		return false;
 	}
 	try { m_Color = node["Color"].as<up<Texture>>(); }
+	catch (...) { return false; }
+
+    if (!node["Normal"])
+	{
+		Error("Glass material does not have a normal map (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	try { m_Normal = node["Normal"].as<up<Texture>>(); }
 	catch (...) { return false; }
 
 	if (!node["Refractive Index"])

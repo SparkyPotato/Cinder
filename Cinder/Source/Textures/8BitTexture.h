@@ -9,12 +9,12 @@ public:
 	EightBitTexture(Color* data, uint32_t width, uint32_t height);
 	virtual ~EightBitTexture();
 
-	virtual Color Evaluate(const Interaction& interaction) override;
+	virtual Color Evaluate(const Interaction& interaction) const override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 
 private:
-	Color GetPixel(uint32_t x, uint32_t y);
+	Color GetPixel(uint32_t x, uint32_t y) const;
 
 	struct Pixel
 	{
