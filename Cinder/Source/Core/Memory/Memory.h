@@ -20,8 +20,11 @@ public:
 
 		if (m_AllocationBlock->Pointer + size > m_AllocationBlock->Data + BLOCK_SIZE)
 		{
-			Verbose("Expanding memory arena.");
-			m_AllocationBlock->Next = new Block;
+			if (!m_AllocationBlock->Next)
+			{
+				Verbose("Expanding memory arena.");
+				m_AllocationBlock->Next = new Block;
+			}
 			m_AllocationBlock = m_AllocationBlock->Next;
 		}
 

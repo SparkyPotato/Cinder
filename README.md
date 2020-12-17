@@ -26,11 +26,9 @@ and should support any other POSIX-complaint OS. It has been tested on:
 2. Area lights.
 3. Monte Carlo path tracing.
 
-## Performance
-![](Content/Renders/Render1.png)
-8K image rendered with 256 samples per pixel, in 136 minutes on an i7-4790K(4.6GHz all cores).
-![](Content/Renders/Render2.png)
-Blender's Suzanne, rendered in 4K with 8 samples per pixel, in 16 minutes on the same hardware as above.
+## Renders and performance
+Go [here](Content/Renders/README.md)
+
 
 ## Getting Started
 Cinder uses CMake.

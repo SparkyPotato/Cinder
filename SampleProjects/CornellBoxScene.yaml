@@ -41,6 +41,12 @@ Objects:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
+  - Geometry: Small Sphere
+    Material: White
+    Transform:
+      Position: [ 278, 200, 350 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
 
 Geometry:
   - Name: Floor
@@ -58,9 +64,9 @@ Geometry:
   - Name: Right Wall
     Type: Mesh
     Source: Models/RightWall.obj
-  - Name: Light
-    Type: Mesh
-    Source: Models/Light.obj
+  - Name: Small Sphere
+    Type: Sphere
+    Radius: 75
 
 Materials:
   - Name: White
@@ -104,8 +110,8 @@ Lights:
       Position: [ 278, 548.8, 279.5 ]
       Rotation: [ 180, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 1 ]
-    Intensity: 1
+    Color: [ 1, 0.9, 0.7 ]
+    Intensity: 17
 
 Environment:
   Radiance Map Resolution: 16

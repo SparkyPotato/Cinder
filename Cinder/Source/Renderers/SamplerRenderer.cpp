@@ -126,11 +126,12 @@ void SamplerRenderer::Thread()
 
 					color += TraceRay(*m_Scene, ray, arena, sampler.get()) * 
 						m_Filter->Evaluate(Point(pair.first - 0.5f, pair.second - 0.5f, 0.f));
+
+					arena.Reset();
 				} while (sampler->NextSample());
 				color /= float(m_Samples);
 
 				bTile->SetPixel(color, x, y);
-				arena.Reset();
 			}
 		}
 
@@ -151,7 +152,7 @@ Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& in
 	const Normal& normal = interaction.SNormal;
 	if (pdf > 0.f && c != Color() && Dot(incoming, normal) != 0.f)
 	{
-		Ray ray = Ray(interaction.HitPoint + 1.f * Vector(interaction.GNormal) * ShadowEpsilon, incoming);
+		Ray ray = Ray(interaction.HitPoint + 1.f * Vector(interaction.GNormal) * Epsilon, incoming);
 		return c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
 	}
 	else { return Color(); }
@@ -171,7 +172,7 @@ Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& i
 	{
 		float x = 1.f;
 		if (dot < 0.f) { x = -1.f; }
-		Ray ray = Ray(interaction.HitPoint + x * Vector(interaction.GNormal) * ShadowEpsilon, incoming);
+		Ray ray = Ray(interaction.HitPoint + x * Vector(interaction.GNormal) * Epsilon, incoming);
 		return c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
 	}
 	else { return Color(); }

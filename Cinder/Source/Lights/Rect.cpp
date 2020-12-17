@@ -10,16 +10,43 @@ RectLight::RectLight(const Transform& transform)
 Color RectLight::EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, 
 	Vector& incoming, float& pdf, Occlusion& tester) const
 {
+	if (Dot(Vector(0.f, 1.f, 0.f), Point() - ToCamera.GetInverse()(interaction.HitPoint)) >= 0.f) { pdf = 0.f; return Color(); }
+
 	float x = Lerp(-m_Size.X(), m_Size.X(), sample.first);
-	float z = Lerp(-m_Size.z(), m_Size.z(), sample.second);
+	float z = Lerp(-m_Size.Z(), m_Size.Z(), sample.second);
+	Point p = ToCamera(Point(x, 0.f, z));
+	Vector d = p - interaction.HitPoint;
+
+	pdf = m_AreaInverse;
+
+	tester.Point1 = interaction;
+	tester.Point2.HitPoint = p;
+	incoming = d.GetNormalized();
+
+	return m_Color / d.GetLengthSquare();
 }
 
 Color RectLight::EvaluateAlong(const Ray& ray) const
 {
+	Ray r = ToCamera.GetInverse()(ray);
+	float denom = Dot(Vector(0.f, 1.f, 0.f), r.Direction.Normalize());
+	if (denom < -Epsilon)
+	{
+		float t = Dot(Vector(0.f, 1.f, 0.f), Point() - r.Origin) / denom;
 
+		if (t >= 0.f && t < ray.Extent) 
+		{
+			Point hit = r(t);
+			if (hit.X() < m_Size.X() && hit.X() > -m_Size.X() &&
+				hit.Z() < m_Size.Z() && hit.Z() > -m_Size.Z())
+			{ return m_Color; }
+		}
+	}
+
+	return Color();
 }
 
-virtual bool RectLight::Parse(const YAML::Node& node)
+bool RectLight::Parse(const YAML::Node& node)
 {
 	if (!node["Color"])
 	{
@@ -62,7 +89,7 @@ virtual bool RectLight::Parse(const YAML::Node& node)
 	}
 
 	m_Size.Z() = node["Dimension"][1].as<float>();
-	m_Area = m_Size.X() * m_Size.Z();
+	m_AreaInverse = 1.f / (m_Size.X() * m_Size.Z());
 	m_Size /= 2.f;
 	
 	m_Color *= intensity;
@@ -70,7 +97,7 @@ virtual bool RectLight::Parse(const YAML::Node& node)
 	return true;
 }
 
-virtual void RectLight::Preprocess(const Scene& scene)
+void RectLight::Preprocess(const Scene& scene)
 {
 
 }

@@ -17,5 +17,5 @@ public:
 private:
     Color m_Color;
     Vector m_Size;
-    float m_Area;
+    float m_AreaInverse;
 };

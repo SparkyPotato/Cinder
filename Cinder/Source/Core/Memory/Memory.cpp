@@ -20,6 +20,7 @@ MemoryArena::~MemoryArena()
 
 void MemoryArena::Reset()
 {
+	m_AllocationBlock = m_Block;
 	Block* block = m_Block;
 	while (block)
 	{

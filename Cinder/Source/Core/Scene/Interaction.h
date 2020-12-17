@@ -6,7 +6,7 @@
 class Object;
 class BSDF;
 
-constexpr float ShadowEpsilon = 0.001f;
+constexpr float Epsilon = 0.001f;
 
 class Interaction
 {
@@ -22,9 +22,9 @@ public:
 
 	Ray SpawnRayTo(const Interaction& other)
 	{
-		Point origin = HitPoint + Vector(GNormal) * ShadowEpsilon;
+		Point origin = HitPoint + Vector(GNormal) * Epsilon;
 		Vector direction = other.HitPoint - origin;
-		float extent = direction.GetLength() - ShadowEpsilon;
+		float extent = direction.GetLength() - Epsilon;
 
 		return Ray(origin, direction, extent);
 	}

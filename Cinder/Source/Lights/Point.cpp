@@ -9,15 +9,14 @@ PointLight::PointLight(const Transform& transform)
 
 Color PointLight::EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const
 {
-	incoming = (m_Position - interaction.HitPoint).Normalize();
+	Vector d = m_Position - interaction.HitPoint;
+	incoming = d.GetNormalized();
 	pdf = 1.f;
 
 	tester.Point1 = interaction;
-	Interaction r;
-	r.HitPoint = m_Position;
-	tester.Point2 = r;
+	tester.Point2.HitPoint = m_Position;
 
-	return m_Color / (m_Position - interaction.HitPoint).GetLengthSquare();
+	return m_Color / d.GetLengthSquare();
 }
 
 bool PointLight::Parse(const YAML::Node& node)
