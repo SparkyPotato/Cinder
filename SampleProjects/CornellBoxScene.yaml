@@ -17,11 +17,50 @@ Objects:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
+  - Geometry: Ceiling
+    Material: White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Back Wall
+    Material: White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Left Wall
+    Material: Red
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Right Wall
+    Material: Green
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
 
 Geometry:
   - Name: Floor
     Type: Mesh
     Source: Models/Floor.obj
+  - Name: Ceiling
+    Type: Mesh
+    Source: Models/Ceiling.obj
+  - Name: Back Wall
+    Type: Mesh
+    Source: Models/BackWall.obj
+  - Name: Left Wall
+    Type: Mesh
+    Source: Models/LeftWall.obj
+  - Name: Right Wall
+    Type: Mesh
+    Source: Models/RightWall.obj
+  - Name: Light
+    Type: Mesh
+    Source: Models/Light.obj
 
 Materials:
   - Name: White
@@ -35,18 +74,41 @@ Materials:
     Roughness:
       Type: Constant
       Color: [ 0, 0, 0 ]
+  - Name: Green
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 0, 1, 0 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+  - Name: Red
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 1, 0, 0 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
 
 Lights:
-  - Type: Directional
+  - Type: Area
+    Geometry: Light
     Transform:
       Position: [ 0, 0, 0 ]
-      Rotation: [ 90, 0, 20 ]
+      Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 0 ]
+    Color: [ 1, 1, 1 ]
     Intensity: 0
 
 Environment:
-  Radiance Map Resolution: 32
+  Radiance Map Resolution: 16
   Front:
     Type: Constant
     Color: [ 0, 0, 0 ]
