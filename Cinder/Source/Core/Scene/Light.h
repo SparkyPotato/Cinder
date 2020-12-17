@@ -26,6 +26,7 @@ public:
 	virtual ~Light() {}
 
 	virtual Color EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const = 0;
+	virtual Color EvaluateAlong(const Ray& ray) const = 0;
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 

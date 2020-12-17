@@ -8,6 +8,7 @@ public:
 	DirectionalLight(const Transform& transform);
 	
 	virtual Color EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const override;
+	virtual Color EvaluateAlong(const Ray& ray) const override { return Color(); }
 	
 	virtual bool Parse(const YAML::Node& node) override;
 	

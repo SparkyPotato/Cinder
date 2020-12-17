@@ -8,7 +8,11 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
  	Interaction interaction;
 	if (!scene.Intersect(ray, interaction))
 	{
-		return scene.GetEnvironment().Sample(ray.Direction);
+		Color out;
+
+		for (auto& light : scene.GetLights()) { out += light->EvaluateAlong(ray); }
+
+		return out + scene.GetEnvironment().Sample(ray.Direction);
 	}
 
 	interaction.HitObject->GetMaterial()->Compute(interaction, arena);
@@ -24,6 +28,8 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 	// Lights
 	for (auto& light : scene.GetLights())
 	{
+		out += light->EvaluateAlong(ray);
+
 		Vector incoming;
 		float pdf;
 		Occlusion occlusion;

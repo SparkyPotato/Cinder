@@ -98,14 +98,14 @@ Materials:
       Color: [ 0, 0, 0 ]
 
 Lights:
-  - Type: Area
-    Geometry: Light
+  - Type: Rect
+    Dimension: [ 130, 105 ]
     Transform:
-      Position: [ 0, 0, 0 ]
-      Rotation: [ 0, 0, 0 ]
+      Position: [ 278, 548.8, 279.5 ]
+      Rotation: [ 180, 0, 0 ]
       Scale: [ 1, 1, 1 ]
     Color: [ 1, 1, 1 ]
-    Intensity: 0
+    Intensity: 1
 
 Environment:
   Radiance Map Resolution: 16

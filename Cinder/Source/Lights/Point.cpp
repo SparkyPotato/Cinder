@@ -36,14 +36,15 @@ bool PointLight::Parse(const YAML::Node& node)
 	try { m_Color = node["Color"].as<Color>(); }
 	catch (...) { return false; }
 	
-	try { m_Intensity = node["Intensity"].as<float>(); }
+    float intensity;
+	try { intensity = node["Intensity"].as<float>(); }
 	catch (YAML::Exception& e)
 	{
 		Error("Point light intensity must be a float (line {})!", e.mark.line + 1);
 		return false;
 	}
 	
-	m_Color *= m_Intensity;
+	m_Color *= intensity;
 
 	return true;
 }
