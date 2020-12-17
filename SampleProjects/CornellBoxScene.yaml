@@ -1,0 +1,67 @@
+---
+Acceleration:
+  Type: None
+
+Camera:
+  Type: Perspective
+  Transform:
+    Position: [ 278, 273, -800 ]
+    Rotation: [ 0, 0, 0 ]
+    Scale: [ 1, 1, 1 ]
+  FOV: 60
+
+Objects:
+  - Geometry: Floor
+    Material: White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+
+Geometry:
+  - Name: Floor
+    Type: Mesh
+    Source: Models/Floor.obj
+
+Materials:
+  - Name: White
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+
+Lights:
+  - Type: Directional
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 90, 0, 20 ]
+      Scale: [ 1, 1, 1 ]
+    Color: [ 1, 1, 0 ]
+    Intensity: 0
+
+Environment:
+  Radiance Map Resolution: 32
+  Front:
+    Type: Constant
+    Color: [ 0, 0, 0 ]
+  Back:
+    Type: Constant
+    Color: [ 0, 0, 0 ]
+  Left:
+    Type: Constant
+    Color: [ 0, 0, 0 ]
+  Right:
+    Type: Constant
+    Color: [ 0, 0, 0 ]
+  Top:
+    Type: Constant
+    Color: [ 0, 0, 0 ]
+  Bottom:
+    Type: Constant
+    Color: [ 0, 0, 0 ]

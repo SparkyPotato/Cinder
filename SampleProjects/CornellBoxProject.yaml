@@ -1,0 +1,18 @@
+---
+Project Name: Cornell Box
+
+Scenes:
+  - File: CornellBoxScene.yaml
+    Output: CornellBox.png
+
+Renderer:
+  Type: Whitted
+  Sampler: Random
+  Filter: Box
+  Samples: 8
+  Ray Depth: 5
+
+Framebuffer:
+  Type: 8-bit
+  Output: PNG
+  Resolution: [ 1000, 1000 ]
