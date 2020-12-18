@@ -5,8 +5,8 @@
 
 LIGHT(Directional, DirectionalLight)
 
-DirectionalLight::DirectionalLight(const Transform& transform)
-: Light(transform)
+DirectionalLight::DirectionalLight(uint32_t samples, const Transform& transform)
+: Light(samples, transform)
 {}
 
 Color DirectionalLight::EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const

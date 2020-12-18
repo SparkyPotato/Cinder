@@ -82,13 +82,13 @@ bool SamplerRenderer::Parse(const YAML::Node& node)
 		return false;
 	}
 
-	if (!node["Samples"])
+	if (!node["Camera Samples"])
 	{
 		Warning("Using default sample count ({})", m_Samples);
 	}
 	else
 	{
-		try { m_Samples = node["Samples"].as<uint32_t>(); }
+		try { m_Samples = node["Camera Samples"].as<uint32_t>(); }
 		catch (YAML::Exception& e)
 		{
 			Error("Sample count must be an unsigned integer (line {})!", e.mark.line + 1);

@@ -159,7 +159,15 @@ bool YAML::convert<up<Light>>::decode(const Node& node, up<Light>& light)
 	try { t = node["Transform"].as<Transform>(); }
 	catch (...) { return false; }
 
-	try { light = Registry::Get()->GLights.at(type)(t); }
+    uint32_t s;
+    try { s = node["Samples"].as<uint32_t>(); }
+    catch (YAML::Exception& e)
+    {
+        Error("Light samples must be an unsigned integer (line {})!", e.mark.line + 1);
+        return false;
+    }
+
+	try { light = Registry::Get()->GLights.at(type)(s, t); }
 	catch (...)
 	{
 		Error("Light type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);

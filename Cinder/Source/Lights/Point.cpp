@@ -3,8 +3,8 @@
 
 LIGHT(Point, PointLight)
 
-PointLight::PointLight(const Transform& transform)
-	: Light(transform)
+PointLight::PointLight(uint32_t samples, const Transform& transform)
+	: Light(samples, transform)
 {}
 
 Color PointLight::EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, Vector& incoming, float& pdf, Occlusion& tester) const

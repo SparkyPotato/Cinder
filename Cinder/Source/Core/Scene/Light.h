@@ -20,8 +20,8 @@ public:
 class Light
 {
 public:
-	Light(const Transform& toCamera)
-		: ToCamera(toCamera)
+	Light(uint32_t samples, const Transform& toCamera)
+		: SampleCount(samples), ToCamera(toCamera)
 	{}
 	virtual ~Light() {}
 
@@ -33,6 +33,7 @@ public:
 	virtual void Preprocess(const Scene& scene) {};
 
 	Transform ToCamera;
+    uint32_t SampleCount;
 };
 
 template<>
@@ -42,7 +43,7 @@ struct YAML::convert<up<Light>>
 };
 
 #define LIGHT(type, className) \
-up<Light> Spawn##className(const Transform& t) { return std::make_unique<className>(t); } \
+up<Light> Spawn##className(uint32_t s, const Transform& t) { return std::make_unique<className>(s, t); } \
 struct Register##className \
 { \
 	Register##className() { Registry::Get()->GLights.emplace(#type, &Spawn##className); } \

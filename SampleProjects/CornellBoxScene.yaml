@@ -106,6 +106,7 @@ Materials:
 Lights:
   - Type: Rect
     Dimension: [ 130, 105 ]
+    Samples: 256
     Transform:
       Position: [ 278, 548.8, 279.5 ]
       Rotation: [ 180, 0, 0 ]

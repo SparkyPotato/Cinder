@@ -21,7 +21,7 @@ using TextureSpawnFunction = up<Texture> (*)();
 class Material;
 using MaterialSpawnFunction = up<Material> (*)(const std::string&);
 class Light;
-using LightSpawnFunction = up<Light>(*)(const Transform&);
+using LightSpawnFunction = up<Light>(*)(uint32_t, const Transform&);
 
 class Registry
 {

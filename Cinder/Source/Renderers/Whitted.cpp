@@ -30,19 +30,24 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 	{
 		out += light->EvaluateAlong(ray);
 
-		Vector incoming;
-		float pdf;
-		Occlusion occlusion;
-
-		Color lightColor = light->EvaluateSample(interaction, sampler->Get2D(), incoming, pdf, occlusion);
-
-		if (lightColor == Color() || pdf == 0.f) { continue; }
-
-		Color c = bsdf->Evaluate(outgoing, incoming);
-		if (c != Color() && !occlusion(scene))
+		Color avg;
+		for (uint32_t i = 0; i < light->SampleCount; i++)
 		{
-			out += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
+			Vector incoming;
+			float pdf;
+			Occlusion occlusion;
+
+			Color lightColor = light->EvaluateSample(interaction, sampler->Get2D(), incoming, pdf, occlusion);
+
+			if (lightColor == Color() || pdf == 0.f) { continue; }
+
+			Color c = bsdf->Evaluate(outgoing, incoming);
+			if (c != Color() && !occlusion(scene))
+			{
+				avg += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
+			}
 		}
+		out += avg / light->SampleCount;
 	}
 	
 	// Reflect

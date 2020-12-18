@@ -3,8 +3,8 @@
 
 LIGHT(Rect, RectLight)
 
-RectLight::RectLight(const Transform& transform)
-	: Light(transform)
+RectLight::RectLight(uint32_t samples, const Transform& transform)
+	: Light(samples, transform)
 {}
 
 Color RectLight::EvaluateSample(const Interaction& interaction, const std::pair<float, float>& sample, 
