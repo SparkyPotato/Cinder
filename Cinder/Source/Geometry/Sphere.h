@@ -18,6 +18,8 @@ public:
 
 	virtual const std::vector<Geometry*>& GetSubGeometry() override { return m_Sub; }
 
+	virtual Point Sample(Sampler* sampler, float& pdf) const override;
+
 private:
 	float m_Radius = 0.f;
 	float m_Area;

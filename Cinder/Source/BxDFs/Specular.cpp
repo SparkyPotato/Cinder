@@ -10,7 +10,7 @@ Color SpecularReflection::Evaluate(const Vector& outgoing, const Vector& incomin
 	return Color();
 }
 
-Color SpecularReflection::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample, float& pdf) const
+Color SpecularReflection::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
 {
 	incoming = Vector(-outgoing.X(), outgoing.Y(), -outgoing.Z());
 	pdf = 1.f;
@@ -32,7 +32,7 @@ Color SpecularTransmission::Evaluate(const Vector& outgoing, const Vector& incom
 	return Color();
 }
 
-Color SpecularTransmission::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample, float& pdf) const
+Color SpecularTransmission::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
 {
 	bool entering = Cos(outgoing) > 0;
 	float etaI = entering ? m_EtaOut : m_EtaIn;

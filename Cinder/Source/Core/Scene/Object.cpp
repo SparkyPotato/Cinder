@@ -3,7 +3,7 @@
 
 bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 {
-	Ray r = m_ToCamera.GetInverse()(ray);
+	Ray r = ToCamera.GetInverse()(ray);
 	
 	int hit = 0;
 	if (m_Geometry->GetSubGeometry().empty())
@@ -22,8 +22,8 @@ bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 	{
 		ray.Extent = r.Extent;
 		interaction.HitObject = this;
-		interaction.HitPoint = m_ToCamera(interaction.HitPoint);
-		interaction.GNormal = interaction.SNormal = m_ToCamera(interaction.GNormal).Normalize();
+		interaction.HitPoint = ToCamera(interaction.HitPoint);
+		interaction.GNormal = interaction.SNormal = ToCamera(interaction.GNormal).Normalize();
 	}
 
 	return hit;
@@ -31,7 +31,7 @@ bool Object::Intersect(const Ray& ray, Interaction& interaction) const
 
 bool Object::TestIntersect(const Ray& ray) const
 {
-	Ray r = m_ToCamera.GetInverse()(ray);
+	Ray r = ToCamera.GetInverse()(ray);
 
 	if (m_Geometry->GetSubGeometry().empty())
 	{
@@ -60,14 +60,9 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 		Error("Object does not have geometry (line {})!", node.Mark().line + 1);
 		return false;
 	}
-	if (!node["Material"])
-	{
-		Error("Object does not have a material (line {})!", node.Mark().line + 1);
-		return false;
-	}
 	
 	// Just store object to world, scene will later set it to object to camera
-	object.m_ToCamera = node["Transform"].as<Transform>();
+	object.ToCamera = node["Transform"].as<Transform>();
 	
 	try { object.m_GeometryName = node["Geometry"].as<std::string>(); }
 	catch (YAML::Exception& e)
@@ -76,11 +71,58 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 		return false;
 	}
 
-	try { object.m_MaterialName = node["Material"].as<std::string>(); }
-	catch (YAML::Exception& e)
+	if (node["Emission"])
 	{
-		Error("Material reference must be a string (line {})!", e.mark.line + 1);
-		return false;
+		const auto& n = node["Emission"];
+		if (!n["Type"])
+		{
+			Error("Emission must have a type (line {})!", n.Mark().line + 1);
+			return false;
+		}
+		std::string type;
+		try { type = n["Type"].as<std::string>(); }
+		catch (YAML::Exception& e)
+		{
+			Error("Emission type must be a string (line {})!", e.mark.line + 1);
+			return false;
+		}
+
+		if (!n["Samples"])
+		{
+			Error("Emission must have a sample count (line {})!", n.Mark().line + 1);
+			return false;
+		}
+		uint32_t samples;
+		try { samples = n["Samples"].as<uint32_t>(); }
+		catch (YAML::Exception& e)
+		{
+			Error("Emission sample count must be an unsigned integer (line {})!", e.mark.line + 1);
+			return false;
+		}
+
+		try { object.m_Emission = Registry::Get()->GEmission.at(type)(samples); }
+		catch (...)
+		{
+			Error("Emission type '{}' does not exist (line {})!", type, n.Mark().line + 1);
+			return false;
+		}
+
+		return object.m_Emission->Parse(n);
+	}
+	else
+	{
+		if (!node["Material"])
+		{
+			Error("Object does not have a material (line {})!", node.Mark().line + 1);
+			return false;
+		}
+
+		try { object.m_MaterialName = node["Material"].as<std::string>(); }
+		catch (YAML::Exception& e)
+		{
+			Error("Material reference must be a string (line {})!", e.mark.line + 1);
+			return false;
+		}
 	}
 	
 	return true;

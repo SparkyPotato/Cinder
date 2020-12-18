@@ -58,13 +58,14 @@ Color BSDF::Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type 
 	return c;
 }
 
-Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample,
-	float& pdf, BxDF::Type type, BxDF::Type* sampled) const
+Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf, BxDF::Type type, BxDF::Type* sampled) const
 {
+	std::pair<float, float> sample = sampler->Get2D();
+
 	uint16_t matching = Components(type);
-	pdf = 0.f;
 	if (matching == 0)
 	{
+		pdf = 0.f;
 		if (sampled) { *sampled = BxDF::Type(0); }
 		return Color();
 	}
@@ -81,17 +82,15 @@ Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::
 		}
 	}
 
-	std::pair<float, float> remapped = { std::min(sample.first * matching - comp, 1.f), sample.second };
-
 	Vector in, out = ToLocal(outgoing);
 	if (out.Y() == 0.f) { return Color(); }
 
 	if (sampled) { *sampled = bxdf->GetType(); }
-	Color c = bxdf->EvaluateSample(out, in, remapped, pdf);
-	if (pdf == 0)
+	Color c = bxdf->EvaluateSample(out, in, sampler, pdf);
+	if (pdf == 0.f)
 	{
 		if (sampled) { *sampled = BxDF::Type(0); }
-		return 0.f;
+		return Color();
 	}
 	incoming = ToWorld(in);
 
@@ -120,21 +119,6 @@ Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::
 			{
 				c += m_BxDFs[i]->Evaluate(out, in);
 			}
-		}
-	}
-
-	return c;
-}
-
-Color BSDF::Reflectance(const Vector& outgoing, uint32_t sampleCount, const std::pair<float, float>* samples, BxDF::Type type) const
-{
-	Vector o = ToLocal(outgoing);
-	Color c;
-	for (uint16_t i = 0; i < m_BxDFCount; i++)
-	{
-		if (m_BxDFs[i]->IsType(type))
-		{
-			c += m_BxDFs[i]->Reflectance(o, sampleCount, samples);
 		}
 	}
 

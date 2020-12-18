@@ -8,12 +8,10 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
  	Interaction interaction;
 	if (!scene.Intersect(ray, interaction))
 	{
-		Color out;
-
-		for (auto& light : scene.GetLights()) { out += light->EvaluateAlong(ray); }
-
-		return out + scene.GetEnvironment().Sample(ray.Direction);
+		return scene.GetEnvironment().Sample(ray.Direction);
 	}
+
+	if (interaction.HitObject->GetEmission()) { return interaction.HitObject->GetEmission()->Evaluate(interaction); }
 
 	interaction.HitObject->GetMaterial()->Compute(interaction, arena);
 	const BSDF* bsdf = interaction.Bsdf;
@@ -25,29 +23,26 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 	out += bsdf->Evaluate(outgoing, Vector(interaction.GNormal)) *
 		scene.GetEnvironment().SampleIrradiance(Vector(interaction.GNormal));
 
-	// Lights
-	for (auto& light : scene.GetLights())
+	for (auto& emission : scene.GetEmission())
 	{
-		out += light->EvaluateAlong(ray);
-
 		Color avg;
-		for (uint32_t i = 0; i < light->SampleCount; i++)
-		{
-			Vector incoming;
-			float pdf;
-			Occlusion occlusion;
-
-			Color lightColor = light->EvaluateSample(interaction, sampler->Get2D(), incoming, pdf, occlusion);
-
-			if (lightColor == Color() || pdf == 0.f) { continue; }
-
-			Color c = bsdf->Evaluate(outgoing, incoming);
-			if (c != Color() && !occlusion(scene))
-			{
-				avg += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
-			}
-		}
-		out += avg / light->SampleCount;
+ 		for (uint32_t i = 0; i < emission->SampleCount; i++)
+ 		{
+ 			Vector incoming;
+ 			float pdf;
+ 			Occlusion occlusion;
+ 
+ 			Color lightColor = emission->Sample(interaction, sampler, incoming, pdf, occlusion);
+ 
+ 			if (lightColor == Color() || pdf == 0.f) { continue; }
+ 
+ 			Color c = bsdf->Evaluate(outgoing, incoming);
+ 			if (c != Color() && !occlusion(scene))
+ 			{
+ 				avg += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
+ 			}
+ 		}
+ 		out += avg / emission->SampleCount;
 	}
 	
 	// Reflect

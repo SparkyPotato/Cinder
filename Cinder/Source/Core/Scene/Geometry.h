@@ -4,6 +4,7 @@
 #include "Core/Math/Ray.h"
 #include "Core/Scene/Interaction.h"
 #include "Core/Math/Bound.h"
+#include "Core/Components/Sampler.h"
 
 class Geometry
 {
@@ -27,6 +28,8 @@ public:
 	virtual float GetArea() const = 0;
 
 	virtual const std::vector<Geometry*>& GetSubGeometry() = 0;
+
+	virtual Point Sample(Sampler* sampler, float& pdf) const = 0;
 
 	std::string Name;
 };

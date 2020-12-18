@@ -2,6 +2,7 @@
 
 #include "Core/Scene/Interaction.h"
 #include "Core/Material/BxDF.h"
+#include "Core/Components/Sampler.h"
 
 class BSDF
 {
@@ -15,10 +16,7 @@ public:
 	Vector ToWorld(const Vector& vector) const;
 
 	Color Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type type = BxDF::All) const;
-	Color EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample,
-		float& pdf, BxDF::Type type = BxDF::All, BxDF::Type* sampled = nullptr) const;
-
-	Color Reflectance(const Vector& outgoing, uint32_t sampleCount, const std::pair<float, float>* samples, BxDF::Type type = BxDF::All) const;
+	Color EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf, BxDF::Type type = BxDF::All, BxDF::Type* sampled = nullptr) const;
 
 	virtual float Pdf(const Vector& outgoing, const Vector& incoming, BxDF::Type type = BxDF::All) const;
 private:

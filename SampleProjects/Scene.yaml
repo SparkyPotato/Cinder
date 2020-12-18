@@ -1,92 +1,88 @@
 ---
-# Acceleration Structure to use
 Acceleration:
   Type: None
 
-# The camera to use while rendering.
-# Orientation: X+ forward, Y+ up, Z+ forward
 Camera:
   Type: Perspective
   Transform:
-    Position: [ 0, 0, -25 ]
+    Position: [ 278, 273, -800 ]
     Rotation: [ 0, 0, 0 ]
-    Scale: [ 1, 1, 1 ] # Don't even think about setting scale to anything else
-  FOV: 75
+    Scale: [ 1, 1, 1 ]
+  FOV: 60
 
-# Objects that make up the scene.
-# Hold a reference to geometry
 Objects:
-  - Geometry: Small Sphere
-    Material: Silver
+  - Geometry: Floor
+    Material: White
     Transform:
-      Position: [ 0, 2.5, 5 ]
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Ceiling
+    Material: White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Back Wall
+    Material: White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Left Wall
+    Material: Red
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Right Wall
+    Material: Green
+    Transform:
+      Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Small Sphere
-    Material: White Diffuse
+    Material: White
     Transform:
-      Position: [ -5, 0, -30 ]
+      Position: [ 278, 200, 350 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
-  - Geometry: Small Sphere
-    Material: Green Diffuse
+  - Geometry: Light
+    Emission:
+      Type: Simple
+      Color: [ 1, 1, 1 ]
+      Intensity: 10
+      Samples: 64
     Transform:
-      Position: [ 8, 6, 0 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-  - Geometry: Small Sphere
-    Material: Mirror
-    Transform:
-      Position: [ 10, -5, 0 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-  - Geometry: A Box
-    Material: Glass
-    Transform:
-      Position: [ -9, -2.5, -1.5 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 2, 2, 2 ]
-  - Geometry: A Box
-    Material: Purple Plastic
-    Transform:
-      Position: [ -2, -8, -5 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-  - Geometry: A Box
-    Material: Yellow Glass
-    Transform:
-      Position: [ -7, 6, -5 ]
+      Position: [ 0, -0.01, 0 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
 
-# Raw Geometry, to be used in objects
 Geometry:
+  - Name: Floor
+    Type: Mesh
+    Source: Models/Floor.obj
+  - Name: Ceiling
+    Type: Mesh
+    Source: Models/Ceiling.obj
+  - Name: Back Wall
+    Type: Mesh
+    Source: Models/BackWall.obj
+  - Name: Left Wall
+    Type: Mesh
+    Source: Models/LeftWall.obj
+  - Name: Right Wall
+    Type: Mesh
+    Source: Models/RightWall.obj
+  - Name: Light
+    Type: Mesh
+    Source: Models/Light.obj
   - Name: Small Sphere
     Type: Sphere
-    Radius: 5
-  - Name: A Box
-    Type: Mesh
-    Source: Models/Cube.fbx
+    Radius: 75
 
 Materials:
-  - Name: Silver
-    Type: Metal
-    Color:
-      Type: Constant
-      Color: [ 1, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
-    Roughness:
-      Type: Constant
-      Color: [ 0.05, 0, 0 ]
-    Refractive Index:
-      Type: Constant
-      Color: [ 0.051585, 0.051585, 0.051585 ]
-    Absorption:
-      Type: Constant
-      Color: [ 3.9046, 3.9046, 3.9046 ]
-  - Name: White Diffuse
+  - Name: White
     Type: Matte
     Color:
       Type: Constant
@@ -97,119 +93,46 @@ Materials:
     Roughness:
       Type: Constant
       Color: [ 0, 0, 0 ]
-  - Name: Green Diffuse
+  - Name: Green
     Type: Matte
     Color:
       Type: Constant
-      Color: [ 0.2, 1, 0.1 ]
+      Color: [ 0, 1, 0 ]
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
-      Color: [ 0.8, 0, 0 ]
-  - Name: Glass
-    Type: Glass
+      Color: [ 0, 0, 0 ]
+  - Name: Red
+    Type: Matte
     Color:
       Type: Constant
-      Color: [ 1, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
-    Refractive Index:
-      Type: Constant
-      Color: [ 2, 0, 0 ]
-  - Name: Mirror
-    Type: Mirror
-    Color:
-      Type: Constant
-      Color: [ 1, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
-  - Name: Purple Plastic
-    Type: Plastic
-    Diffuse Color:
-      Type: Constant
-      Color: [ 0.3, 0.3, 1 ]
-    Specular Color:
-      Type: Constant
-      Color: [ 1, 0.8, 1 ]
+      Color: [ 1, 0, 0 ]
     Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
-      Color: [ 0.2, 0, 0 ]
-    Refractive Index:
-      Type: Constant
-      Color: [ 2, 0, 0 ]
-  - Name: Yellow Glass
-    Type: Glass
-    Color:
-      Type: Constant
-      Color: [ 0.2, 1, 1 ]
-    Normal:
-      Type: Constant
-      Color: [ 0, 0, 1 ]
-    Refractive Index:
-      Type: Constant
-      Color: [ 2, 0, 0 ]
-
-Lights:
-  - Type: Point
-    Transform:
-      Position: [ 0, -1.5, -3 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 1 ]
-    Intensity: 15
-  - Type: Point
-    Transform:
-      Position: [ 0, 10, 0 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 1 ]
-    Intensity: 30
-  - Type: Point
-    Transform:
-      Position: [ 12, 6, -7.5 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 1 ]
-    Intensity: 15
-  - Type: Point
-    Transform:
-      Position: [ 0, 4, -30 ]
-      Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 1 ]
-    Intensity: 20
-  - Type: Directional
-    Transform:
-      Position: [ 0, 0, 0 ]
-      Rotation: [ 90, 0, 20 ]
-      Scale: [ 1, 1, 1 ]
-    Color: [ 1, 1, 0 ]
-    Intensity: 0.4
+      Color: [ 0, 0, 0 ]
 
 Environment:
-  Radiance Map Resolution: 256
+  Radiance Map Resolution: 16
   Front:
-    Type: 8-bit
-    Source: Textures/Skybox/Front.jpg
+    Type: Constant
+    Color: [ 0, 0, 0 ]
   Back:
-    Type: 8-bit
-    Source: Textures/Skybox/Back.jpg
+    Type: Constant
+    Color: [ 0, 0, 0 ]
   Left:
-    Type: 8-bit
-    Source: Textures/Skybox/Left.jpg
+    Type: Constant
+    Color: [ 0, 0, 0 ]
   Right:
-    Type: 8-bit
-    Source: Textures/Skybox/Right.jpg
+    Type: Constant
+    Color: [ 0, 0, 0 ]
   Top:
-    Type: 8-bit
-    Source: Textures/Skybox/Top.jpg
+    Type: Constant
+    Color: [ 0, 0, 0 ]
   Bottom:
-    Type: 8-bit
-    Source: Textures/Skybox/Bottom.jpg
+    Type: Constant
+    Color: [ 0, 0, 0 ]

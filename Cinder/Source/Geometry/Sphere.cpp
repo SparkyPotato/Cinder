@@ -1,6 +1,8 @@
 #include "PCH.h"
 #include "Geometry/Sphere.h"
 
+#include "Core/Math/Sampling.h"
+
 GEOMETRY(Sphere, Sphere)
 
 Sphere::Sphere(const std::string& name)
@@ -79,4 +81,10 @@ bool Sphere::TestIntersect(const Ray& ray) const
 float Sphere::GetArea() const
 {
 	return m_Area;
+}
+
+Point Sphere::Sample(Sampler* sampler, float& pdf) const
+{
+	pdf = 1.f / m_Area;
+	return Point() + UniformSampleSphere(sampler->Get2D()) * m_Radius;
 }

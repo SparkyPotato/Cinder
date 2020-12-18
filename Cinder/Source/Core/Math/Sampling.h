@@ -6,3 +6,5 @@ Point ConcentricSampleDisk(const std::pair<float, float>& sample);
 
 Vector CosineSampleHemisphere(const std::pair<float, float>& sample);
 float CosineHemispherePdf(float cos);
+
+Vector UniformSampleSphere(const std::pair<float, float>& sample);

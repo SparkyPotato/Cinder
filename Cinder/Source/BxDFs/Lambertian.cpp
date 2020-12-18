@@ -9,9 +9,3 @@ Color LambertianBRDF::Evaluate(const Vector& outgoing, const Vector& incoming) c
 {
 	return m_Base * InversePi;
 }
-
-Color LambertianBRDF::Reflectance(const Vector& outgoing, uint32_t sampleCount, const std::pair<float, float>* samples) const
-{
-	return m_Base;
-}
-

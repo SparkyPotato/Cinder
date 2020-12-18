@@ -19,11 +19,11 @@ Color MicrofacetReflection::Evaluate(const Vector& outgoing, const Vector& incom
 		fresnel / (4 * cosI * cosO);
 }
 
-Color MicrofacetReflection::EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample, float& pdf) const
+Color MicrofacetReflection::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
 {
 	if (outgoing.Y() == 0.f) { return Color(); }
 
-	Vector normal = m_Microfacet->SampleNormal(outgoing, sample);
+	Vector normal = m_Microfacet->SampleNormal(outgoing, sampler);
 	if (Dot(outgoing, normal) < 0.f) { return Color(); }
 
 	incoming = Reflect(outgoing, normal);

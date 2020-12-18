@@ -65,6 +65,9 @@ bool Mesh::Parse(const YAML::Node& node)
 
 	m_Area = 0.f;
 
+	float minArea = FloatMax;
+	std::vector<std::pair<uint32_t, float>> areas;
+
 	m_Triangles.reserve(mesh->mNumFaces);
 	for (uint32_t i = 0; i < mesh->mNumFaces; i++)
 	{
@@ -77,9 +80,19 @@ bool Mesh::Parse(const YAML::Node& node)
 				this
 			);
 
+			if (t.GetArea() < minArea) { minArea = t.GetArea(); }
+
+			areas.push_back({ uint32_t(m_Triangles.size()) - 1, t.GetArea() });
 			m_Area += t.GetArea();
 			m_Sub.push_back(&t);
 		}
+	}
+
+	for (auto& area : areas)
+	{
+		uint32_t relative = uint32_t(area.second /= minArea);
+
+		for (; relative > 0.f; relative--) { m_SampleList.push_back(area.first); }
 	}
 
 	return true;
@@ -100,6 +113,17 @@ bool Mesh::TestIntersect(const Ray& ray) const
 float Mesh::GetArea() const
 {
 	return m_Area;
+}
+
+Point Mesh::Sample(Sampler* sampler, float& pdf) const
+{
+	float s = sampler->Get1D();
+	uint32_t tri = uint32_t(s * m_SampleList.size());
+	if (tri == m_SampleList.size()) { tri--; }
+
+	pdf = 1.f / m_Area;
+	float d;
+	return m_Triangles[m_SampleList[tri]].Sample(sampler, d);
 }
 
 Triangle::Triangle(uint32_t i0, uint32_t i1, uint32_t i2, Mesh* mesh)
@@ -234,4 +258,21 @@ bool Triangle::TestIntersect(const Ray& ray) const
 	if (t > ray.Extent) { return false; }
 
 	return true;
+}
+
+Point Triangle::Sample(Sampler* sampler, float& pdf) const
+{
+	pdf = 1.f / m_Area;
+	std::pair<float, float> sample = sampler->Get2D();
+
+	float u = sample.first;
+	float v = sample.second;
+	float w = 1.f - u - v;
+
+	Vector p0, p1, p2;
+	p0 = Vector(m_V0.Position.X(), m_V0.Position.Y(), m_V0.Position.Z());
+	p1 = Vector(m_V1.Position.X(), m_V1.Position.Y(), m_V1.Position.Z());
+	p2 = Vector(m_V2.Position.X(), m_V2.Position.Y(), m_V2.Position.Z());
+
+	return Point() + BarycentricInterp(u, v, w, p0, p1, p2);
 }

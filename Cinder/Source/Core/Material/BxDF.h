@@ -3,6 +3,7 @@
 #include "Core/Math/Color.h"
 #include "Core/Math/Vector.h"
 #include "Core/Math/Sampling.h"
+#include "Core/Components/Sampler.h"
 
 inline float Cos(const Vector& w) { return w.Y(); }
 inline float Cos2(const Vector& w) { return w.Y() * w.Y(); }
@@ -76,30 +77,20 @@ public:
 	Type GetType() const { return m_Type; }
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const = 0;
-	virtual Color EvaluateSample(const Vector& outgoing, Vector& incoming, const std::pair<float, float>& sample, float& pdf) const
+	virtual Color EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
 	{
+		std::pair<float, float> sample = sampler->Get2D();
+
 		incoming = CosineSampleHemisphere(sample);
 		incoming.Y() = std::abs(incoming.Y());
 		pdf = Pdf(outgoing, incoming);
 		
 		return Evaluate(outgoing, incoming);
 	}
-
-	virtual Color Reflectance(const Vector& outgoing, uint32_t sampleCount, const std::pair<float, float>* samples) const
-	{
-		Color c;
-		for (uint32_t i = 0; i < sampleCount; ++i) {
-			Vector incoming;
-			float pdf = 0;
-			Color f = EvaluateSample(outgoing, incoming, samples[i], pdf);
-			if (pdf > 0) c += f * AbsCos(incoming) / pdf;
-		}
-		return c / float(sampleCount);
-	}
 	
 	virtual float Pdf(const Vector& outgoing, const Vector& incoming) const
 	{
-		return SameHemisphere(outgoing, incoming) ? 0.f : AbsCos(incoming) * InversePi;
+		return SameHemisphere(outgoing, incoming) ? AbsCos(incoming) * InversePi : 0.f;
 	}
 
 protected:

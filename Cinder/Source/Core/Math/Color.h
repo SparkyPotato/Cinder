@@ -34,6 +34,10 @@ private:
 
 bool operator==(const Color& first, const Color& second);
 bool operator!=(const Color& first, const Color& second);
+bool operator<(const Color& first, const Color& second);
+bool operator<=(const Color& first, const Color& second);
+bool operator>(const Color& first, const Color& second);
+bool operator>=(const Color& first, const Color& second);
 
 Color Lerp(const Color& from, const Color& to, float ratio);
 

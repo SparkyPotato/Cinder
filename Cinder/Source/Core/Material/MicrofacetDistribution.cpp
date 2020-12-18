@@ -116,8 +116,10 @@ Vector TrowbridgeReitzSample(const Vector& incoming, float alphaX, float alphaY,
 	return Vector(-slopeX, 1.f, -slopeZ).Normalize();
 }
 
-Vector TrowbridgeReitz::SampleNormal(const Vector& outgoing, const std::pair<float, float>& sample) const
+Vector TrowbridgeReitz::SampleNormal(const Vector& outgoing, Sampler* sampler) const
 {
+	std::pair<float, float> sample = sampler->Get2D();
+
 	Vector normal;
 	if (!m_SampleVisible) 
 	{

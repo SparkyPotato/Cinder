@@ -36,9 +36,27 @@ bool Scene::LinkReferences()
 	for (auto& object : m_Objects)
 	{
 		// Setup object to world transform to object to camera
-		object.m_ToCamera = object.m_ToCamera * m_Camera->ToWorld.GetInverse();
+		object.ToCamera = object.ToCamera * m_Camera->ToWorld.GetInverse();
 		//                   object to world         world to camera
 		
+		if (object.m_Emission) 
+		{
+			object.m_Emission->Owner = &object;
+			m_Emission.push_back(object.m_Emission.get()); 
+		}
+		else
+		{
+			for (auto& material : m_Materials)
+			{
+				if (material->Name == object.m_MaterialName)
+				{
+					object.m_Material = material.get();
+					break;
+				}
+			}
+			if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
+		}
+
 		// Link geometry pointers to the actual geometry
 		for (auto& geometry : m_Geometry)
 		{
@@ -49,24 +67,8 @@ bool Scene::LinkReferences()
 			}
 		}
 		if (!object.m_Geometry) { Error("Geometry '{}' does not exist!", object.m_GeometryName); return false; }
-
-		for (auto& material : m_Materials)
-		{
-			if (material->Name == object.m_MaterialName)
-			{
-				object.m_Material = material.get();
-				break;
-			}
-		}
-		if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
 		
 		m_Bound = Union(m_Bound, object.GetBound());
-	}
-
-	for (auto& light : m_Lights)
-	{
-		light->ToCamera = light->ToCamera * m_Camera->ToWorld.GetInverse();
-		light->Preprocess(*this);
 	}
 
 	m_Environment.m_CameraToWorld = m_Camera->ToWorld;
@@ -95,11 +97,6 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	if (!node["Materials"] || !node["Materials"].IsSequence())
 	{
 		Error("Material list must be a sequence (line {})!", node.Mark().line + 1);
-		return false;
-	}
-	if (!node["Lights"] || !node["Lights"].IsSequence())
-	{
-		Error("Light list must be a sequence (line {})!", node.Mark().line + 1);
 		return false;
 	}
 
@@ -136,11 +133,6 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	for (auto& material : node["Materials"])
 	{
 		scene->m_Materials.emplace_back(material.as<up<Material>>());
-	}
-
-	for (auto& light : node["Lights"])
-	{
-		scene->m_Lights.emplace_back(light.as<up<Light>>());
 	}
 	
 	for (auto& object : node["Objects"])

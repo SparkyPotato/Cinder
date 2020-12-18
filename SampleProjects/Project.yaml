@@ -1,23 +1,18 @@
 ---
-# Name of the project, will be displayed in Cinder while rendering
-Project Name: Sample Cinder Project
+Project Name: Cornell Box
 
-# A list of scenes to render in the project, with its corresponding output file
 Scenes:
-  - File: Model.yaml
-    Output: Render.png
+  - File: Scene.yaml
+    Output: CornellBox.png
 
-# Renderer to use
 Renderer:
   Type: Whitted
   Sampler: Random
   Filter: Box
-  Samples: 8
-  Ray Depth: 5
-  
-# Type of framebuffer, and the format of the output.
-# Should be the same format as your output file (*.png -> PNG)
+  Camera Samples: 4
+  Ray Depth: 2
+
 Framebuffer:
   Type: 8-bit
   Output: PNG
-  Resolution: [ 1920, 1080 ]
+  Resolution: [ 1000, 1000 ]
