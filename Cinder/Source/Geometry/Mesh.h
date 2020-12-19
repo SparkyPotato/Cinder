@@ -28,7 +28,7 @@ public:
 
 	virtual const std::vector<Geometry*>& GetSubGeometry() override { return m_Sub; }
 
-	virtual Point Sample(Sampler* sampler, float& pdf) const override;
+	virtual Interaction Sample(Sampler* sampler, float& pdf) const override;
 
 private:
 	std::vector<Geometry*> m_Sub;
@@ -55,7 +55,7 @@ public:
 
 	virtual const std::vector<Geometry*>& GetSubGeometry() override { return m_Sub; }
 	
-	virtual Point Sample(Sampler* sampler, float& pdf) const override;
+	virtual Interaction Sample(Sampler* sampler, float& pdf) const override;
 
 private:
 	friend class Triangle;

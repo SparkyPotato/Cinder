@@ -10,4 +10,4 @@ Blender's Suzanne, rendered in 4K with 8 samples per pixel, in 16 minutes on the
 
 ### Soft shadows:
 ![](Render3.png)
-Cornell Box at a resolution of 1000x1000. Rendered in 43 minutes on the same hardware.
+Cornell Box at a resolution of 1000x1000. Rendered in 2 min, 45 sec on the same hardware.

@@ -33,11 +33,3 @@ float CosineHemispherePdf(float cos)
 {
 	return cos * InversePi;
 }
-
-Vector UniformSampleSphere(const std::pair<float, float>& sample)
-{
-	float z = 1.f - 2.f * sample.first;
-	float r = std::sqrt(std::max(0.f, 1.f - z * z));
-	float phi = 2 * Pi * sample.second;
-	return Vector(r * std::cos(phi), r * std::sin(phi), z);
-}

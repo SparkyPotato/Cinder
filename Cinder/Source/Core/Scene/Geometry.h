@@ -29,7 +29,7 @@ public:
 
 	virtual const std::vector<Geometry*>& GetSubGeometry() = 0;
 
-	virtual Point Sample(Sampler* sampler, float& pdf) const = 0;
+	virtual Interaction Sample(Sampler* sampler, float& pdf) const = 0;
 
 	std::string Name;
 };

@@ -9,7 +9,7 @@ Renderer:
   Type: Whitted
   Sampler: Random
   Filter: Box
-  Camera Samples: 4
+  Camera Samples: 8
   Ray Depth: 2
 
 Framebuffer:

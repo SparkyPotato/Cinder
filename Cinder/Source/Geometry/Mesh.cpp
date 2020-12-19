@@ -115,11 +115,10 @@ float Mesh::GetArea() const
 	return m_Area;
 }
 
-Point Mesh::Sample(Sampler* sampler, float& pdf) const
+Interaction Mesh::Sample(Sampler* sampler, float& pdf) const
 {
 	float s = sampler->Get1D();
-	uint32_t tri = uint32_t(s * m_SampleList.size());
-	if (tri == m_SampleList.size()) { tri--; }
+	uint32_t tri = uint32_t(s * (m_SampleList.size() - 1) + 0.5f);
 
 	pdf = 1.f / m_Area;
 	float d;
@@ -260,19 +259,28 @@ bool Triangle::TestIntersect(const Ray& ray) const
 	return true;
 }
 
-Point Triangle::Sample(Sampler* sampler, float& pdf) const
+Interaction Triangle::Sample(Sampler* sampler, float& pdf) const
 {
 	pdf = 1.f / m_Area;
-	std::pair<float, float> sample = sampler->Get2D();
+	auto sample = sampler->Get2D();
 
-	float u = sample.first;
-	float v = sample.second;
+	float su0 = std::sqrt(sample.first);
+	float u = 1.f - su0;
+	float v = sample.second * su0;
 	float w = 1.f - u - v;
 
 	Vector p0, p1, p2;
-	p0 = Vector(m_V0.Position.X(), m_V0.Position.Y(), m_V0.Position.Z());
-	p1 = Vector(m_V1.Position.X(), m_V1.Position.Y(), m_V1.Position.Z());
-	p2 = Vector(m_V2.Position.X(), m_V2.Position.Y(), m_V2.Position.Z());
+	p0 = m_V0.Position - Point();
+	p1 = m_V1.Position - Point();
+	p2 = m_V2.Position - Point();
 
-	return Point() + BarycentricInterp(u, v, w, p0, p1, p2);
+	Interaction i;
+	i.HitPoint = Point() + BarycentricInterp(u, v, w, p0, p1, p2);
+	i.GNormal = Normal(BarycentricInterp(u, v, w, Vector(m_V0.VNormal), Vector(m_V1.VNormal), Vector(m_V2.VNormal)));
+	i.Tangent = BarycentricInterp(u, v, w, m_V0.Tangent, m_V1.Tangent, m_V2.Tangent);
+	i.Bitangent = BarycentricInterp(u, v, w, m_V0.Bitangent, m_V1.Bitangent, m_V2.Bitangent);
+	i.U = BarycentricInterp(u, v, w, m_V0.U, m_V1.U, m_V2.U);
+	i.V = BarycentricInterp(u, v, w, m_V0.V, m_V1.V, m_V2.V);
+
+	return i;
 }

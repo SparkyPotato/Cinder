@@ -52,7 +52,7 @@ Objects:
       Type: Simple
       Color: [ 1, 1, 1 ]
       Intensity: 10
-      Samples: 64
+      Samples: 128
     Transform:
       Position: [ 0, -0.01, 0 ]
       Rotation: [ 0, 0, 0 ]

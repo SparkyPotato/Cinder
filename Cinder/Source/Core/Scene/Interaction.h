@@ -6,7 +6,7 @@
 class Object;
 class BSDF;
 
-constexpr float Epsilon = 0.001f;
+constexpr float Epsilon = 0.002f;
 
 class Interaction
 {

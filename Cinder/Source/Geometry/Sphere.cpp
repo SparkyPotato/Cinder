@@ -24,7 +24,7 @@ bool Sphere::Parse(const YAML::Node& node)
 		return false;
 	}
 
-    m_Bound = Bound(
+	m_Bound = Bound(
 		Point(-m_Radius, -m_Radius, -m_Radius),
 		Point(m_Radius, m_Radius, m_Radius)
 	);
@@ -58,8 +58,8 @@ bool Sphere::Intersect(const Ray& ray, Interaction& interaction) const
 	interaction.HitPoint = hit;
 	interaction.GNormal = Normal(hit - Point()).GetNormalized();
 
-    interaction.Tangent = Cross(Vector(0.f, 1.f, 0.f), hit - Point()).Normalize();
-    interaction.Bitangent = Cross(interaction.Tangent, Vector(interaction.GNormal));
+	interaction.Tangent = Cross(Vector(0.f, 1.f, 0.f), hit - Point()).Normalize();
+	interaction.Bitangent = Cross(interaction.Tangent, Vector(interaction.GNormal));
 
 	return true;
 }
@@ -83,8 +83,26 @@ float Sphere::GetArea() const
 	return m_Area;
 }
 
-Point Sphere::Sample(Sampler* sampler, float& pdf) const
+Interaction Sphere::Sample(Sampler* sampler, float& pdf) const
 {
 	pdf = 1.f / m_Area;
-	return Point() + UniformSampleSphere(sampler->Get2D()) * m_Radius;
+	Interaction i;
+
+	auto sample = sampler->Get2D();
+	float y = 1.f - 2.f * sample.first;
+	float r = std::sqrt(std::max(0.f, 1.f - y * y));
+	float phi = 2 * Pi * sample.second;
+
+	Vector n = Vector(r * std::cos(phi), y, r * std::sin(phi));
+	i.HitPoint = Point() + n * m_Radius;
+	i.GNormal = Normal(n);
+
+	i.Tangent = Cross(Vector(0.f, 1.f, 0.f), n);
+	i.Bitangent = Cross(i.Tangent, Vector(i.GNormal));
+	
+	i.U = phi / (2 * Pi);
+	float theta = std::acos(n.Y());
+	i.V = theta * InversePi;
+
+	return i;
 }

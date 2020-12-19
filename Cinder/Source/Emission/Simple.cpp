@@ -18,15 +18,16 @@ Color SimpleEmission::Evaluate(const Interaction& interaction) const
 
 Color SimpleEmission::Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const
 {
-	Point point = Owner->ToCamera(Owner->GetGeometry()->Sample(sampler, pdf));
-	Vector d = point - interaction.HitPoint;
-	Interaction i;
-	if (!Owner->Intersect(Ray(interaction.HitPoint + Vector(interaction.GNormal) * Epsilon, d), i)) { pdf = 0.f; return Color(); }
+	Interaction i = Owner->GetGeometry()->Sample(sampler, pdf);
+	i.HitPoint = Owner->ToCamera(i.HitPoint);
+	i.GNormal = Owner->ToCamera(i.GNormal);
+
+	Vector d = i.HitPoint - interaction.HitPoint;
 	if (Dot(-d, i.GNormal) < 0.f) { pdf = 0.f; return Color(); }
-	incoming = (d).GetNormalized();
+	incoming = d.GetNormalized();
 
 	tester.Point1 = interaction;
-	tester.Point2.HitPoint = point;
+	tester.Point2 = i;
 
 	return m_Color / d.GetLengthSquare();
 }
