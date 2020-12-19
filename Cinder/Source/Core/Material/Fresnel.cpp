@@ -33,7 +33,7 @@ FresnelConductor::FresnelConductor(Color etaOut, Color etaIn, Color absorption)
 
 Color Sqrt(const Color& color)
 {
-	return Color(std::sqrt(color.R), std::sqrt(color.G), std::sqrt(color.B));
+	return Color(std::sqrt(color.R()), std::sqrt(color.G()), std::sqrt(color.B()));
 }
 
 Color FresnelConductor::Evaluate(float cosI) const

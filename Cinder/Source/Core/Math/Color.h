@@ -1,6 +1,5 @@
 #pragma once
 
-// Color used in the framebuffer
 class Color
 {
 public:
@@ -22,9 +21,15 @@ public:
 	Color operator/(const Color& other) const;
 	Color& operator/=(const Color& other);
 
-	float& R = reinterpret_cast<float*>(&m_Vector)[0];
-	float& G = reinterpret_cast<float*>(&m_Vector)[1];
-	float& B = reinterpret_cast<float*>(&m_Vector)[2];
+	float& R() { return reinterpret_cast<float*>(&m_Vector)[0]; }
+	float& G() { return reinterpret_cast<float*>(&m_Vector)[1]; }
+	float& B() { return reinterpret_cast<float*>(&m_Vector)[2]; }
+
+	const float& R() const { return reinterpret_cast<const float*>(&m_Vector)[0]; }
+	const float& G() const { return reinterpret_cast<const float*>(&m_Vector)[1]; }
+	const float& B() const { return reinterpret_cast<const float*>(&m_Vector)[2]; }
+
+	float Y() const;
 
 private:
 	Color(__m128 vector);

@@ -15,10 +15,10 @@ void Plastic::Compute(Interaction& interaction, MemoryArena& arena) const
     NormalMap(m_Normal, interaction);
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 
-	float rough = m_Roughness->Evaluate(interaction).R;
+	float rough = m_Roughness->Evaluate(interaction).R();
 	float roughness = TrowbridgeReitz::RoughnessToAlpha(rough);
 	auto microfacet = arena.Allocate<TrowbridgeReitz>(roughness, roughness);
-	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, m_Eta->Evaluate(interaction).R);
+	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, m_Eta->Evaluate(interaction).R());
 
 	interaction.Bsdf->Add(arena.Allocate<OrenNayar>(m_DiffuseColor->Evaluate(interaction), rough));
 	interaction.Bsdf->Add(arena.Allocate<MicrofacetReflection>(m_SpecularColor->Evaluate(interaction), microfacet, fresnel));

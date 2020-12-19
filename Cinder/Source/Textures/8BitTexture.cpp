@@ -13,9 +13,9 @@ EightBitTexture::EightBitTexture(Color* data, uint32_t width, uint32_t height)
 
 	for (uint32_t i = 0; i < width * height; i++)
 	{
-		m_Data[i].R = uint8_t(std::max(0.f, std::min(1.f, data[i].R)) * 255.f);
-		m_Data[i].G = uint8_t(std::max(0.f, std::min(1.f, data[i].G)) * 255.f);
-		m_Data[i].B = uint8_t(std::max(0.f, std::min(1.f, data[i].B)) * 255.f);
+		m_Data[i].R = uint8_t(std::max(0.f, std::min(1.f, data[i].R())) * 255.f);
+		m_Data[i].G = uint8_t(std::max(0.f, std::min(1.f, data[i].G())) * 255.f);
+		m_Data[i].B = uint8_t(std::max(0.f, std::min(1.f, data[i].B())) * 255.f);
 	}
 }
 

@@ -56,6 +56,8 @@ int wmain(int argc, wchar_t** argv)
 		uArgv[i] = strings[i].data();
 	}
 
+	// while (!IsDebuggerPresent()) { Sleep(100); }
+
 	return Entry(argc, uArgv);
 }
 

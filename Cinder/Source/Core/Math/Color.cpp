@@ -71,9 +71,16 @@ Color& Color::operator/=(const Color& other)
 	return *this;
 }
 
+float Color::Y() const 
+{
+	const float YWeight[3] = { 0.212671f, 0.715160f, 0.072169f };
+
+	return YWeight[0] * R() + YWeight[1] * G() + YWeight[2] * B();
+}
+
 bool operator==(const Color& first, const Color& second)
 {
-	return first.R == second.R && first.G == second.G && first.B == second.B;
+	return first.R() == second.R() && first.G() == second.G() && first.B() == second.B();
 }
 
 bool operator!=(const Color& first, const Color& second)
@@ -83,12 +90,12 @@ bool operator!=(const Color& first, const Color& second)
 
 bool operator<(const Color& first, const Color& second)
 {
-	return first.R < second.R && first.G < second.G && first.B < second.B;
+	return first.R() < second.R() && first.G() < second.G() && first.B() < second.B();
 }
 
 bool operator<=(const Color& first, const Color& second)
 {
-	return first.R <= second.R&& first.G <= second.G&& first.B <= second.B;
+	return first.R() <= second.R()&& first.G() <= second.G()&& first.B() <= second.B();
 }
 
 bool operator>(const Color& first, const Color& second)
@@ -121,9 +128,9 @@ bool YAML::convert<Color>::decode(const Node& node, Color& color)
 	
 	try
 	{
-		color.R = node[0].as<float>();
-		color.G = node[1].as<float>();
-		color.B = node[2].as<float>();
+		color.R() = node[0].as<float>();
+		color.G() = node[1].as<float>();
+		color.B() = node[2].as<float>();
 	}
 	catch (YAML::Exception& e)
 	{

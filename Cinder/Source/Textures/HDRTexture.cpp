@@ -76,7 +76,7 @@ bool HDRTexture::Parse(const YAML::Node& node)
 			float(data[i * 3] + 2) / 255.f
 		);
 
-		m_Data[i] = Color(std::pow(c.R, 2.2f), std::pow(c.G, 2.2f), std::pow(c.B, 2.2f));
+		m_Data[i] = Color(std::pow(c.R(), 2.2f), std::pow(c.G(), 2.2f), std::pow(c.B(), 2.2f));
 	}
 
 	stbi_image_free(data);

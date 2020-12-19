@@ -6,11 +6,11 @@ Scenes:
     Output: CornellBox.png
 
 Renderer:
-  Type: Whitted
+  Type: Path
   Sampler: Random
   Filter: Box
-  Camera Samples: 8
-  Ray Depth: 2
+  Camera Samples: 1024
+  Ray Depth: 5
 
 Framebuffer:
   Type: 8-bit

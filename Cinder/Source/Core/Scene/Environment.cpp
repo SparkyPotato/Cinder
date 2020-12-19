@@ -118,9 +118,9 @@ void Environment::GenerateIrradiance(const IrradianceSample& average)
 				{
 					color += sample.Coefficients[i];
 				}
-				color.R = std::max(0.f, color.R);
-				color.G = std::max(0.f, color.G);
-				color.B = std::max(0.f, color.B);
+				color.R() = std::max(0.f, color.R());
+				color.G() = std::max(0.f, color.G());
+				color.B() = std::max(0.f, color.B());
 			}
 		}
 

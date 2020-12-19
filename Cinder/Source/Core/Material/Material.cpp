@@ -4,7 +4,7 @@
 void Material::NormalMap(const up<Texture>& texture, Interaction& interaction) const
 {
     Color c = texture->Evaluate(interaction);
-    Vector normal = Vector(c.R, c.G, c.B).Normalize();
+    Vector normal = Vector(c.R(), c.G(), c.B()).Normalize();
     interaction.SNormal = Normal(normal.TransformFrom(
         interaction.Tangent,
         interaction.Bitangent,

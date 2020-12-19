@@ -97,8 +97,8 @@ void EightBitTile::SetPixel(const Color& color, uint32_t x, uint32_t y)
 	
 	pixel = {
 		// Clamp all color values from 0.f - 1.f
-		uint8_t(std::max(std::min(c.R, 1.f), 0.f) * 255.f),
-		uint8_t(std::max(std::min(c.G, 1.f), 0.f) * 255.f),
-		uint8_t(std::max(std::min(c.B, 1.f), 0.f) * 255.f)
+		uint8_t(std::max(std::min(c.R(), 1.f), 0.f) * 255.f),
+		uint8_t(std::max(std::min(c.G(), 1.f), 0.f) * 255.f),
+		uint8_t(std::max(std::min(c.B(), 1.f), 0.f) * 255.f)
 	};
 }

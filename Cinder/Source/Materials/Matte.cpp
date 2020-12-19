@@ -14,7 +14,7 @@ void MatteMaterial::Compute(Interaction& interaction, MemoryArena& arena) const
     NormalMap(m_Normal, interaction);
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 
-	interaction.Bsdf->Add(arena.Allocate<OrenNayar>(m_Color->Evaluate(interaction), m_Roughness->Evaluate(interaction).R));
+	interaction.Bsdf->Add(arena.Allocate<OrenNayar>(m_Color->Evaluate(interaction), m_Roughness->Evaluate(interaction).R()));
 }
 
 bool MatteMaterial::Parse(const YAML::Node& node)

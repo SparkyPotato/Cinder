@@ -14,7 +14,7 @@ void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
     NormalMap(m_Normal, interaction);
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 
-	float eta = m_Eta->Evaluate(interaction).R;
+	float eta = m_Eta->Evaluate(interaction).R();
 	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, eta);
 	Color c = m_Color->Evaluate(interaction);
 

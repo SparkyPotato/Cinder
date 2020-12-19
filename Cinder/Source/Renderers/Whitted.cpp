@@ -15,7 +15,7 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 
 	interaction.HitObject->GetMaterial()->Compute(interaction, arena);
 	const BSDF* bsdf = interaction.Bsdf;
-	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized();
+	Vector outgoing = -ray.Direction;
 
 	Color out;
 

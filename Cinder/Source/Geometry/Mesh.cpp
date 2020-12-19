@@ -117,8 +117,7 @@ float Mesh::GetArea() const
 
 Interaction Mesh::Sample(Sampler* sampler, float& pdf) const
 {
-	float s = sampler->Get1D();
-	uint32_t tri = uint32_t(s * (m_SampleList.size() - 1) + 0.5f);
+	uint64_t tri = std::min(uint64_t(sampler->Get1D() * m_SampleList.size()), m_SampleList.size() - 1);
 
 	pdf = 1.f / m_Area;
 	float d;

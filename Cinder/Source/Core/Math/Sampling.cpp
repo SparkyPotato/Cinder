@@ -33,3 +33,9 @@ float CosineHemispherePdf(float cos)
 {
 	return cos * InversePi;
 }
+
+float PowerHeuristic(int nf, float fPdf, int ng, float gPdf)
+{
+	float f = nf * fPdf, g = ng * gPdf;
+	return (f * f) / (f * f + g * g);
+}
