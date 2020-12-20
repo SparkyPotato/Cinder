@@ -42,9 +42,9 @@ Objects:
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Small Sphere
-    Material: White
+    Material: Sphere
     Transform:
-      Position: [ 278, 200, 350 ]
+      Position: [ 200, 200, 350 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
   - Geometry: Light
@@ -82,6 +82,23 @@ Geometry:
     Radius: 75
 
 Materials:
+  - Name: Sphere
+    Type: Metal
+    Color:
+      Type: Constant
+      Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0.1, 0, 0 ]
+    Refractive Index:
+      Type: Constant
+      Color: [ 1.2, 0, 0 ]
+    Absorption:
+      Type: Constant
+      Color: [ 7, 0, 0 ]
   - Name: White
     Type: Matte
     Color:

@@ -14,4 +14,6 @@ Cornell Box at a resolution of 1000x1000. Rendered in 2 min, 45 sec on the same 
 
 ### Global illumination
 ![](Render4.png)
-Same scene as above, path-traced with 1024 samples per pixel. Took 64 minutes.
+Same scene as above, path-traced with 5000 samples per pixel. Took approx 5 hours.
+![](Render5.png)
+Sphere uses a metallic material, modelled after aluminium. 4000 samples per pixel, in 4 hours.
