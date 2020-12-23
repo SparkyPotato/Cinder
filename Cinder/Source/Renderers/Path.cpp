@@ -121,7 +121,6 @@ Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* 
 	{
 		return tester(scene) ? Color() :
 			c * std::abs(Dot(incoming, i.SNormal)) / pdf * i.Bsdf->Evaluate((Point() - i.HitPoint).GetNormalized(), incoming);
-			// SpecularReflect(scene, i, arena, sampler, 0) + SpecularTransmit(scene, i, arena, sampler, 0);
 	}
 
 	return Color();

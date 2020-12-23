@@ -19,3 +19,20 @@ private:
 	const Microfacet* m_Microfacet;
 	const Fresnel* m_Fresnel;
 };
+
+class MicrofacetTransmission : public BxDF
+{
+public:
+	MicrofacetTransmission(const Color& base, Microfacet* microfacet, float etaOut, float etaIn);
+
+	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;
+	virtual Color EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const override;
+
+	virtual float Pdf(const Vector& outgoing, const Vector& incoming) const override;
+
+private:
+	const Color m_Base;
+	const Microfacet* m_Microfacet;
+	const FresnelDielectric m_Fresnel;
+	float m_EtaI, m_EtaT;
+};

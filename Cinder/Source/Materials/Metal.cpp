@@ -14,10 +14,9 @@ void Metal::Compute(Interaction& interaction, MemoryArena& arena) const
     NormalMap(m_Normal, interaction);
 	interaction.Bsdf = arena.Allocate<BSDF>(interaction);
 
-	float roughness = TrowbridgeReitz::RoughnessToAlpha(m_Roughness->Evaluate(interaction).R());
-
-	auto microfacet = arena.Allocate<TrowbridgeReitz>(roughness, roughness);
 	auto fresnel = arena.Allocate<FresnelConductor>(1.f, m_Eta->Evaluate(interaction), m_K->Evaluate(interaction));
+	float roughness = TrowbridgeReitz::RoughnessToAlpha(m_Roughness->Evaluate(interaction).R());
+	auto microfacet = arena.Allocate<TrowbridgeReitz>(roughness, roughness);
 
 	interaction.Bsdf->Add(arena.Allocate<MicrofacetReflection>(m_Color->Evaluate(interaction), microfacet, fresnel));
 }

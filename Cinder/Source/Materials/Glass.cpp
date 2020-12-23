@@ -1,6 +1,7 @@
 #include "PCH.h"
 #include "Materials/Glass.h"
 
+#include "BxDFs/Microfacet.h"
 #include "BxDFs/Specular.h"
 
 MATERIAL(Glass, Glass)
@@ -16,10 +17,12 @@ void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
 
 	float eta = m_Eta->Evaluate(interaction).R();
 	auto fresnel = arena.Allocate<FresnelDielectric>(1.f, eta);
+	float roughness = TrowbridgeReitz::RoughnessToAlpha(m_Roughness->Evaluate(interaction).R());
+	auto microfacet = arena.Allocate<TrowbridgeReitz>(roughness, roughness);
 	Color c = m_Color->Evaluate(interaction);
 
-	interaction.Bsdf->Add(arena.Allocate<SpecularReflection>(c, fresnel));
-	interaction.Bsdf->Add(arena.Allocate<SpecularTransmission>(c, 1.f, eta));
+	interaction.Bsdf->Add(arena.Allocate<MicrofacetReflection>(c, microfacet, fresnel));
+	interaction.Bsdf->Add(arena.Allocate<MicrofacetTransmission>(c, microfacet, 1.f, eta));
 }
 
 bool Glass::Parse(const YAML::Node& node)
@@ -38,6 +41,14 @@ bool Glass::Parse(const YAML::Node& node)
 		return false;
 	}
 	try { m_Normal = node["Normal"].as<up<Texture>>(); }
+	catch (...) { return false; }
+
+	if (!node["Roughness"])
+	{
+		Error("Glass material does not have roughness (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	try { m_Roughness = node["Roughness"].as<up<Texture>>(); }
 	catch (...) { return false; }
 
 	if (!node["Refractive Index"])

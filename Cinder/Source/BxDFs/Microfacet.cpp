@@ -40,3 +40,58 @@ float MicrofacetReflection::Pdf(const Vector& outgoing, const Vector& incoming) 
 	Vector normal = (incoming + outgoing).Normalize();
 	return m_Microfacet->Pdf(outgoing, normal) / (4 * Dot(outgoing, normal));
 }
+
+MicrofacetTransmission::MicrofacetTransmission(const Color& base, Microfacet* microfacet, float etaOut, float etaIn)
+	: BxDF(Type(Transmission | Glossy)), m_Base(base), m_Microfacet(microfacet), m_Fresnel(etaOut, etaIn),
+	m_EtaI(etaOut), m_EtaT(etaIn)
+{}
+
+Color MicrofacetTransmission::Evaluate(const Vector& outgoing, const Vector& incoming) const
+{
+	if (SameHemisphere(outgoing, incoming)) { return Color(); }
+
+	float cosO = Cos(outgoing);
+	float cosI = Cos(incoming);
+	if (cosI == 0.f || cosO == 0.f) { return Color(); }
+
+	float eta = cosO > 0.f ? (m_EtaT / m_EtaI) : (m_EtaI / m_EtaT);
+	Vector normal = (outgoing + incoming * eta).Normalize();
+	if (normal.Y() < 0.f) { normal = -normal; }
+
+	if (Dot(outgoing, normal) * Dot(incoming, normal) > 0.f) { return Color(); }
+
+	Color c = m_Fresnel.Evaluate(Dot(outgoing, normal));
+
+	float sqrtDenom = Dot(outgoing, normal) + eta * Dot(incoming, normal);
+	float factor = 1.f / eta;
+
+	return (Color(1.f) - c) * m_Base *
+		std::abs(m_Microfacet->Evaluate(normal) * m_Microfacet->Masking(outgoing, incoming) * eta * eta *
+		std::abs(Dot(incoming, normal)) * std::abs(Dot(outgoing, normal)) * factor * factor /
+		(cosI * cosO * sqrtDenom * sqrtDenom));
+}
+
+Color MicrofacetTransmission::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
+{
+	if (outgoing.Y() == 0.f) { return Color(); }
+	Vector normal = m_Microfacet->SampleNormal(outgoing, sampler);
+	if (Dot(outgoing, normal) < 0.f) { return Color(); }
+
+	float eta = Cos(outgoing) > 0.f ? (m_EtaT / m_EtaI) : (m_EtaI / m_EtaT);
+	if (!Refract(outgoing, Normal(normal), eta, incoming)) { return Color(); }
+	pdf = Pdf(outgoing, incoming);
+	return Evaluate(outgoing, incoming);
+}
+
+float MicrofacetTransmission::Pdf(const Vector& outgoing, const Vector& incoming) const
+{
+	if (SameHemisphere(outgoing, incoming)) { return 0.f; }
+	float eta = Cos(outgoing) > 0.f ? (m_EtaT / m_EtaI) : (m_EtaI / m_EtaT);
+	Vector normal = (outgoing + incoming * eta).Normalize();
+
+	if (Dot(outgoing, normal) * Dot(incoming, normal) > 0.f) { return 0.f; }
+
+	float sqrtDenom = Dot(outgoing, normal) + eta * Dot(incoming, normal);
+	float dwhdwi = std::abs((eta * eta * Dot(incoming, normal)) / (sqrtDenom * sqrtDenom));
+	return m_Microfacet->Pdf(outgoing, normal) * dwhdwi;
+}
