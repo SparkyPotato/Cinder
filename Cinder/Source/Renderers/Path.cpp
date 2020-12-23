@@ -24,16 +24,17 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 		i.HitObject->GetMaterial()->Compute(i, arena);
 		out += b * SampleOneLight(scene, i, arena, sampler);
 
-		Vector outgoing = -r.Direction.GetNormalized(), incoming;
+		Vector outgoing = -r.Direction, incoming;
 		float pdf;
 		BxDF::Type type;
 		Color c = i.Bsdf->EvaluateSample(outgoing, incoming, sampler, pdf, BxDF::All, &type);
 
 		if (c == Color() || pdf == 0.f) { break; }
 
-		b *= c * std::abs(Dot(incoming, i.SNormal)) / pdf;
+		float dot = Dot(incoming, i.SNormal);
+		b *= c * std::abs(dot) / pdf;
 		specular = (type & BxDF::Specular) != 0;
-		r = Ray(i.HitPoint + Vector(i.GNormal) * Epsilon, incoming);
+		r = Ray(i.HitPoint + (dot < 0.f ? -Vector(i.GNormal) : Vector(i.GNormal)) * Epsilon, incoming);
 
 		if (bounces > 3) 
 		{
@@ -66,48 +67,64 @@ bool PathRenderer::Parse(const YAML::Node& node)
 	return true;
 }
 
-Color Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Emission* light, MemoryArena& arena, bool specular = false)
+// Color Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Emission* light, MemoryArena& arena, bool specular = false)
+// {
+// 	BxDF::Type flags = specular ? BxDF::All : BxDF::Type(BxDF::All & ~BxDF::Specular);
+// 	Color L;
+// 
+// 	Vector incoming;
+// 	Vector outgoing = Point() - i.HitPoint;
+// 	outgoing.Normalize();
+// 
+// 	float lightPdf, bsdfPdf;
+// 	Occlusion occlusion;
+// 	Color c = light->Sample(i, sampler, incoming, lightPdf, occlusion);
+// 	if (lightPdf > 0.f && c != Color())
+// 	{
+// 		Color f;
+// 		f = i.Bsdf->Evaluate(outgoing, incoming, flags) * std::abs(Dot(incoming, i.SNormal));
+// 		bsdfPdf = i.Bsdf->Pdf(outgoing, incoming, flags);
+// 
+// 		if (!occlusion(scene))
+// 		{
+// 			float weight = PowerHeuristic(1, lightPdf, 1, bsdfPdf);
+// 			L = f * c * weight / lightPdf;
+// 		}
+// 	}
+// 
+// 	BxDF::Type sType;
+// 	c = i.Bsdf->EvaluateSample(outgoing, incoming, sampler, bsdfPdf, flags, &sType);
+// 	c *= std::abs(Dot(incoming, i.SNormal));
+// 
+// 	if (c != Color() && bsdfPdf > 0.f)
+// 	{
+// 		Interaction interaction;
+// 		bool hit = scene.Intersect(Ray(i.HitPoint + Vector(i.GNormal) * Epsilon, incoming), interaction);
+// 		if (hit && interaction.HitObject->GetEmission())
+// 		{
+// 			lightPdf = 1.f / interaction.HitObject->GetGeometry()->GetArea();
+// 			float weight = PowerHeuristic(1, lightPdf, 1, bsdfPdf);
+// 			L += interaction.HitObject->GetEmission()->Evaluate(interaction) * weight / bsdfPdf;
+// 		}
+// 	}
+// 
+// 	return L;
+// }
+
+Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Emission* light, MemoryArena& arena)
 {
-	BxDF::Type flags = specular ? BxDF::All : BxDF::Type(BxDF::All & ~BxDF::Specular);
-	Color L;
-
 	Vector incoming;
-	Vector outgoing = Point() - i.HitPoint;
-	outgoing.Normalize();
-
-	float lightPdf, bsdfPdf;
-	Occlusion occlusion;
-	Color c = light->Sample(i, sampler, incoming, lightPdf, occlusion);
-	if (lightPdf > 0.f && c != Color())
+	float pdf;
+	Occlusion tester;
+	Color c = light->Sample(i, sampler, incoming, pdf, tester);
+	if (c != Color() && pdf != 0.f)
 	{
-		Color f;
-		f = i.Bsdf->Evaluate(outgoing, incoming, flags) * std::abs(Dot(incoming, i.SNormal));
-		bsdfPdf = i.Bsdf->Pdf(outgoing, incoming, flags);
-
-		if (!occlusion(scene))
-		{
-			float weight = PowerHeuristic(1, lightPdf, 1, bsdfPdf);
-			L = f * c * weight / lightPdf;
-		}
+		return tester(scene) ? Color() :
+			c * std::abs(Dot(incoming, i.SNormal)) / pdf * i.Bsdf->Evaluate((Point() - i.HitPoint).GetNormalized(), incoming);
+			// SpecularReflect(scene, i, arena, sampler, 0) + SpecularTransmit(scene, i, arena, sampler, 0);
 	}
 
-	BxDF::Type sType;
-	c = i.Bsdf->EvaluateSample(outgoing, incoming, sampler, bsdfPdf, flags, &sType);
-	c *= std::abs(Dot(incoming, i.SNormal));
-
-	if (c != Color() && bsdfPdf > 0.f)
-	{
-		Interaction interaction;
-		bool hit = scene.Intersect(Ray(i.HitPoint + Vector(i.GNormal) * Epsilon, incoming), interaction);
-		if (hit && interaction.HitObject->GetEmission())
-		{
-			lightPdf = 1.f / interaction.HitObject->GetGeometry()->GetArea();
-			float weight = PowerHeuristic(1, lightPdf, 1, bsdfPdf);
-			L += interaction.HitObject->GetEmission()->Evaluate(interaction) * weight / bsdfPdf;
-		}
-	}
-
-	return L;
+	return Color();
 }
 
 Color PathRenderer::SampleOneLight(const Scene& scene, const Interaction& interaction, MemoryArena& arena, Sampler* sampler)

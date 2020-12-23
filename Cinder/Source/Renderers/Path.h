@@ -9,7 +9,8 @@ public:
 
 	virtual bool Parse(const YAML::Node& node) override;
 
-	virtual Color SampleOneLight(const Scene& scene, const Interaction& i, MemoryArena& arena, Sampler* sampler);
+	Color Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Emission* light, MemoryArena& arena);
+	Color SampleOneLight(const Scene& scene, const Interaction& i, MemoryArena& arena, Sampler* sampler);
 
 private:
 	uint16_t m_Depth;

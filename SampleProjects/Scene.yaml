@@ -9,6 +9,8 @@ Camera:
     Rotation: [ 0, 0, 0 ]
     Scale: [ 1, 1, 1 ]
   FOV: 60
+  Aperture: 0.025
+  Focal Length: 0.035
 
 Objects:
   - Geometry: Floor
@@ -51,7 +53,7 @@ Objects:
     Emission:
       Type: Simple
       Color: [ 1, 1, 1 ]
-      Intensity: 10
+      Intensity: 2
       Samples: 4
     Transform:
       Position: [ 0, -0.01, 0 ]
@@ -83,7 +85,7 @@ Geometry:
 
 Materials:
   - Name: Sphere
-    Type: Metal
+    Type: Glass
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
@@ -92,13 +94,10 @@ Materials:
       Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
-      Color: [ 0.1, 0, 0 ]
+      Color: [ 0, 0, 0 ]
     Refractive Index:
       Type: Constant
-      Color: [ 1.2, 0, 0 ]
-    Absorption:
-      Type: Constant
-      Color: [ 7, 0, 0 ]
+      Color: [ 1.5, 0, 0 ]
   - Name: White
     Type: Matte
     Color:
