@@ -11,11 +11,11 @@ struct Options
 
 namespace LogLevel
 {
-	inline int Verbose = 0;
-	inline int Log = 1;
-	inline int Warning = 2;
-	inline int Error = 3;
-	inline int Fatal = 4;
+	constexpr int Verbose = 0;
+	constexpr int Log = 1;
+	constexpr int Warning = 2;
+	constexpr int Error = 3;
+	constexpr int Fatal = 4;
 };
 
 extern int GLogLevel;

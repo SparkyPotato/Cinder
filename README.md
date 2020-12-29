@@ -11,15 +11,16 @@ and should support any other POSIX-complaint OS. It has been tested on:
 ## Features
 1. Easily-extendable component system composed of several simple interfaces.
 2. Project and scene deserialization from YAML.
-3. Sampler Renderer as a base for tile-based multithreaded raytracing.
+3. Sampler Renderer as a base for tile-based multithreaded raytracing. Used by Whitted Renderer and Path Renderer.
 4. Geometry-instancing, with spheres and triangle meshes.
 5. Interface for object-ray intersection acceleration structures.
-6. BRDF and BTDF interfaces, with Lambertian and Oren-Nayar diffuse BRDFs. Perfect specular reflection and transmission
-   has also been implemented, with Fresnel reflectance (assuming unpolarized light) and refraction.
+6. BRDF and BTDF interfaces, with Lambertian and Oren-Nayar diffuse BRDFs. Microfacet reflection
+   and transmission has also been implemented, with Fresnel reflectance (assuming unpolarized light) and refraction.
 7. Texture interface, with constant-value, 8-bit, and floating-point textures.
-8. Material interface for computing BSDFs. Perfect mirrors, glass, and matte materials have been implemented.
-9. Light interface, with a point and directional light implemented.
-10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL in the Whitted Renderer.
+8. Material interface for computing BSDFs. Perfect mirrors, glass, matte, plastic and metal materials have been implemented.
+9. Emission interface, used for Monte-Carlo integration of incoming light from an object without a delta-distribution.
+   Simple diffuse emission has be implemented, which supports light texturing.
+10. Environment skyboxes, with runtime irradiance map generation, for diffuse IBL.
 
 ### Upcoming
 1. BVH acceleration structure.

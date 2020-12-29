@@ -49,10 +49,18 @@ Objects:
       Position: [ 200, 200, 350 ]
       Rotation: [ 0, 0, 0 ]
       Scale: [ 1, 1, 1 ]
+  - Geometry: Small Sphere
+    Material: Mirror
+    Transform:
+      Position: [ 400, 200, 350 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
   - Geometry: Light
     Emission:
       Type: Simple
-      Color: [ 1, 1, 1 ]
+      Color:
+        Type: Constant
+        Color: [ 1, 1, 1 ]
       Intensity: 2
       Samples: 4
     Transform:
@@ -85,7 +93,7 @@ Geometry:
 
 Materials:
   - Name: Sphere
-    Type: Glass
+    Type: Matte
     Color:
       Type: Constant
       Color: [ 1, 1, 1 ]
@@ -94,7 +102,18 @@ Materials:
       Color: [ 0, 0, 1 ]
     Roughness:
       Type: Constant
-      Color: [ 0.1, 0, 0 ]
+      Color: [ 0, 0, 0 ]
+  - Name: Mirror
+    Type: Mirror
+    Color:
+      Type: Constant
+      Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
     Refractive Index:
       Type: Constant
       Color: [ 1.5, 0, 0 ]

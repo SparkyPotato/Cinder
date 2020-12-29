@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Scene/Emission.h"
-#include "Core/Math/Color.h"
+#include "Core/Material/Texture.h"
 
 class SimpleEmission : public Emission
 {
@@ -14,5 +14,6 @@ public:
 	virtual bool Parse(const YAML::Node& node) override;
 
 private:
-	Color m_Color;
+	up<Texture> m_Color;
+	float m_Intensity = 0.f;
 };

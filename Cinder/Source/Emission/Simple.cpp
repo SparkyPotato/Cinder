@@ -13,7 +13,7 @@ Color SimpleEmission::Evaluate(const Interaction& interaction) const
 {
 	if (Dot(Point() - interaction.HitPoint, interaction.GNormal) < 0.f) { return Color(); }
 
-	return m_Color;
+	return m_Color->Evaluate(interaction);
 }
 
 Color SimpleEmission::Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const
@@ -29,7 +29,7 @@ Color SimpleEmission::Sample(const Interaction& interaction, Sampler* sampler, V
 	tester.Point1 = interaction;
 	tester.Point2 = i;
 
-	return m_Color / d.GetLengthSquare();
+	return m_Color->Evaluate(i) / d.GetLengthSquare();
 }
 
 bool SimpleEmission::Parse(const YAML::Node& node)
@@ -45,10 +45,10 @@ bool SimpleEmission::Parse(const YAML::Node& node)
 		return false;
 	}
 
-	try { m_Color = node["Color"].as<Color>(); }
+	try { m_Color = node["Color"].as<up<Texture>>(); }
 	catch (...) { return false; }
 
-	try { m_Color *= node["Intensity"].as<float>(); }
+	try { m_Intensity = node["Intensity"].as<float>(); }
 	catch (YAML::Exception& e)
 	{
 		Error("Emission intensity must be a float (line {})!", e.mark.line + 1);
