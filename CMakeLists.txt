@@ -1,31 +1,39 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.12)
 
-project(Cinder)
+project (Cinder LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+	option(SUBMODULE "Check submodules during build" ON)
+	if(SUBMODULE)
+		execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+			RESULT_VARIABLE GIT_SUBMOD_RESULT)
+		if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+			message(FATAL_ERROR "Updating submodules failed with code ${GIT_SUBMOD_RESULT}.")
+		endif()
+	endif()
+endif()
 
-add_subdirectory(Cinder/Dependencies/fmt)
-add_subdirectory(Cinder/Dependencies/yaml-cpp)
-add_subdirectory(Cinder/Dependencies/Assimp)
+option(BUILD_DOCS "Build the documentation" ON)
+option(BUILD_CLI "Build the CLI tool" ON)
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/Executable)
-set(THREADS_PREFER_PTHREAD_FLAG ON)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Libraries)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Libraries)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Binaries)
 
-include_directories(${PROJECT_SOURCE_DIR}/Cinder/Source/)
-include_directories(${PROJECT_SOURCE_DIR}/Cinder/Dependencies/fmt/include)
-include_directories(${PROJECT_SOURCE_DIR}/Cinder/Dependencies/yaml-cpp/include)
-include_directories(${PROJECT_SOURCE_DIR}/Cinder/Dependencies/stb)
-include_directories(${PROJECT_SOURCE_DIR}/Cinder/Dependencies/Assimp/include)
-include_directories(${CMAKE_BINARY_DIR}/Cinder/Dependencies/Assimp/include)
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
-file(GLOB_RECURSE CINDER_SOURCE CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/Cinder/Source/*.cpp)
-add_executable(Cinder ${CINDER_SOURCE})
+add_subdirectory(${PROJECT_SOURCE_DIR}/External/fmt)
+add_subdirectory(${PROJECT_SOURCE_DIR}/External/yaml-cpp)
+add_subdirectory(${PROJECT_SOURCE_DIR}/External/Assimp)
 
-target_precompile_headers(Cinder PRIVATE ${PROJECT_SOURCE_DIR}/Cinder/Source/PCH.h)
+add_subdirectory(API)
 
-find_package(Threads REQUIRED)
-target_link_libraries(Cinder PRIVATE Threads::Threads)
-target_link_libraries(Cinder PRIVATE fmt)
-target_link_libraries(Cinder PRIVATE yaml-cpp)
-target_link_libraries(Cinder PRIVATE assimp)
+if (BUILD_CLI)
+	add_subdirectory(CLI)
+endif ()
+
+if (BUILD_DOCS)
+	add_subdirectory(Docs)
+endif ()

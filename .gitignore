@@ -18,11 +18,6 @@ _deps
 # Log files
 */Log.txt
 
-# Render Results
-*Render.png
-*Model.png
-*CornellBox.png
-
 # Logs
 *Log.txt
 

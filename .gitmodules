@@ -1,12 +1,12 @@
-[submodule "Cinder/Dependencies/yaml-cpp"]
-	path = Cinder/Dependencies/yaml-cpp
+[submodule "External/yaml-cpp"]
+	path = External/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
-[submodule "Cinder/Dependencies/stb"]
-	path = Cinder/Dependencies/stb
+[submodule "External/stb"]
+	path = External/stb
 	url = https://github.com/nothings/stb
-[submodule "Cinder/Dependencies/fmt"]
-	path = Cinder/Dependencies/fmt
-	url = https://github.com/fmtlib/fmt
-[submodule "Cinder/Dependencies/Assimp"]
-	path = Cinder/Dependencies/Assimp
+[submodule "External/Assimp"]
+	path = External/Assimp
 	url = https://github.com/assimp/assimp
+[submodule "External/fmt"]
+	path = External/fmt
+	url = https://github.com/fmtlib/fmt
