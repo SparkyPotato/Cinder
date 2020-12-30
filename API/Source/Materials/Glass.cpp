@@ -35,8 +35,8 @@ void Glass::Compute(Interaction& interaction, MemoryArena& arena) const
 	auto microfacet = arena.Allocate<TrowbridgeReitz>(roughness, roughness);
 	Color c = m_Color->Evaluate(interaction);
 
-	interaction.Bsdf->Add(arena.Allocate<MicrofacetReflection>(c, microfacet, fresnel));
-	interaction.Bsdf->Add(arena.Allocate<MicrofacetTransmission>(c, microfacet, 1.f, eta));
+	interaction.Bsdf->Add(arena.Allocate<SpecularReflection>(c, fresnel));
+	interaction.Bsdf->Add(arena.Allocate<SpecularTransmission>(c, 1.f, eta));
 }
 
 bool Glass::Parse(const YAML::Node& node)

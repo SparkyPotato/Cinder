@@ -18,6 +18,7 @@
 #include "Core/Scene/Geometry.h"
 #include "Core/Scene/Object.h"
 #include "Core/Scene/Environment.h"
+#include "Core/Scene/Light.h"
 #include "Core/Material/Material.h"
 
 class AccelerationStructure;
@@ -38,7 +39,8 @@ public:
 	bool TestIntersect(const Ray& ray) const;
 
 	const Environment& GetEnvironment() const { return m_Environment; }
-	const std::vector<Emission*>& GetEmission() const { return m_Emission; }
+
+	const std::vector<up<Light>>& GetLights() const { return m_Lights; }
 
 private:
 	friend struct YAML::convert<Scene*>;
@@ -51,8 +53,8 @@ private:
 	up<Camera> m_Camera = nullptr;
 	std::vector<up<Geometry>> m_Geometry;
 	std::vector<up<Material>> m_Materials;
+	std::vector<up<Light>> m_Lights;
 	std::vector<Object> m_Objects;
-	std::vector<Emission*> m_Emission;
 
 	Environment m_Environment;
 	

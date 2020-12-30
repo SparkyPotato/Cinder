@@ -17,6 +17,8 @@
 
 #include "Core/Scene/AccelerationStructure.h"
 
+#include "Lights/Area.h"
+
 Scene* Scene::Load(const std::string& file)
 {
 	YAML::Node node = YAML::LoadFile(file);
@@ -52,24 +54,6 @@ bool Scene::LinkReferences()
 		// Setup object to world transform to object to camera
 		object.ToCamera = object.ToCamera * m_Camera->ToWorld.GetInverse();
 		//                   object to world         world to camera
-		
-		if (object.m_Emission) 
-		{
-			object.m_Emission->Owner = &object;
-			m_Emission.push_back(object.m_Emission.get()); 
-		}
-		else
-		{
-			for (auto& material : m_Materials)
-			{
-				if (material->Name == object.m_MaterialName)
-				{
-					object.m_Material = material.get();
-					break;
-				}
-			}
-			if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
-		}
 
 		// Link geometry pointers to the actual geometry
 		for (auto& geometry : m_Geometry)
@@ -81,6 +65,25 @@ bool Scene::LinkReferences()
 			}
 		}
 		if (!object.m_Geometry) { Error("Geometry '{}' does not exist!", object.m_GeometryName); return false; }
+
+		for (auto& material : m_Materials)
+		{
+			if (material->Name == object.m_MaterialName)
+			{
+				object.m_Material = material.get();
+				if (material->GetEmission())
+				{
+					m_Lights.push_back(std::make_unique<AreaLight>(
+						1,
+						material->GetEmission(),
+						material->GetEmissionIntensity(),
+						&object
+					));
+				}
+				break;
+			}
+		}
+		if (!object.m_Material) { Error("Material '{}' does not exist!", object.m_MaterialName); return false; }
 		
 		m_Bound = Union(m_Bound, object.GetBound());
 	}
@@ -111,6 +114,11 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	if (!node["Materials"] || !node["Materials"].IsSequence())
 	{
 		Error("Material list must be a sequence (line {})!", node.Mark().line + 1);
+		return false;
+	}
+	if (!node["Lights"] || !node["Lights"].IsSequence())
+	{
+		Error("Light list must be a sequence (line {})!", node.Mark().line + 1);
 		return false;
 	}
 
@@ -152,6 +160,11 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	for (auto& object : node["Objects"])
 	{
 		scene->m_Objects.emplace_back(object.as<Object>());
+	}
+
+	for (auto& light : node["Lights"])
+	{
+		scene->m_Lights.emplace_back(light.as<up<Light>>());
 	}
 	
 	if (!node["Environment"])

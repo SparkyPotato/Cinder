@@ -16,7 +16,6 @@
 
 #include "Core/Math/Transform.h"
 #include "Core/Scene/Geometry.h"
-#include "Core/Scene/Emission.h"
 
 class Object
 {
@@ -27,10 +26,11 @@ public:
 	bool TestIntersect(const Ray& ray) const;
 	
 	Bound GetBound() { return ToCamera(m_Geometry->GetBound()); }
+	const Geometry* GetGeometry() const { return m_Geometry; }
+
+	Interaction Sample(Sampler* sampler, float& pdf) const;
 	
 	const Material* GetMaterial() const { return m_Material; }
-	const Emission* GetEmission() const { return m_Emission.get(); }
-	const Geometry* GetGeometry() const { return m_Geometry; }
 
 	Transform ToCamera;
 
@@ -43,7 +43,6 @@ private:
 	
 	Geometry* m_Geometry = nullptr;
 	Material* m_Material = nullptr;
-	up<Emission> m_Emission;
 };
 
 template<>

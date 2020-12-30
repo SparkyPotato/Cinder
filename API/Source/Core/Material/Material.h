@@ -30,6 +30,8 @@ public:
 
 	virtual void Compute(Interaction& interaction, MemoryArena& arena) const = 0;
 	virtual bool Parse(const YAML::Node& node) = 0;
+	virtual const Texture* GetEmission() const { return nullptr; }
+	virtual float GetEmissionIntensity() const { return 0.f; }
 
 	std::string Name;
 };

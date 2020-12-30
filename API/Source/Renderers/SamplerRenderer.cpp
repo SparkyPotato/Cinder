@@ -154,6 +154,8 @@ void SamplerRenderer::Thread()
 Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& interaction, MemoryArena& arena,
 	Sampler* sampler, uint16_t depth)
 {
+	Color out;
+
 	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
 	float pdf;
 	auto type = BxDF::Type(BxDF::Reflection | BxDF::Specular);
@@ -163,14 +165,26 @@ Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& in
 	if (pdf > 0.f && c != Color() && Dot(incoming, normal) != 0.f)
 	{
 		Ray ray = Ray(interaction.HitPoint + 1.f * Vector(interaction.GNormal) * Epsilon, incoming);
-		return c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
+		out += c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
 	}
-	else { return Color(); }
+
+	type = BxDF::Type(BxDF::Reflection | BxDF::Glossy);
+	c = interaction.Bsdf->EvaluateSample(outgoing, incoming, sampler, pdf, type);
+
+	if (pdf > 0.f && c != Color() && Dot(incoming, normal) != 0.f)
+	{
+		Ray ray = Ray(interaction.HitPoint + 1.f * Vector(interaction.GNormal) * Epsilon, incoming);
+		out += c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
+	}
+	
+	return out;
 }
 
 Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& interaction, MemoryArena& arena,
 	Sampler* sampler, uint16_t depth)
 {
+	Color out;
+
 	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
 	float pdf;
 	auto type = BxDF::Type(BxDF::Transmission | BxDF::Specular);
@@ -183,7 +197,20 @@ Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& i
 		float x = 1.f;
 		if (dot < 0.f) { x = -1.f; }
 		Ray ray = Ray(interaction.HitPoint + x * Vector(interaction.GNormal) * Epsilon, incoming);
-		return c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
+		out += c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
 	}
-	else { return Color(); }
+	
+	type = BxDF::Type(BxDF::Transmission | BxDF::Glossy);
+	c = interaction.Bsdf->EvaluateSample(outgoing, incoming, sampler, pdf, type);
+
+	dot = Dot(incoming, normal);
+	if (pdf > 0.f && c != Color() && dot != 0.f)
+	{
+		float x = 1.f;
+		if (dot < 0.f) { x = -1.f; }
+		Ray ray = Ray(interaction.HitPoint + x * Vector(interaction.GNormal) * Epsilon, incoming);
+		out += c * TraceRay(scene, ray, arena, sampler, depth + 1) * std::abs(Dot(incoming, normal)) / pdf;
+	}
+
+	return out;
 }

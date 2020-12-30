@@ -20,33 +20,32 @@ RENDERER(Whitted, WhittedRenderer)
 Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth)
 {
  	Interaction interaction;
+	Color out;
+
 	if (!scene.Intersect(ray, interaction))
 	{
 		return scene.GetEnvironment().Sample(ray.Direction);
 	}
 
-	if (interaction.HitObject->GetEmission()) { return interaction.HitObject->GetEmission()->Evaluate(interaction); }
-
 	interaction.HitObject->GetMaterial()->Compute(interaction, arena);
+	if (interaction.HitObject->GetMaterial()->GetEmission()) { out += interaction.HitObject->GetMaterial()->GetEmission()->Evaluate(interaction); }
 	const BSDF* bsdf = interaction.Bsdf;
 	Vector outgoing = -ray.Direction;
-
-	Color out;
 
 	// Environment Map IBL
 	out += bsdf->Evaluate(outgoing, Vector(interaction.GNormal)) *
 		scene.GetEnvironment().SampleIrradiance(Vector(interaction.GNormal));
 
-	for (auto& emission : scene.GetEmission())
+	for (auto& light : scene.GetLights())
 	{
 		Color avg;
- 		for (uint32_t i = 0; i < emission->SampleCount; i++)
+ 		for (uint32_t i = 0; i < light->SampleCount; i++)
  		{
  			Vector incoming;
  			float pdf;
  			Occlusion occlusion;
  
- 			Color lightColor = emission->Sample(interaction, sampler, incoming, pdf, occlusion);
+ 			Color lightColor = light->Sample(interaction, sampler, incoming, pdf, occlusion);
  
  			if (lightColor == Color() || pdf == 0.f) { continue; }
  
@@ -56,7 +55,7 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
  				avg += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
  			}
  		}
- 		out += avg / float(emission->SampleCount);
+		out += avg / float(light->SampleCount);
 	}
 	
 	// Reflect

@@ -19,6 +19,7 @@
 #include "Core/Components/Renderer.h"
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
+#include "Core/Scene/Light.h"
 #include "Core/Material/Texture.h"
 
 Registry* Registry::s_Registry = nullptr;
@@ -156,4 +157,36 @@ bool YAML::convert<up<Texture>>::decode(const Node& node, up<Texture>& texture)
 	}
 	
 	return texture->Parse(node);
+}
+
+bool YAML::convert<up<Light>>::decode(const Node& node, up<Light>& light)
+{
+	std::string type;
+	try { type = node["Type"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Light type must be a string (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	Transform t;
+	try { t = node["Transform"].as<Transform>(); }
+	catch (...) { return false; }
+
+	uint32_t s;
+	try { s = node["Samples"].as<uint32_t>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Light samples must be an unsigned integer (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	try { light = Registry::Get()->GLights.at(type)(s, t); }
+	catch (...)
+	{
+		Error("Light type '{}' does not exist (line {})!", type, node["Type"].Mark().line + 1);
+		return false;
+	}
+
+	return light->Parse(node);
 }

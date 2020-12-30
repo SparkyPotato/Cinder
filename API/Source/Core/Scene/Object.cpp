@@ -62,6 +62,16 @@ bool Object::TestIntersect(const Ray& ray) const
 	}
 }
 
+Interaction Object::Sample(Sampler* sampler, float& pdf) const
+{
+	Interaction i = m_Geometry->Sample(sampler, pdf);
+	i.HitObject = this;
+	i.HitPoint = ToCamera(i.HitPoint);
+	i.GNormal = i.SNormal = ToCamera(i.GNormal).Normalize();
+
+	return i;
+}
+
 bool YAML::convert<Object>::decode(const Node& node, Object& object)
 {
 	if (!node["Transform"])
@@ -85,58 +95,17 @@ bool YAML::convert<Object>::decode(const Node& node, Object& object)
 		return false;
 	}
 
-	if (node["Emission"])
+	if (!node["Material"])
 	{
-		const auto& n = node["Emission"];
-		if (!n["Type"])
-		{
-			Error("Emission must have a type (line {})!", n.Mark().line + 1);
-			return false;
-		}
-		std::string type;
-		try { type = n["Type"].as<std::string>(); }
-		catch (YAML::Exception& e)
-		{
-			Error("Emission type must be a string (line {})!", e.mark.line + 1);
-			return false;
-		}
-
-		if (!n["Samples"])
-		{
-			Error("Emission must have a sample count (line {})!", n.Mark().line + 1);
-			return false;
-		}
-		uint32_t samples;
-		try { samples = n["Samples"].as<uint32_t>(); }
-		catch (YAML::Exception& e)
-		{
-			Error("Emission sample count must be an unsigned integer (line {})!", e.mark.line + 1);
-			return false;
-		}
-
-		try { object.m_Emission = Registry::Get()->GEmission.at(type)(samples); }
-		catch (...)
-		{
-			Error("Emission type '{}' does not exist (line {})!", type, n.Mark().line + 1);
-			return false;
-		}
-
-		return object.m_Emission->Parse(n);
+		Error("Object does not have a material (line {})!", node.Mark().line + 1);
+		return false;
 	}
-	else
-	{
-		if (!node["Material"])
-		{
-			Error("Object does not have a material (line {})!", node.Mark().line + 1);
-			return false;
-		}
 
-		try { object.m_MaterialName = node["Material"].as<std::string>(); }
-		catch (YAML::Exception& e)
-		{
-			Error("Material reference must be a string (line {})!", e.mark.line + 1);
-			return false;
-		}
+	try { object.m_MaterialName = node["Material"].as<std::string>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Material reference must be a string (line {})!", e.mark.line + 1);
+		return false;
 	}
 	
 	return true;

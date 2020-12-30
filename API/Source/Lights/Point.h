@@ -14,18 +14,21 @@
 
 #pragma once
 
-#include "Renderers/SamplerRenderer.h"
+#include "Core/Scene/Light.h"
 
-class PathRenderer : public SamplerRenderer
+class PointLight : public Light
 {
 public:
-	virtual Color TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth = 0) override;
+	PointLight(uint32_t samples, const Transform& transform);
+
+	virtual Color Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const override;
+	virtual Color EvaluateAlong(const Ray& ray) const override { return Color(); }
 
 	virtual bool Parse(const YAML::Node& node) override;
 
-	Color Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Light* light, MemoryArena& arena);
-	Color SampleOneLight(const Scene& scene, const Interaction& i, MemoryArena& arena, Sampler* sampler);
+	virtual void Preprocess(const Scene& scene) override;
 
 private:
-	uint16_t m_Depth;
+	Color m_Color;
+	Point m_Position;
 };

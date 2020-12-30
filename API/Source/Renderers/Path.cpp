@@ -28,12 +28,12 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 		Interaction i;
 		bool hit = scene.Intersect(r, i);
 
-		if (depth == 0 || specular)
+		if (bounces == 0 || specular)
 		{
-			if (hit && i.HitObject->GetEmission()) { out += b * i.HitObject->GetEmission()->Evaluate(i); break; }
-			else if (!hit) { out += b * scene.GetEnvironment().Sample(r.Direction); }
+			if (!hit) { out += b * scene.GetEnvironment().Sample(r.Direction); }
+			else if (i.HitObject->GetMaterial()->GetEmission()) { out += i.HitObject->GetMaterial()->GetEmission()->Evaluate(i); }
 		}
-		if (!hit || bounces >= m_Depth || i.HitObject->GetEmission()) { break; }
+		if (!hit || bounces >= m_Depth) { break; }
 
 		i.HitObject->GetMaterial()->Compute(i, arena);
 		out += b * SampleOneLight(scene, i, arena, sampler);
@@ -81,51 +81,7 @@ bool PathRenderer::Parse(const YAML::Node& node)
 	return true;
 }
 
-// Color Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Emission* light, MemoryArena& arena, bool specular = false)
-// {
-// 	BxDF::Type flags = specular ? BxDF::All : BxDF::Type(BxDF::All & ~BxDF::Specular);
-// 	Color L;
-// 
-// 	Vector incoming;
-// 	Vector outgoing = Point() - i.HitPoint;
-// 	outgoing.Normalize();
-// 
-// 	float lightPdf, bsdfPdf;
-// 	Occlusion occlusion;
-// 	Color c = light->Sample(i, sampler, incoming, lightPdf, occlusion);
-// 	if (lightPdf > 0.f && c != Color())
-// 	{
-// 		Color f;
-// 		f = i.Bsdf->Evaluate(outgoing, incoming, flags) * std::abs(Dot(incoming, i.SNormal));
-// 		bsdfPdf = i.Bsdf->Pdf(outgoing, incoming, flags);
-// 
-// 		if (!occlusion(scene))
-// 		{
-// 			float weight = PowerHeuristic(1, lightPdf, 1, bsdfPdf);
-// 			L = f * c * weight / lightPdf;
-// 		}
-// 	}
-// 
-// 	BxDF::Type sType;
-// 	c = i.Bsdf->EvaluateSample(outgoing, incoming, sampler, bsdfPdf, flags, &sType);
-// 	c *= std::abs(Dot(incoming, i.SNormal));
-// 
-// 	if (c != Color() && bsdfPdf > 0.f)
-// 	{
-// 		Interaction interaction;
-// 		bool hit = scene.Intersect(Ray(i.HitPoint + Vector(i.GNormal) * Epsilon, incoming), interaction);
-// 		if (hit && interaction.HitObject->GetEmission())
-// 		{
-// 			lightPdf = 1.f / interaction.HitObject->GetGeometry()->GetArea();
-// 			float weight = PowerHeuristic(1, lightPdf, 1, bsdfPdf);
-// 			L += interaction.HitObject->GetEmission()->Evaluate(interaction) * weight / bsdfPdf;
-// 		}
-// 	}
-// 
-// 	return L;
-// }
-
-Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Emission* light, MemoryArena& arena)
+Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Light* light, MemoryArena& arena)
 {
 	Vector incoming;
 	float pdf;
@@ -142,12 +98,11 @@ Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* 
 
 Color PathRenderer::SampleOneLight(const Scene& scene, const Interaction& interaction, MemoryArena& arena, Sampler* sampler)
 {
-	uint64_t lightCount = scene.GetEmission().size();
+	uint64_t lightCount = scene.GetLights().size();
 	if (lightCount == 0) { return Color(); }
 	uint64_t n = uint64_t(sampler->Get1D() * lightCount);
 	if (n == lightCount) { return scene.GetEnvironment().SampleIrradiance(Vector(interaction.SNormal)); }
 
-	Emission* light = scene.GetEmission()[n];
+	Light* light = scene.GetLights()[n].get();
 	return Estimate(scene, interaction, sampler, light, arena) * float(lightCount);
 }
-

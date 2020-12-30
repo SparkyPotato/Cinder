@@ -34,8 +34,8 @@ class Texture;
 using TextureSpawnFunction = up<Texture> (*)();
 class Material;
 using MaterialSpawnFunction = up<Material> (*)(const std::string&);
-class Emission;
-using EmissionSpawnFunction = up<Emission>(*)(uint32_t);
+class Light;
+using LightSpawnFunction = up<Light>(*)(uint32_t, const Transform&);
 
 class Registry
 {
@@ -51,7 +51,7 @@ public:
 	std::map<std::string, FilterSpawnFunction> GFilters;
 	std::map<std::string, TextureSpawnFunction> GTextures;
 	std::map<std::string, MaterialSpawnFunction> GMaterials;
-	std::map<std::string, EmissionSpawnFunction> GEmission;
+	std::map<std::string, LightSpawnFunction> GLights;
 
 private:
 	static Registry* s_Registry;

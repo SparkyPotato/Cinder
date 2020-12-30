@@ -14,18 +14,20 @@
 
 #pragma once
 
-#include "Renderers/SamplerRenderer.h"
+#include "Core/Material/Material.h"
 
-class PathRenderer : public SamplerRenderer
+class Emission : public Material
 {
 public:
-	virtual Color TraceRay(const Scene& scene, const Ray& ray, MemoryArena& arena, Sampler* sampler, uint16_t depth = 0) override;
+	Emission(const std::string& name);
+
+	virtual void Compute(Interaction& interaction, MemoryArena& arena) const override;
+	virtual const Texture* GetEmission() const override;
+	virtual float GetEmissionIntensity() const override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 
-	Color Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Light* light, MemoryArena& arena);
-	Color SampleOneLight(const Scene& scene, const Interaction& i, MemoryArena& arena, Sampler* sampler);
-
 private:
-	uint16_t m_Depth;
+	up<Texture> m_Color;
+	float m_Intensity;
 };

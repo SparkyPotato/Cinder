@@ -23,15 +23,15 @@ def GenerateFiles(args):
     os.chdir(buildDir)
     
     buildOptions = {
-        "Debug"       : "-DCMAKE_BUILD_TYPE=Debug",
-        "Development" : "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-        "Release"     : "-DCMAKE_BUILD_TYPE=Release",
+        "Debug"       : "-DCMAKE_BUILD_TYPE=Debug ",
+        "Development" : "-DCMAKE_BUILD_TYPE=RelWithDebInfo ",
+        "Release"     : "-DCMAKE_BUILD_TYPE=Release ",
     }
     
     options = buildOptions.get(args.config, "");
     # Turn submodule updating off
     if args.nosub:
-        options += " -DSUBMODULE=OFF "
+        options += "-DSUBMODULE=OFF "
 
     # Turn documentation building off
     if args.nodoc:

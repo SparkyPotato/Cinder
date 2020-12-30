@@ -14,19 +14,22 @@
 
 #pragma once
 
-#include "Core/Scene/Emission.h"
-#include "Core/Math/Color.h"
+#include "Core/Scene/Light.h"
+#include "Core/Scene/Object.h"
+#include "Core/Material/Texture.h"
 
-class SimpleEmission : public Emission
+class AreaLight : public Light
 {
 public:
-	SimpleEmission(uint32_t samples);
+	AreaLight(uint32_t samples, const Texture* emission, float intensity, const Object* object);
 
-	virtual Color Evaluate(const Interaction& interaction) const override;
 	virtual Color Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const override;
+	virtual Color EvaluateAlong(const Ray& ray) const override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 
 private:
-	Color m_Color;
+	const Texture* m_Color;
+	float m_Intensity;
+	const Object* m_Object;
 };

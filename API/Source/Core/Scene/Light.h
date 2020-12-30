@@ -14,11 +14,12 @@
 
 #pragma once
 
-#include "Core/Math/Color.h"
-#include "Core/Scene/Interaction.h"
+#include "Core/Components/Registry.h"
 #include "Core/Components/Sampler.h"
+#include "Core/Math/Transform.h"
+#include "Core/Scene/Interaction.h"
+#include "Core/Math/Color.h"
 
-class Object;
 class Scene;
 
 class Occlusion
@@ -31,26 +32,35 @@ public:
 	Interaction Point1, Point2;
 };
 
-class Emission
+class Light
 {
 public:
-	Emission(uint32_t samples)
-		: SampleCount(samples)
+	Light(uint32_t samples, const Transform& toCamera)
+		: SampleCount(samples), ToCamera(toCamera)
 	{}
+	virtual ~Light() {}
+
+	virtual Color Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const = 0;
+	virtual Color EvaluateAlong(const Ray& ray) const = 0;
 
 	virtual bool Parse(const YAML::Node& node) = 0;
 
-	virtual Color Evaluate(const Interaction& interaction) const = 0;
-	virtual Color Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const = 0;
+	virtual void Preprocess(const Scene& scene) {};
 
+	Transform ToCamera;
 	uint32_t SampleCount;
-	const Object* Owner = nullptr;
 };
 
-#define EMISSION(type, className) \
-up<Emission> Spawn##className(uint32_t s) { return std::make_unique<className>(s); } \
+template<>
+struct YAML::convert<up<Light>>
+{
+	static bool decode(const Node& node, up<Light>& light);
+};
+
+#define LIGHT(type, className) \
+up<Light> Spawn##className(uint32_t s, const Transform& t) { return std::make_unique<className>(s, t); } \
 struct Register##className \
 { \
-	Register##className() { Registry::Get()->GEmission.emplace(#type, &Spawn##className); } \
+	Register##className() { Registry::Get()->GLights.emplace(#type, &Spawn##className); } \
 }; \
 static Register##className StaticRegister##className;
