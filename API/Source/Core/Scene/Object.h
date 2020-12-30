@@ -17,19 +17,48 @@
 #include "Core/Math/Transform.h"
 #include "Core/Scene/Geometry.h"
 
+/// An object present in a scene.
 class Object
 {
 public:
 	Object() = default;
 	
+	/// Intersect a ray with the object.
+	///
+	/// \param ray The ray to intersect.
+	/// \param interaction The interaction to fill in (in camera space).
+	/// 
+	/// \return If there was a hit.
 	bool Intersect(const Ray& ray, Interaction& interaction) const;
+
+	/// Test intersect a ray with the object.
+	///
+	/// \param ray The ray to intersect.
+	/// 
+	/// \return If there was a hit.
 	bool TestIntersect(const Ray& ray) const;
 	
+	/// Get the bounding box of the object.
+	///
+	/// \return The bounding box in world space.
 	Bound GetBound() { return ToCamera(m_Geometry->GetBound()); }
+
+	/// Get the geometry of the object.
+	///
+	/// \return The geometry the object consists off.
 	const Geometry* GetGeometry() const { return m_Geometry; }
 
+	/// Sample a point on the object.
+	///
+	/// \param sampler The Sampler to use to sample.
+	/// \param pdf The probability distribution of the sample.
+	/// 
+	/// \return The Interaction at the sampled point.
 	Interaction Sample(Sampler* sampler, float& pdf) const;
 	
+	/// Get the material of the object.
+	///
+	/// \return The material.
 	const Material* GetMaterial() const { return m_Material; }
 
 	Transform ToCamera;

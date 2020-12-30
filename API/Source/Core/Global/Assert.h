@@ -20,4 +20,10 @@
 #		define ASSERT(condition, message) Assert(condition, message, __FILE__, __LINE__)
 #	endif
 
+/// Assertions.
+///
+/// \param condition If false, the renderer exits.
+/// \param message Assertion message.
+/// \param file File in which the assertion occurred.
+/// \param line Line of the assertion.
 void Assert(bool condition, const char* message, const char* file, int line);

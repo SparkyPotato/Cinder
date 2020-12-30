@@ -29,9 +29,9 @@ bool SetOptions(Options* options)
 	return true;
 }
 
-bool RunCinderProject(const char* path, float* timeSeconds)
+bool RunCinderProject(const char* filePath, float* timeSeconds)
 {
-	std::filesystem::path filePath = path;
+	std::filesystem::path path = filePath;
 
 	try
 	{
@@ -52,7 +52,7 @@ bool RunCinderProject(const char* path, float* timeSeconds)
 		Log("Rendering with {} threads.", GOptions.ThreadCount);
 
 		YAML::Node project;
-		try { project = YAML::LoadFile(filePath.string()); }
+		try { project = YAML::LoadFile(path.string()); }
 		catch (YAML::Exception& e)
 		{
 			Error("Failed to parse project file (line {})!", e.mark.line);
@@ -62,7 +62,7 @@ bool RunCinderProject(const char* path, float* timeSeconds)
 		// Set the working directory to the directory containing the project,
 		// so we can use relative paths without issues.
 		std::filesystem::path workingDirectory = std::filesystem::current_path();
-		std::filesystem::current_path(filePath.parent_path());
+		std::filesystem::current_path(path.parent_path());
 
 		up<Renderer> renderer = nullptr;
 		try { renderer = project["Renderer"].as<up<Renderer>>(); }
@@ -116,7 +116,7 @@ bool RunCinderProject(const char* path, float* timeSeconds)
 			// Output and time it
 			s = std::chrono::high_resolution_clock().now();
 			Log("Writing output.");
-			framebuffer->Ouput(output);
+			framebuffer->Output(output);
 			e = std::chrono::high_resolution_clock().now();
 			Log("Written output. Took {:%M:%S}.", e - s);
 

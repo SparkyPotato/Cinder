@@ -16,6 +16,7 @@
 
 #include "Renderers/SamplerRenderer.h"
 
+/// Whitted raytracer with Monte-Carlo sampling of lights.
 class WhittedRenderer : public SamplerRenderer
 {
 public:

@@ -26,6 +26,7 @@ struct Vertex
 	float U, V;
 };
 
+/// A single triangle.
 class Triangle : public Geometry
 {
 public:
@@ -53,6 +54,7 @@ private:
 	Vertex& m_V2;
 };
 
+/// A triangle mesh.
 class Mesh : public Geometry
 {
 public:

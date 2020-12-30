@@ -17,14 +17,27 @@
 #include "Core/Components/Registry.h"
 #include "Core/Math/Vector.h"
 
+/// Base class of image filters.
+/// Image filters are used in image reconstruction, 
+/// to weight the contribution of samples relative to the center of the pixel.
 class Filter
 {
 public:
+	/// Construct the filter.
+	///
+	/// \param radius The radius of the effect of the filter.
 	Filter(const Vector& radius)
 		: m_Radius(radius), m_InverseRadius(1.f / radius.X(), 1.f / radius.Y(), 0.f)
 	{}
+
+	/// Virtual destructor.
 	virtual ~Filter() = default;
 
+	/// Evaluate the filter function.
+	///
+	/// \param point The point of the sample, relative to the center of the pixel.
+	///  
+	/// \return The weight of the sample.
 	virtual float Evaluate(const Point& point) = 0;
 
 protected:

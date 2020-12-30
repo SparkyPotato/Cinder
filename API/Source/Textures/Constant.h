@@ -16,6 +16,7 @@
 
 #include "Core/Material/Texture.h"
 
+/// A texture with a constant value.
 class ConstantTexture : public Texture
 {
 public:

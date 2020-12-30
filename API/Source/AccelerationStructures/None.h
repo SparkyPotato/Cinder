@@ -16,6 +16,9 @@
 
 #include "Core/Scene/AccelerationStructure.h"
 
+/// No acceleration structure.
+/// Tests for intersects by iterating over every object in the scene,
+/// Time complexity of O(n).
 class None : public AccelerationStructure
 {
 public:

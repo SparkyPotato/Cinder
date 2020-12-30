@@ -16,14 +16,22 @@
 
 constexpr size_t BLOCK_SIZE = 1024 * 1024; // 1 MB blocks
 
+/// Memory Arena for fast allocation/
 class MemoryArena
 {
 public:
 	MemoryArena();
 	~MemoryArena();
 
+	/// Reset the arena for reuse.
 	void Reset();
 
+	/// Allocate an object.
+	///
+	/// \tparam T Any type with a size < 1MB.
+	/// \param args Constructor arguments.
+	/// 
+	/// \return The created object.
 	template<typename T, typename... Args>
 	T* Allocate(Args&&... args)
 	{
@@ -48,6 +56,12 @@ public:
 		return ptr;
 	}
 
+	/// Allocate an array of objects.
+	///
+	/// \tparam T Any type.
+	/// \param count The size of array. sizeof(T) * count must be < 1 MB
+	/// 
+	/// \return The created array.
 	template<typename T>
 	T* AllocateArray(size_t count)
 	{

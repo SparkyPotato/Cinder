@@ -16,6 +16,7 @@
 
 #include "Core/Components/Sampler.h"
 
+/// A random sampler.
 class RandomSampler : public Sampler
 {
 public:

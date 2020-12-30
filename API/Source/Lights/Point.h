@@ -16,6 +16,7 @@
 
 #include "Core/Scene/Light.h"
 
+/// A point light which emits radiance from a single point.
 class PointLight : public Light
 {
 public:

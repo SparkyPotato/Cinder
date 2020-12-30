@@ -16,10 +16,16 @@
 
 #include "Core/Material/BxDF.h"
 
+/// BRDF that models Oren-Nayar diffuse reflection.
 class OrenNayar : public BxDF
 {
 public:
-	OrenNayar(const Color& color, float roughness);
+	/// Construct the BRDF.
+	///
+	/// \param base The base color (albedo).
+	/// \param roughness The standard deviation of the microfacet normal from
+	/// the surface normal.
+	OrenNayar(const Color& base, float roughness);
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;
 

@@ -16,6 +16,7 @@
 
 #include "Core/Material/Material.h"
 
+/// A perfect mirror.
 class Mirror : public Material
 {
 public:

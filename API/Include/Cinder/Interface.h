@@ -50,6 +50,7 @@
 extern "C" {
 #endif
 
+/// Allowed logging levels.
 enum LogLevel
 {
 	LL_Verbose = 0,
@@ -62,24 +63,44 @@ enum LogLevel
 /// Options for Cinder.
 struct Options
 {
+	/// The log level to use.
 	LogLevel LoggingLevel = LL_Warning;
+
+	/// The file in which to output logs.
 	FILE* LogFile = NULL;
+
+	/// Whether Cinder should be completely quiet.
 	bool Quiet = false;
 
+	/// Callbacks for various loggers.
 	void (*VerboseCallback)(const char*) = nullptr;
 	void (*LogCallback)(const char*) = nullptr;
 	void (*WarningCallback)(const char*) = nullptr;
 	void (*ErrorCallback)(const char*) = nullptr;
 	void (*FatalCallback)(const char*) = nullptr;
 
+	/// Number of threads to use. 0 will auto-detect.
 	uint16_t ThreadCount = 0;
+
+	/// The size of each square render tile.
 	uint32_t TileSize = 16;
 
+	/// Callback for rendering progress. May be called many times in one second.
 	void (*ProgressCallback)(float) = nullptr;
 };
 
+/// Set the options to be used by Cinder.
+///
+/// \param options The options to set.
+/// 
+/// \return If setting the options was successful.
 CINDER_API bool SetOptions(Options* options);
-CINDER_API bool RunCinderProject(const char* projectFilePath, float* timeSeconds);
+
+/// Run a Cinder project.
+///
+/// \param filePath Path of the project file.
+/// \param timeSeconds The time the render took (Is filled by Cinder).
+CINDER_API bool RunCinderProject(const char* filePath, float* timeSeconds);
 
 #ifdef __cplusplus
 }

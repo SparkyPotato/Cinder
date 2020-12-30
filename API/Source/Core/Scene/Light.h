@@ -22,29 +22,64 @@
 
 class Scene;
 
+/// A tester for occlusion.
 class Occlusion
 {
 public:
 	Occlusion() = default;
 
+	/// Test if the objects are occluded by the scene.
+	///
+	/// \return If there was an occlusion.
 	bool operator()(const Scene& scene);
 
+	/// The points to test for occlusion.
 	Interaction Point1, Point2;
 };
 
+/// Base class for scene lighting.
 class Light
 {
 public:
+	/// Construct a light.
+	///
+	/// \param samples The amount of samples to take for the light.
+	/// \param toCamera Local to camera transformation.
 	Light(uint32_t samples, const Transform& toCamera)
 		: SampleCount(samples), ToCamera(toCamera)
 	{}
+
+	/// Virtual destructor.
 	virtual ~Light() {}
 
+	/// Sample the light.
+	///
+	/// \param interaction The interaction to sample the light for.
+	/// \param sampler The Sampler to use.
+	/// \param incoming The incoming vector to be filled by the light.
+	/// \param pdf The probability distribution to be filled by the light.
+	/// \param tester The occlusion tester to be filled by the light.
+	/// 
+	/// \return The incoming radiance at the interaction.
 	virtual Color Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const = 0;
+
+	/// Evaluate the radiance along a ray.
+	///
+	/// \param ray The ray to evaluate along.
+	/// 
+	/// \return The radiance along the ray.
 	virtual Color EvaluateAlong(const Ray& ray) const = 0;
 
+	/// Parse the required parameters.
+	///
+	/// \param node The node containing the data.
+	/// 
+	/// \return If the parse succeeded.
 	virtual bool Parse(const YAML::Node& node) = 0;
 
+	/// Preprocess before rendering.
+	///
+	/// \param scene The scene to preprocess for.
 	virtual void Preprocess(const Scene& scene) {};
 
 	Transform ToCamera;

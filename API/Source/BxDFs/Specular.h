@@ -17,9 +17,14 @@
 #include "Core/Material/BxDF.h"
 #include "Core/Material/Fresnel.h"
 
+/// BRDF that models perfect specular reflection.
 class SpecularReflection : public BxDF
 {
 public:
+	/// Construct the BRDF
+	///
+	/// \param base The base color (albedo).
+	/// \param fresnel The fresnel object to control the amount of light reflected.
 	SpecularReflection(const Color& base, Fresnel* fresnel);
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;
@@ -32,9 +37,16 @@ private:
 	Fresnel* m_Fresnel;
 };
 
+/// BTDF that models perfect specular transmission.
+/// Takes refraction into account.
 class SpecularTransmission : public BxDF
 {
 public:
+	/// Construct the BTDF
+	///
+	/// \param base The base color (albedo).
+	/// \param etaOut The refractive index outside the surface.
+	/// \param etaIn The refractive index inside the surface.
 	SpecularTransmission(const Color& base, float etaOut, float etaIn);
 	
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;

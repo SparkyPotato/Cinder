@@ -35,6 +35,7 @@ private:
 	uint32_t m_Xmin, m_Xmax, m_Ymin, m_Ymax;
 };
 
+/// 8-bit framebuffer which can store images as PNGs.
 class EightBitFramebuffer : public Framebuffer
 {
 public:
@@ -43,7 +44,7 @@ public:
 
 	virtual BufferTile* GetBufferTile(uint32_t xmin, uint32_t xmax, uint32_t ymin, uint32_t ymax) override;
 	virtual void SaveBufferTile(BufferTile* tile) override;
-	virtual bool Ouput(const std::string& file) override;
+	virtual bool Output(const std::string& file) override;
 
 	virtual bool Parse(const YAML::Node& node) override;
 	

@@ -18,21 +18,71 @@
 #include "Core/Material/BxDF.h"
 #include "Core/Components/Sampler.h"
 
+/// Scattering distribution (collection of BxDFs).
 class BSDF
 {
 public:
+	/// Create the BSDF.
+	///
+	/// \param interaction The surface interaction where the BSDF is spawned.
 	BSDF(const Interaction& interaction);
 
+	/// Add a BxDF to the BSDF.
+	///
+	/// \param bxdf The bxdf to add. It is NOT copied.
 	void Add(BxDF* bxdf);
+
+	/// Get the components.
+	///
+	/// \param type Type to match in the count.
+	/// 
+	/// \return The number of componenets.
 	uint16_t Components(BxDF::Type type = BxDF::All) const;
 
+	/// Convert to local shading coordinates.
+	///
+	/// \param vector Vector to convert.
+	/// 
+	/// \return The vector in local coordinates.
 	Vector ToLocal(const Vector& vector) const;
+
+	/// Convert to world (camera) coordinates.
+	///
+	/// \param vector Vector to convert.
+	/// 
+	/// \return The vector in camera coordinates.
 	Vector ToWorld(const Vector& vector) const;
 
+	/// Evaluate the reflected amount of energy.
+	///
+	/// \param outgoing The unit vector pointing towards the camera (view direction / wo).
+	/// \param incoming The unit vector pointing towards the light (energy direction / wi).
+	/// \param type The type of BxDFs to take into consideration.
+	/// 
+	/// \return The amount of incident energy reflected along the outgoing vector.
 	Color Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type type = BxDF::All) const;
-	Color EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf, BxDF::Type type = BxDF::All, BxDF::Type* sampled = nullptr) const;
 
+	/// Sample the BSDF.
+	///
+	/// \param outgoing The unit vector pointing towards the camera (view direction / wo).
+	/// \param incoming The unit vector pointing towards the light (energy direction / wi) (Is filled in by the function).
+	/// \param sampler The sampler to extract samples from.
+	/// \param pdf The probability density of the distribution (Is filled in by the function).
+	/// \param type The type of BxDF to sample.
+	/// \param sampled The type of BxDF that was sampled (Is filled in by the function).
+	/// 
+	/// \return The amount of incident energy reflected along the outgoing vector.
+	Color Sample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf, BxDF::Type type = BxDF::All, BxDF::Type* sampled = nullptr) const;
+
+	/// Get the probability density for a pair of directions.
+	///
+	/// \param outgoing The unit vector pointing towards the camera (view direction / wo).
+	/// \param incoming The unit vector pointing towards the light (energy direction / wi).
+	/// \param type The type of BxDFs to take into consideration.
+	/// 
+	/// \return The probability density of the BSDF.
 	virtual float Pdf(const Vector& outgoing, const Vector& incoming, BxDF::Type type = BxDF::All) const;
+
 private:
 	Vector m_GNormal, m_X, m_Z;
 	Vector m_SNormal;

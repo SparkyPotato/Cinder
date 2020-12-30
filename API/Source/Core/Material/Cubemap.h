@@ -16,12 +16,18 @@
 
 #include "Core/Material/Texture.h"
 
+/// A collection of 6 textures, forming a cube.
 class Cubemap
 {
 public:
 	Cubemap() = default;
 	Cubemap(up<Texture> faces[6]);
 	
+	/// Sample the cubemap.
+	///
+	/// \param direction Direction to sample the cubemap in.
+	/// 
+	/// \return The value of the texture function in the sampled direction.
 	Color operator()(const Vector& direction) const;
 	
 private:

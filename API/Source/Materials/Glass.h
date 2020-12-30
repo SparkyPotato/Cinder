@@ -16,6 +16,7 @@
 
 #include "Core/Material/Material.h"
 
+/// A perfectly smooth glass material.
 class Glass : public Material
 {
 public:

@@ -72,7 +72,7 @@ Color BSDF::Evaluate(const Vector& outgoing, const Vector& incoming, BxDF::Type 
 	return c;
 }
 
-Color BSDF::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf, BxDF::Type type, BxDF::Type* sampled) const
+Color BSDF::Sample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf, BxDF::Type type, BxDF::Type* sampled) const
 {
 	std::pair<float, float> sample = sampler->Get2D();
 

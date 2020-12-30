@@ -16,20 +16,40 @@
 
 #include "Core/Components/Registry.h"
 
+/// Sampler for generating values in the range [0, 1)
 class Sampler
 {
 public:
+	/// Construct a sampler.
+	///
+	/// \param samplesPerPixel The number of samples taken for every pixel.
 	Sampler(uint32_t samplesPerPixel)
 		: m_SamplesPerPixel(samplesPerPixel)
 	{}
+
+	/// Virtual destructor.
 	virtual ~Sampler() = default;
 
+	/// Start getting samples for a new pixel.
+	///
+	/// \param x x-value of pixel coordinate.
+	/// \param y y-value of pixel coordinate.
 	virtual void StartPixel(uint32_t x, uint32_t y) 
 	{ m_CurrentX = x; m_CurrentY = y; m_CurrentSample = 0; }
 
+	/// Get a one-dimensional sample.
+	///
+	/// \return A sample in the range [0, 1).
 	virtual float Get1D() = 0;
+
+	/// Get a two-dimensional sample.
+	///
+	/// \return A sample in the range [0, 1).
 	virtual std::pair<float, float> Get2D() = 0;
 
+	/// Advance to the next sample in the current pixel.
+	///
+	/// \return If there are any more samples for the current pixel.
 	virtual bool NextSample() { m_CurrentSample++; return !(m_CurrentSample > m_SamplesPerPixel); }
 
 protected:

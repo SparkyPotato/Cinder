@@ -18,13 +18,25 @@
 #include "Core/Scene/Interaction.h"
 #include "Core/Components/Registry.h"
 
+/// A texture.
 class Texture
 {
 public:
+	/// Virtual destructor.
 	virtual ~Texture() = default;
-	
+
+	/// Evaluate the texture function.
+	///
+	/// \param interaction The interaction to evaluate the texture at.
+	/// 
+	/// \return The value of the texture function.
 	virtual Color Evaluate(const Interaction& interaction) const = 0;
 	
+	/// Parse the required parameters.
+	///
+	/// \param node The node containing the data.
+	/// 
+	/// \return If the parse succeeded.
 	virtual bool Parse(const YAML::Node& node) = 0;
 };
 

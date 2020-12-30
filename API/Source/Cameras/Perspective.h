@@ -16,6 +16,7 @@
 
 #include "Core/Scene/Camera.h"
 
+/// Basic perspective camera, without any depth of field.
 class PerspectiveCamera : public Camera
 {
 public:

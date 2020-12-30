@@ -16,6 +16,7 @@
 
 #include "Core/Scene/Geometry.h"
 
+/// A sphere.
 class Sphere : public Geometry
 {
 public:

@@ -18,9 +18,16 @@
 #include "Core/Material/MicrofacetDistribution.h"
 #include "Core/Material/Fresnel.h"
 
+/// BRDF that follows the Cook-Torrance model of perfectly specular
+/// reflection over a surface with microfacets.
 class MicrofacetReflection : public BxDF 
 {
 public:
+	/// Construct the BRDF.
+	///
+	/// \param base The base color (albedo).
+	/// \param microfacet The microfacet distribution.
+	/// \param fresnel The fresnel object to control the ratio of reflected and transmitted light.
 	MicrofacetReflection(const Color& base, Microfacet* microfacet, Fresnel* fresnel);
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;
@@ -34,9 +41,17 @@ private:
 	const Fresnel* m_Fresnel;
 };
 
+/// BTDF that follows the Cook-Torrance model of perfectly specular
+/// transmission through a surface with microfacets.
 class MicrofacetTransmission : public BxDF
 {
 public:
+	/// Construct the BRDF.
+	///
+	/// \param base The base color (albedo).
+	/// \param microfacet The microfacet distribution.
+	/// \param etaOut The refractive index outside the surface.
+	/// \param etaIn The refractive index inside the surface
 	MicrofacetTransmission(const Color& base, Microfacet* microfacet, float etaOut, float etaIn);
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;

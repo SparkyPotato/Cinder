@@ -16,6 +16,7 @@
 
 #include "Renderers/SamplerRenderer.h"
 
+/// Unbiased Monte-Carlo path tracer.
 class PathRenderer : public SamplerRenderer
 {
 public:

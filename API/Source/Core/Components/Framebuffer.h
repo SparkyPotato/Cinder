@@ -17,27 +17,73 @@
 #include "Core/Components/Registry.h"
 #include "Core/Math/Color.h"
 
+/// Tile of the framebuffer, used for tile-based rendering.
 class BufferTile
 {
 public:
+	/// Virtual destructor.
 	virtual ~BufferTile() = default;
 	
+	/// Get the color of the pixel.
+	///
+	/// \param x The x-value of the pixel relative to the top-left corner of the framebuffer.
+	/// \param y The y-value of the pixel relative to the top-left corner of the framebuffer.
+	/// 
+	/// \return The color of the requested pixel.
 	virtual Color GetPixel(uint32_t x, uint32_t y) = 0;
+
+	/// Set the color of the pixel.
+	///
+	/// \param color The color to set the pixel to.
+	/// \param x The x-value of the pixel relative to the top-left corner of the framebuffer.
+	/// \param y The y-value of the pixel relative to the top-left corner of the framebuffer.
 	virtual void SetPixel(const Color& color, uint32_t x, uint32_t y) = 0;
 };
 
+/// Base class of framebuffers for storing the image being rendered.
 class Framebuffer
 {
 public:
+	/// Construct the framebuffer.
+	///
+	/// \param width Width of the framebuffer.
+	/// \param height Height of the framebuffer.
 	Framebuffer(uint32_t width, uint32_t height)
 		: Width(width), Height(height)
 	{}
+
+	/// Virtual destructor.
 	virtual ~Framebuffer() = default;
 
+	/// Get a tile of the framebuffer.
+	///
+	/// \param xmin The minimum x-value of the tile's range (inclusive).
+	/// \param xmax The maximum x-value of the tile's range (exclusive).
+	/// \param ymin The minimum y-value of the tile's range (inclusive).
+	/// \param ymax The maximum y-value of the tile's range (exclusive).
+	/// 
+	/// \return The created buffer tile.
 	virtual BufferTile* GetBufferTile(uint32_t xmin, uint32_t xmax, uint32_t ymin, uint32_t ymax) = 0;
-	virtual void SaveBufferTile(BufferTile* tile) = 0;
-	virtual bool Ouput(const std::string& file) = 0;
 
+
+	/// Save a buffer tile to the framebuffer.
+	///
+	/// \param tile The tile to save. Is destroyed by the function.
+	virtual void SaveBufferTile(BufferTile* tile) = 0;
+
+	/// Output the framebuffer into a file.
+	///
+	/// \param file The name and path of the file to output into.
+	/// The filename extension is NOT checked.
+	/// 
+	/// \return If the output succeeded.
+	virtual bool Output(const std::string& file) = 0;
+
+	/// Parse the required parameters.
+	///
+	/// \param node The node containing the data.
+	/// 
+	/// \return If the parse succeeded.
 	virtual bool Parse(const YAML::Node& node) = 0;
 
 	uint32_t Width;

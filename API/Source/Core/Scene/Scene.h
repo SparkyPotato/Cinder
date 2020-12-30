@@ -28,18 +28,49 @@ class Scene
 public:
 	Scene() = default;
 	~Scene();
+
+	/// Load a scene from a file.
+	///
+	/// \param file The path of the scene description file.
+	/// 
+	/// \return The loaded scene.
 	static Scene* Load(const std::string& file);
 
+	/// Get the scene camera.
+	///
+	/// \return The camera.
 	Camera& GetCamera() const;
+
+	/// Get the objects in the scene.
+	///
+	/// \return std::vector of objects.
 	const std::vector<Object>& GetObjects() const { return m_Objects; }
 	
+	/// Get the bound of the scene.
+	///
+	/// \return The bound of the scene in camera space.
 	const Bound& GetBound() const { return m_Bound; }
 
+	/// Intersect a ray with the scene.
+	///
+	/// \param ray The ray to intersect.
+	/// \param interaction The interaction to fill in (in camera space).
+	/// 
+	/// \return If there was a hit.
 	bool Intersect(const Ray& ray, Interaction& interaction) const;
+
+	/// Test intersect a ray with the scene.
+	///
+	/// \param ray The ray to intersect.
+	/// 
+	/// \return If there was a hit.
 	bool TestIntersect(const Ray& ray) const;
 
 	const Environment& GetEnvironment() const { return m_Environment; }
-
+	
+	/// Get the lights in the scene.
+	///
+	/// \return The lights in scene.
 	const std::vector<up<Light>>& GetLights() const { return m_Lights; }
 
 private:

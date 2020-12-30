@@ -16,6 +16,7 @@
 
 #include "Core/Material/Texture.h"
 
+/// A floating-point texture.
 class HDRTexture : public Texture
 {
 public:

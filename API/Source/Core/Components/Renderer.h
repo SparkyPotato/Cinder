@@ -18,12 +18,25 @@
 #include "Core/Components/Framebuffer.h"
 #include "Core/Scene/Scene.h"
 
+/// Renderer responsible for converting a scene description into an image.
+/// Go ham.
 class Renderer
 {
 public:
+	/// Virtual destructor.
 	virtual ~Renderer() = default;
 
+	/// Render.
+	///
+	/// \param scene The scene to render.
+	/// \param framebuffer The framebuffer to render into.
 	virtual void Render(const Scene& scene, Framebuffer& framebuffer) = 0;
+
+	/// Parse the required parameters.
+	///
+	/// \param node The node containing the data.
+	/// 
+	/// \return If the parse succeeded.
 	virtual bool Parse(const YAML::Node& node) = 0;
 };
 

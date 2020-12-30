@@ -16,6 +16,7 @@
 
 #include "Core/Material/Material.h"
 
+/// A material which only emits light.
 class Emission : public Material
 {
 public:

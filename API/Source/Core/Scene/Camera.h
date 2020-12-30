@@ -18,18 +18,36 @@
 #include "Core/Math/Ray.h"
 #include "Core/Math/Transform.h"
 
+/// Base class for cameras, which generate camera rays.
 class Camera
 {
 public:
+	/// Construct a camera.
+	///
+	/// \param toWorld Camera to world transformation.
 	Camera(const Transform& toWorld)
 		: ToWorld(toWorld)
 	{}
+
+	/// Virtual destructor.
 	virtual ~Camera() = default;
 
+	/// Set the aspect-ratio of the camera.
+	///
+	/// \param aspectRatio The aspect-ratio.
 	void SetAspectRatio(float aspectRatio) { m_AspectRatio = aspectRatio; }
 
+	/// Parse the required parameters.
+	///
+	/// \param node The node containing the data.
+	/// 
+	/// \return If the parse succeeded.
 	virtual bool Parse(const YAML::Node& node) = 0;
 
+	/// Get a camera ray.
+	///
+	/// \param u U-value of the viewport (horizontal).
+	/// \param v V-value of the viewport (vertical).
 	virtual Ray GetRay(float u, float v) = 0;
 
 	Transform ToWorld;

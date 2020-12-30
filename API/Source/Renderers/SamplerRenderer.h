@@ -19,6 +19,7 @@
 #include "Core/Components/Filter.h"
 #include "Core/Math/Color.h"
 
+/// A base for Renderers that take multiple samples for every pixel.
 class SamplerRenderer : public Renderer
 {
 public:

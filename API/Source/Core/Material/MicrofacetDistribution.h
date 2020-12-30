@@ -18,16 +18,56 @@
 #include "Core/Material/BxDF.h"
 #include "Core/Components/Sampler.h"
 
+/// Base class for distribution of microfacets on surfaces.
 class Microfacet
 {
 public:
+	/// Virtual destructor.
 	virtual ~Microfacet() = default;
 
+	/// Calculate the differential area of the microfacets.
+	///
+	/// \param normal The surface normal.
+	/// 
+	/// \return The differential area.
 	virtual float Evaluate(const Vector& normal) const = 0;
+
+	/// Calculate the shadow-masking function.
+	/// 
+	/// \param w The view direction.
+	/// 
+	/// \return Ratio of invisible masked microfacet area and visible microfacet area.
 	virtual float Lambda(const Vector& w) const = 0;
+
+	/// Calculate the masking function.
+	/// 
+	/// \param w The view direction.
+	/// 
+	/// \return Fraction of visible microfacet area.
 	float Masking(const Vector& w) const;
+
+	/// Calculate the masking function.
+	/// 
+	/// \param outgoing The view direction.
+	/// \param incoming The light direction.
+	/// 
+	/// \return Fraction of visible microfacet area.
 	float Masking(const Vector& outgoing, const Vector& incoming) const;
+
+	/// Sample the microfacet normal.
+	///
+	/// \param outgoing The view direction.
+	/// \param sampler The Sampler to use for samples.
+	/// 
+	/// \return The normal.
 	virtual Vector SampleNormal(const Vector& outgoing, Sampler* sampler) const = 0;
+
+	/// Calculate the probability density with an outgoing vector and a normal.
+	///
+	/// \param outgoing The view direction.
+	/// \param normal The normal.
+	/// 
+	/// \return The probability density function.
 	float Pdf(const Vector& outgoing, const Vector& normal) const;
 	
 protected:
@@ -36,6 +76,7 @@ protected:
 	const bool m_SampleVisible;
 };
 
+/// Trowbridge-Reitz microfacet distribution.
 class TrowbridgeReitz : public Microfacet
 {
 public:

@@ -18,6 +18,7 @@
 #include "Core/Scene/Object.h"
 #include "Core/Material/Texture.h"
 
+/// An area light which is attached to an object.
 class AreaLight : public Light
 {
 public:

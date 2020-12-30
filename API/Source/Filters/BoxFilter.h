@@ -16,6 +16,7 @@
 
 #include "Core/Components/Filter.h"
 
+/// Box filter where every pixel is weighted equally.
 class BoxFilter : public Filter
 {
 public:

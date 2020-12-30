@@ -42,7 +42,7 @@ void EightBitFramebuffer::SaveBufferTile(BufferTile* tile)
 	delete tile;
 }
 
-bool EightBitFramebuffer::Ouput(const std::string& file)
+bool EightBitFramebuffer::Output(const std::string& file)
 {
 	std::filesystem::path path = file;
 	if (path.has_parent_path()) { std::filesystem::create_directories(path.parent_path()); }

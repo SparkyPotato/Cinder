@@ -16,6 +16,7 @@
 
 #include "Core/Material/Material.h"
 
+/// A plastic.
 class Plastic : public Material
 {
 public:

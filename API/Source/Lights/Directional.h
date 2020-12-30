@@ -16,6 +16,7 @@
 
 #include "Core/Scene/Light.h"
 
+/// A directional light which emits radiance in a single direction.
 class DirectionalLight : public Light
 {
 public:

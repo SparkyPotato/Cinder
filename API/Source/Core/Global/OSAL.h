@@ -16,6 +16,11 @@
 
 #ifdef PLATFORM_WINDOWS
 
+/// Convert to UTF-8 on Windows.
+///
+/// \param UTF-16 encoded string.
+/// 
+/// \return UTF-8 encoded conversion.
 std::string ToUTF8(const wchar_t* utf16);
 
 #define BREAK_IF(x) if (x) { __debugbreak(); }

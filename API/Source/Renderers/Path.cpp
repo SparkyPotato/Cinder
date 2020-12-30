@@ -41,7 +41,7 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 		Vector outgoing = -r.Direction, incoming;
 		float pdf;
 		BxDF::Type type;
-		Color c = i.Bsdf->EvaluateSample(outgoing, incoming, sampler, pdf, BxDF::All, &type);
+		Color c = i.Bsdf->Sample(outgoing, incoming, sampler, pdf, BxDF::All, &type);
 
 		if (c == Color() || pdf == 0.f) { break; }
 

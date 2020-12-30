@@ -16,6 +16,7 @@
 
 #include "Core/Material/Material.h"
 
+/// A matte, diffuse material.
 class MatteMaterial : public Material
 {
 public:

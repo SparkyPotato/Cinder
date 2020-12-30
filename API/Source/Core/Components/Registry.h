@@ -37,9 +37,13 @@ using MaterialSpawnFunction = up<Material> (*)(const std::string&);
 class Light;
 using LightSpawnFunction = up<Light>(*)(uint32_t, const Transform&);
 
+/// Singleton registry of loaded components.
 class Registry
 {
 public:
+	/// Get the singleton.
+	///
+	/// \return The registry.
 	static Registry* Get();
 
 	std::map<std::string, RendererSpawnFunction> GRenderers;

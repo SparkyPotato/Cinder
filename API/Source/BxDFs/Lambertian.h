@@ -16,9 +16,14 @@
 
 #include "Core/Material/BxDF.h"
 
+/// BRDF that models Lambertian diffuse reflection.
+/// Assumes the surface is perfectly smooth.
 class LambertianBRDF : public BxDF
 {
 public:
+	/// Construct the BRDF.
+	///
+	/// \param base The base color (albedo) of the material.
 	LambertianBRDF(const Color& base);
 
 	virtual Color Evaluate(const Vector& outgoing, const Vector& incoming) const override;

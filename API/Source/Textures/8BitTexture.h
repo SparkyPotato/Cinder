@@ -16,6 +16,7 @@
 
 #include "Core/Material/Texture.h"
 
+/// An 8-bit texture.
 class EightBitTexture : public Texture
 {
 public:

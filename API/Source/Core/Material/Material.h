@@ -18,19 +18,47 @@
 #include "Core/Material/Texture.h"
 #include "Core/Components/Registry.h"
 
+/// Base class for all materials.
 class Material
 {
 public:
+	/// Construct a material.
+	///
+	/// \param name The name of the material.
 	Material(const std::string& name)
 		: Name(name)
 	{}
+
+	/// Virtual destructor.
 	virtual ~Material() = default;
 
+	/// Calculate the shading normal of the interaction.
+	///
+	/// \param map The normal map to used.
+	/// \param interaction The interaction to update.
     void NormalMap(const up<Texture>& map, Interaction& interaction) const;
 
+	/// Compute the material BSDF at an interaction.
+	///
+	/// \param interaction The interaction to update.
+	/// \param arena The arena to use to allocate the BSDF.
 	virtual void Compute(Interaction& interaction, MemoryArena& arena) const = 0;
+
+	/// Parse the required parameters.
+	///
+	/// \param node The node containing the data.
+	/// 
+	/// \return If the parse succeeded.
 	virtual bool Parse(const YAML::Node& node) = 0;
+
+	/// Get the emission of the material.
+	///
+	/// \return The emission texture.
 	virtual const Texture* GetEmission() const { return nullptr; }
+
+	/// Get the intensity of the emission.
+	///
+	/// \return The emission intensity.
 	virtual float GetEmissionIntensity() const { return 0.f; }
 
 	std::string Name;
