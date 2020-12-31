@@ -30,8 +30,18 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 
 		if (bounces == 0 || specular)
 		{
-			if (!hit) { out += b * scene.GetEnvironment().Sample(r.Direction); }
-			else if (i.HitObject->GetMaterial()->GetEmission()) { out += i.HitObject->GetMaterial()->GetEmission()->Evaluate(i); }
+			if (!hit) 
+			{
+				for (auto& light : scene.GetLights())
+				{
+					out += b * light->EvaluateAlong(r);
+				}
+			}
+			else if (i.HitObject->GetMaterial()->GetEmission()) 
+			{ 
+				out += i.HitObject->GetMaterial()->GetEmission()->Evaluate(i)
+					* i.HitObject->GetMaterial()->GetEmissionIntensity(); 
+			}
 		}
 		if (!hit || bounces >= m_Depth) { break; }
 
@@ -100,8 +110,7 @@ Color PathRenderer::SampleOneLight(const Scene& scene, const Interaction& intera
 {
 	uint64_t lightCount = scene.GetLights().size();
 	if (lightCount == 0) { return Color(); }
-	uint64_t n = uint64_t(sampler->Get1D() * lightCount);
-	if (n == lightCount) { return scene.GetEnvironment().SampleIrradiance(Vector(interaction.SNormal)); }
+	uint64_t n = std::min(uint64_t(sampler->Get1D() * lightCount), lightCount - 1);
 
 	Light* light = scene.GetLights()[n].get();
 	return Estimate(scene, interaction, sampler, light, arena) * float(lightCount);

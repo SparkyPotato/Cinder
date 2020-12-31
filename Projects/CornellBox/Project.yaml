@@ -1,0 +1,19 @@
+---
+# List of scenes contained within the project.
+Scenes:
+  - File: Scene.yaml # Scene file relative to the project file.
+    Output: CornellBox.png # Output file relative to the project file.
+
+# Renderer settings.
+Renderer:
+  Type: Path # Type of renderer to use.
+  Sampler: Random # Sampler to use.
+  Filter: Box # Filter to use
+  Camera Samples: 256 # Number of samples to take for each pixel.
+  Ray Depth: 8 # Maximum number of bounces.
+
+# Framebuffer settings.
+Framebuffer:
+  Type: 8-bit # Type of framebuffer to use.
+  Output: PNG # Output type.
+  Resolution: [ 1200, 1200 ] # Resolution in pixels.

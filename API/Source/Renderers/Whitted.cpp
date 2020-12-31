@@ -24,17 +24,24 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 
 	if (!scene.Intersect(ray, interaction))
 	{
-		return scene.GetEnvironment().Sample(ray.Direction);
+		Color out;
+
+		for (auto& light : scene.GetLights())
+		{
+			out += light->EvaluateAlong(ray);
+		}
+
+		return out;
 	}
 
 	interaction.HitObject->GetMaterial()->Compute(interaction, arena);
-	if (interaction.HitObject->GetMaterial()->GetEmission()) { out += interaction.HitObject->GetMaterial()->GetEmission()->Evaluate(interaction); }
+	if (interaction.HitObject->GetMaterial()->GetEmission()) 
+	{ 
+		out += interaction.HitObject->GetMaterial()->GetEmission()->Evaluate(interaction)
+			* interaction.HitObject->GetMaterial()->GetEmissionIntensity(); 
+	}
 	const BSDF* bsdf = interaction.Bsdf;
 	Vector outgoing = -ray.Direction;
-
-	// Environment Map IBL
-	out += bsdf->Evaluate(outgoing, Vector(interaction.GNormal)) *
-		scene.GetEnvironment().SampleIrradiance(Vector(interaction.GNormal));
 
 	for (auto& light : scene.GetLights())
 	{

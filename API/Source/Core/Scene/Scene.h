@@ -17,7 +17,6 @@
 #include "Core/Scene/Camera.h"
 #include "Core/Scene/Geometry.h"
 #include "Core/Scene/Object.h"
-#include "Core/Scene/Environment.h"
 #include "Core/Scene/Light.h"
 #include "Core/Material/Material.h"
 
@@ -65,8 +64,6 @@ public:
 	/// 
 	/// \return If there was a hit.
 	bool TestIntersect(const Ray& ray) const;
-
-	const Environment& GetEnvironment() const { return m_Environment; }
 	
 	/// Get the lights in the scene.
 	///
@@ -86,8 +83,6 @@ private:
 	std::vector<up<Material>> m_Materials;
 	std::vector<up<Light>> m_Lights;
 	std::vector<Object> m_Objects;
-
-	Environment m_Environment;
 	
 	Bound m_Bound = Bound({ 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f });
 };

@@ -1,0 +1,133 @@
+---
+# Acceleration structure settings
+Acceleration:
+  Type: None # Type of acceleration structure to use
+
+# Camera settings.
+Camera:
+  Type: Perspective # Type of camera to use.
+  Transform: # Transform of the camera.
+    Position: [ 278, 273, -800 ] # Position.
+    Rotation: [ 0, 0, 0 ] # Rotation.
+    Scale: [ 1, 1, 1 ] # Scale. Do not set to anything other than [ 1, 1, 1 ].
+  FOV: 60 # Vertical field of view, in degrees.
+
+# List of geometry.
+Geometry:
+  - Name: Floor # Name of the geometry which will be used in references.
+    Type: Mesh # Type of geometry.
+    Source: Models/Floor.obj # Source file of the mesh.
+  - Name: Ceiling
+    Type: Mesh
+    Source: Models/Ceiling.obj
+  - Name: Back Wall
+    Type: Mesh
+    Source: Models/BackWall.obj
+  - Name: Left Wall
+    Type: Mesh
+    Source: Models/LeftWall.obj
+  - Name: Right Wall
+    Type: Mesh
+    Source: Models/RightWall.obj
+  - Name: Large Box
+    Type: Mesh
+    Source: Models/LargeBox.obj
+  - Name: Small Box
+    Type: Mesh
+    Source: Models/SmallBox.obj
+  - Name: Light
+    Type: Mesh
+    Source: Models/Light.obj
+
+# List of materials.
+Materials:
+  - Name: Diffuse White # Name used in references.
+    Type: Matte # Type of the material.
+    Color: # Texture for albedo.
+      Type: Constant # Type of texture.
+      Color: [ 0.885809, 0.698859, 0.666422 ] # Constant value of texture.
+    Normal: # Texture for shading normals.
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness: # Texture for roughness.
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+  - Name: Diffuse Green
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 0.105421, 0.37798, 0.076425 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+  - Name: Diffuse Red
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 0.570068, 0.0430135, 0.0443706 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+  - Name: Emitter
+    Type: Emission
+    Color: # Texture for emission color.
+      Type: Constant
+      Color: [ 18.387, 10.9873, 2.75357 ]
+    Intensity: 1 # Intensity of the emission.
+
+# List of objects.
+Objects:
+  - Geometry: Floor
+    Material: Diffuse White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Ceiling
+    Material: Diffuse White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Back Wall
+    Material: Diffuse White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Left Wall
+    Material: Diffuse Red
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Right Wall
+    Material: Diffuse Green
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Large Box
+    Material: Diffuse White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Small Box
+    Material: Diffuse White
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+  - Geometry: Light
+    Material: Emitter
+    Transform:
+      Position: [ 0, -0.1, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]

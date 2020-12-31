@@ -49,7 +49,9 @@ public:
 
 	/// Spawn a ray to the other interaction.
 	///
-	/// \param The spawned ray.
+	/// \param other Intersection to spawn ray to.
+	/// 
+	/// \return The spawned ray.
 	Ray SpawnRayTo(const Interaction& other)
 	{
 		Point origin = HitPoint + Vector(GNormal) * Epsilon;

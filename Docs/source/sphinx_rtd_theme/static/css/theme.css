@@ -3378,7 +3378,7 @@ span:first-child:before {
 .wy-alert-warning.error, .rst-content .wy-alert-warning.hint, .rst-content .wy-alert-warning.important,
 .rst-content .wy-alert-warning.note, .rst-content .wy-alert-warning.seealso, .rst-content
 .wy-alert-warning.tip, .wy-alert.wy-alert-warning {
-	background: #ffedcc
+	background: #444
 }
 
 	.rst-content .admonition-todo .admonition-title, .rst-content .admonition-todo
@@ -4893,7 +4893,7 @@ html {
 }
 
 	.wy-menu-vertical header, .wy-menu-vertical p.caption {
-		color: #55a5d9;
+		color: #ff8c00;
 		height: 32px;
 		line-height: 32px;
 		padding: 0 1.618em;

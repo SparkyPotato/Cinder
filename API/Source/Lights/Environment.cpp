@@ -13,18 +13,56 @@
 //    limitations under the License.
 
 #include "PCH.h"
-#include "Core/Scene/Environment.h"
+#include "Lights/Environment.h"
 
+#include "Core/Scene/Scene.h"
 #include "Textures/HDRTexture.h"
 
-Color Environment::Sample(const Vector& direction) const
+LIGHT(Environment, Environment)
+
+Environment::Environment(uint32_t samples, const Transform& transform)
+	: Light(samples, transform)
+{}
+
+Color Environment::Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const
 {
-	return m_Skybox(m_CameraToWorld(direction));
+	incoming = Vector(interaction.SNormal);
+	pdf = 1.f;
+	tester.Point1 = interaction;
+	tester.Point2.HitPoint = interaction.HitPoint + Vector(interaction.SNormal) * Epsilon * 2.f;
+
+	return m_Irradiance(ToCamera.GetInverse()(Vector(interaction.SNormal)));
 }
 
-Color Environment::SampleIrradiance(const Vector& direction) const
+Color Environment::EvaluateAlong(const Ray& ray) const
 {
-	return m_Irradiance(m_CameraToWorld(direction));
+	return m_Skybox(ToCamera.GetInverse()(ray.Direction));
+}
+
+bool Environment::Parse(const YAML::Node& node)
+{
+	try { m_Skybox = node.as<Cubemap>(); }
+	catch (...) { return false; }
+
+	if (!node["Radiance Map Resolution"])
+	{
+		Error("Environment does not have radiance map resolution (line {})!", node.Mark().line + 1);
+		return false;
+	}
+
+	try { m_IrradianceResolution = node["Radiance Map Resolution"].as<uint32_t>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Radiance map resolution must be an unsigned integer (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	return true;
+}
+
+void Environment::Preprocess(const Scene& scene)
+{
+	ComputeIrradiance();
 }
 
 void Environment::ComputeIrradiance()
@@ -40,7 +78,7 @@ void Environment::ComputeIrradiance()
 			for (uint32_t x = 0; x < m_IrradianceResolution; x++)
 			{
 				Color c = m_Skybox(
-					Vector(-CubemapFaceData[i].FaceNormal) + 
+					Vector(-CubemapFaceData[i].FaceNormal) +
 					CubemapFaceData[i].UVector * ((float(x) / m_IrradianceResolution) * 2.f - 1.f) +
 					CubemapFaceData[i].VVector * ((float(y) / m_IrradianceResolution) * 2.f - 1.f)
 				);
@@ -172,25 +210,3 @@ Environment::IrradianceSample& Environment::IrradianceSample::operator*=(const C
 	return *this;
 }
 
-bool YAML::convert<Environment>::decode(const Node& node, Environment& env)
-{
-	try { env.m_Skybox = node.as<Cubemap>(); }
-	catch (...) { return false; }
-
-	if (!node["Radiance Map Resolution"])
-	{
-		Error("Environment does not have radiance map resolution (line {})!", node.Mark().line + 1);
-		return false;
-	}
-
-	try { env.m_IrradianceResolution = node["Radiance Map Resolution"].as<uint32_t>(); }
-	catch (YAML::Exception& e)
-	{
-		Error("Radiance map resolution must be an unsigned integer (line {})!", e.mark.line + 1);
-		return false;
-	}
-
-	env.ComputeIrradiance();
-
-	return true;
-}

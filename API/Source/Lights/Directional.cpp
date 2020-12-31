@@ -29,9 +29,7 @@ Color DirectionalLight::Sample(const Interaction& interaction, Sampler* sampler,
 	pdf = 1.f;
 
 	tester.Point1 = interaction;
-	Interaction r;
-	r.HitPoint = interaction.HitPoint + m_Incoming * m_Radius;
-	tester.Point2 = r;
+	tester.Point2.HitPoint = interaction.HitPoint + m_Incoming * m_Radius;
 
 	return m_Color;
 }

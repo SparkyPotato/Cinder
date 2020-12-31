@@ -88,7 +88,11 @@ bool Scene::LinkReferences()
 		m_Bound = Union(m_Bound, object.GetBound());
 	}
 
-	m_Environment.m_CameraToWorld = m_Camera->ToWorld;
+	for (auto& light : m_Lights)
+	{
+		light->Preprocess(*this);
+	}
+
 	m_Acceleration->Build(*this);
 
 	return true;
@@ -116,10 +120,18 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 		Error("Material list must be a sequence (line {})!", node.Mark().line + 1);
 		return false;
 	}
-	if (!node["Lights"] || !node["Lights"].IsSequence())
+	if (node["Lights"])
 	{
-		Error("Light list must be a sequence (line {})!", node.Mark().line + 1);
-		return false;
+		if (!node["Lights"].IsSequence())
+		{
+			Error("Light list must be a sequence (line {})!", node.Mark().line + 1);
+			return false;
+		}
+
+		for (auto& light : node["Lights"])
+		{
+			scene->m_Lights.emplace_back(light.as<up<Light>>());
+		}
 	}
 
 	if (!node["Acceleration"])
@@ -161,19 +173,6 @@ bool YAML::convert<Scene*>::decode(const Node& node, Scene*& scene)
 	{
 		scene->m_Objects.emplace_back(object.as<Object>());
 	}
-
-	for (auto& light : node["Lights"])
-	{
-		scene->m_Lights.emplace_back(light.as<up<Light>>());
-	}
-	
-	if (!node["Environment"])
-	{
-		Error("Scene does not have environment!");
-		return false;
-	}
-	try { scene->m_Environment = node["Environment"].as<Environment>(); }
-	catch (...) { return false; }
 
 	return scene->LinkReferences();
 }

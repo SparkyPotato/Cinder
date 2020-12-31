@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16)
+
+cmake_policy(SET CMP0077 NEW)
 
 project (Cinder LANGUAGES CXX)
 
@@ -15,14 +17,22 @@ if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 	endif()
 endif()
 
+if (NOT WIN32)
+	add_compile_options("-fPIC")
+endif ()
+
 option(BUILD_DOCS "Build the documentation" ON)
 option(BUILD_CLI "Build the CLI tool" ON)
+
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Libraries)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Libraries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Binaries)
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
+option(ASSIMP_BUILD_TESTS OFF "")
+option(BUILD_SHARED_LIBS OFF "")
+option(YAML_BUILD_SHARED_LIBS OFF "")
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/External/fmt)
 add_subdirectory(${PROJECT_SOURCE_DIR}/External/yaml-cpp)

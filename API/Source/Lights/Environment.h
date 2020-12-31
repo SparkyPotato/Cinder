@@ -14,21 +14,23 @@
 
 #pragma once
 
+#include "Core/Scene/Light.h"
 #include "Core/Material/Cubemap.h"
-#include "Core//Math/Transform.h"
 
-class Environment
+/// A directional light which emits radiance in a single direction.
+class Environment : public Light
 {
 public:
-	Environment() = default;
-	
-	Color Sample(const Vector& direction) const;
-	Color SampleIrradiance(const Vector& direction) const;
+	Environment(uint32_t samples, const Transform& transform);
+
+	virtual Color Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const override;
+	virtual Color EvaluateAlong(const Ray& ray) const override;
+
+	virtual bool Parse(const YAML::Node& node) override;
+
+	virtual void Preprocess(const Scene& scene) override;
 
 private:
-	friend struct YAML::convert<Environment>;
-	friend class Scene;
-
 	struct IrradianceSample
 	{
 		Color Coefficients[9];
@@ -47,10 +49,4 @@ private:
 	Transform m_CameraToWorld;
 	Cubemap m_Skybox;
 	Cubemap m_Irradiance;
-};
-
-template<>
-struct YAML::convert<Environment>
-{
-	static bool decode(const Node& node, Environment& environment);
 };

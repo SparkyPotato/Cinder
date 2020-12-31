@@ -175,7 +175,7 @@ Options:
   -nologo                Suppress the banner on startup.
   -quiet/-q              Suppress everything except fatal errors. Implies -nologo.
   -log/-l                Location of the log file. If left blank, the file will be called
-				         'Log.txt' in the current working directory.
+                         'Log.txt' in the current working directory.
   -loglevel/-ll=<n>      <n> must be from 0 - 4:
                          0 - Verbose
                          1 - Log
@@ -183,6 +183,6 @@ Options:
                          3 - Error
                          4 - Fatal
   -tilesize/-ts=<n>      <n> is the length of each tile in a sampler-based renderer.
-				         The default is 16
+                         The default is 16
 )");
 }

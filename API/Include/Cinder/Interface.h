@@ -46,6 +46,10 @@
 #	error Unknown platform!
 #endif
 
+#ifndef CINDER_API
+# 	define CINDER_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

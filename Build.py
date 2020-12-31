@@ -22,35 +22,38 @@ def GenerateFiles(args):
         
     os.chdir(buildDir)
     
+    callArgs = [ "cmake", "-GNinja" ]
+    
     buildOptions = {
-        "Debug"       : "-DCMAKE_BUILD_TYPE=Debug ",
-        "Development" : "-DCMAKE_BUILD_TYPE=RelWithDebInfo ",
-        "Release"     : "-DCMAKE_BUILD_TYPE=Release ",
+        "Debug"       : "-DCMAKE_BUILD_TYPE=Debug",
+        "Development" : "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+        "Release"     : "-DCMAKE_BUILD_TYPE=Release",
     }
     
-    options = buildOptions.get(args.config, "");
+    callArgs.append(buildOptions.get(args.config, ""))
+    
     # Turn submodule updating off
     if args.nosub:
-        options += "-DSUBMODULE=OFF "
+        callArgs.append("-DSUBMODULE=OFF")
 
     # Turn documentation building off
     if args.nodoc:
-        options += "-DBUILD_DOCS=OFF "
+        callArgs.append("-DBUILD_DOCS=OFF")
 
     # Turn CLI off
     if args.nocli:
-        options += "-DBUILD_CLI=OFF "
+        callArgs.append("-DBUILD_CLI=OFF")
+        
+    callArgs.append("../..")
     
     # Generate CMake files
     value = subprocess.call(
-        "cmake -G Ninja " + options + " ../..", 
+        callArgs, 
         stdout=subprocess.DEVNULL,
         stderr=sys.stderr
     )
     if value != 0:
         print(CRED + "Failed to generate files!" + CEND)
-        os.chdir("../..")
-        shutil.rmtree(buildDir)
         return False
         
     print(CGREEN + "Generated files." + CEND)
@@ -58,7 +61,7 @@ def GenerateFiles(args):
 
 def Build():
     value = subprocess.call(
-        "cmake --build ."
+        [ "cmake", "--build", "." ]
     )
     
     if value != 0:
@@ -85,21 +88,21 @@ def Main():
     
     parser.add_argument(
         "-nosub", "--nosubmodule",
-        action="store_false",
+        action="store_true",
         help="Disable updating submodules, only turn off if you have made changes to them.",
         dest="nosub"
     )
 
     parser.add_argument(
         "-nodoc", "--nodocumentation",
-        action="store_false",
+        action="store_true",
         help="Do not build the Cinder documentation.",
         dest="nodoc"
     )
 
     parser.add_argument(
         "-nocli", 
-        action="store_false",
+        action="store_true",
         help="Do not build the Cinder CLI tool.",
         dest="nocli"
     )

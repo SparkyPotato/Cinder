@@ -7,11 +7,7 @@ file(GLOB_RECURSE API_SOURCE CONFIGURE_DEPENDS
 )
 add_library(CinderAPI SHARED ${API_SOURCE})
 
-target_include_directories(CinderAPI PRIVATE ${PROJECT_SOURCE_DIR}/External/fmt/include)
-target_include_directories(CinderAPI PRIVATE ${PROJECT_SOURCE_DIR}/External/yaml-cpp/include)
 target_include_directories(CinderAPI PRIVATE ${PROJECT_SOURCE_DIR}/External/stb)
-target_include_directories(CinderAPI PRIVATE ${PROJECT_SOURCE_DIR}/External/Assimp/include)
-target_include_directories(CinderAPI PRIVATE ${CMAKE_BINARY_DIR}/External/Assimp/include)
 
 target_include_directories(CinderAPI PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/Cinder)
 target_include_directories(CinderAPI PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Source/)
