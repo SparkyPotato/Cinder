@@ -156,10 +156,10 @@ Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& in
 {
 	Color out;
 
-	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
+	Vector incoming;
 	float pdf;
 	auto type = BxDF::Type(BxDF::Reflection | BxDF::Specular);
-	Color c = interaction.Bsdf->Sample(outgoing, incoming, sampler, pdf, type);
+	Color c = interaction.Bsdf->Sample(interaction.Outgoing, incoming, sampler, pdf, type);
 	
 	const Normal& normal = interaction.SNormal;
 	if (pdf > 0.f && c != Color() && Dot(incoming, normal) != 0.f)
@@ -169,7 +169,7 @@ Color SamplerRenderer::SpecularReflect(const Scene& scene, const Interaction& in
 	}
 
 	type = BxDF::Type(BxDF::Reflection | BxDF::Glossy);
-	c = interaction.Bsdf->Sample(outgoing, incoming, sampler, pdf, type);
+	c = interaction.Bsdf->Sample(interaction.Outgoing, incoming, sampler, pdf, type);
 
 	if (pdf > 0.f && c != Color() && Dot(incoming, normal) != 0.f)
 	{
@@ -185,10 +185,10 @@ Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& i
 {
 	Color out;
 
-	Vector outgoing = (Point() - interaction.HitPoint).GetNormalized(), incoming;
+	Vector incoming;
 	float pdf;
 	auto type = BxDF::Type(BxDF::Transmission | BxDF::Specular);
-	Color c = interaction.Bsdf->Sample(outgoing, incoming, sampler, pdf, type);
+	Color c = interaction.Bsdf->Sample(interaction.Outgoing, incoming, sampler, pdf, type);
 	
 	const Normal& normal = interaction.SNormal;
 	float dot = Dot(incoming, normal);
@@ -201,7 +201,7 @@ Color SamplerRenderer::SpecularTransmit(const Scene& scene, const Interaction& i
 	}
 	
 	type = BxDF::Type(BxDF::Transmission | BxDF::Glossy);
-	c = interaction.Bsdf->Sample(outgoing, incoming, sampler, pdf, type);
+	c = interaction.Bsdf->Sample(interaction.Outgoing, incoming, sampler, pdf, type);
 
 	dot = Dot(incoming, normal);
 	if (pdf > 0.f && c != Color() && dot != 0.f)

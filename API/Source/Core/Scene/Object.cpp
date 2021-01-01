@@ -55,7 +55,7 @@ bool Object::TestIntersect(const Ray& ray) const
 	{
 		for (auto geometry : m_Geometry->GetSubGeometry())
 		{
-			if (m_Geometry->TestIntersect(r)) { return true; }
+			if (geometry->TestIntersect(r)) { return true; }
 		}
 
 		return false;

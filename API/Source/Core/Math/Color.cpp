@@ -87,7 +87,7 @@ Color& Color::operator/=(const Color& other)
 
 float Color::Y() const 
 {
-	const float YWeight[3] = { 0.212671f, 0.715160f, 0.072169f };
+	constexpr float YWeight[3] = { 0.212671f, 0.715160f, 0.072169f };
 
 	return YWeight[0] * R() + YWeight[1] * G() + YWeight[2] * B();
 }

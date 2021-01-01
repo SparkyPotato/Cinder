@@ -45,13 +45,15 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 		}
 		if (!hit || bounces >= m_Depth) { break; }
 
+		i.Outgoing = -r.Direction;
+
 		i.HitObject->GetMaterial()->Compute(i, arena);
 		out += b * SampleOneLight(scene, i, arena, sampler);
 
-		Vector outgoing = -r.Direction, incoming;
+		Vector incoming;
 		float pdf;
 		BxDF::Type type;
-		Color c = i.Bsdf->Sample(outgoing, incoming, sampler, pdf, BxDF::All, &type);
+		Color c = i.Bsdf->Sample(i.Outgoing, incoming, sampler, pdf, BxDF::All, &type);
 
 		if (c == Color() || pdf == 0.f) { break; }
 
@@ -100,7 +102,7 @@ Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* 
 	if (c != Color() && pdf != 0.f)
 	{
 		return tester(scene) ? Color() :
-			c * std::abs(Dot(incoming, i.SNormal)) / pdf * i.Bsdf->Evaluate((Point() - i.HitPoint).GetNormalized(), incoming);
+			c * std::abs(Dot(incoming, i.SNormal)) / pdf * i.Bsdf->Evaluate(i.Outgoing, incoming);
 	}
 
 	return Color();

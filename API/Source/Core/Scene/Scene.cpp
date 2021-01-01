@@ -90,6 +90,7 @@ bool Scene::LinkReferences()
 
 	for (auto& light : m_Lights)
 	{
+		light->ToCamera = light->ToCamera * m_Camera->ToWorld.GetInverse();
 		light->Preprocess(*this);
 	}
 

@@ -1,18 +1,15 @@
 ---
-# Acceleration structure settings
 Acceleration:
-  Type: None # Type of acceleration structure to use
+  Type: None
 
-# Camera settings.
 Camera:
-  Type: Perspective # Type of camera to use.
-  Transform: # Transform of the camera.
-    Position: [ 278, 273, -800 ] # Position.
-    Rotation: [ 0, 0, 0 ] # Rotation.
-    Scale: [ 1, 1, 1 ] # Scale. Do not set to anything other than [ 1, 1, 1 ].
-  FOV: 60 # Vertical field of view, in degrees.
+  Type: Perspective
+  Transform:
+    Position: [ -278, 273, -800 ]
+    Rotation: [ 0, 0, 0 ]
+    Scale: [ 1, 1, 1 ] 
+  FOV: 69
 
-# List of geometry.
 Geometry:
   - Name: Floor # Name of the geometry which will be used in references.
     Type: Mesh # Type of geometry.
@@ -23,12 +20,12 @@ Geometry:
   - Name: Back Wall
     Type: Mesh
     Source: Models/BackWall.obj
-  - Name: Left Wall
+  - Name: Red Wall
     Type: Mesh
-    Source: Models/LeftWall.obj
-  - Name: Right Wall
+    Source: Models/RedWall.obj
+  - Name: Green Wall
     Type: Mesh
-    Source: Models/RightWall.obj
+    Source: Models/GreenWall.obj
   - Name: Large Box
     Type: Mesh
     Source: Models/LargeBox.obj
@@ -41,15 +38,26 @@ Geometry:
 
 # List of materials.
 Materials:
-  - Name: Diffuse White # Name used in references.
-    Type: Matte # Type of the material.
-    Color: # Texture for albedo.
-      Type: Constant # Type of texture.
-      Color: [ 0.885809, 0.698859, 0.666422 ] # Constant value of texture.
-    Normal: # Texture for shading normals.
+  - Name: Box
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 0.45, 0.30, 0.90 ]
+    Normal:
       Type: Constant
       Color: [ 0, 0, 1 ]
-    Roughness: # Texture for roughness.
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+  - Name: Diffuse White
+    Type: Matte
+    Color:
+      Type: Constant
+      Color: [ 0.885809, 0.698859, 0.666422 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
       Type: Constant
       Color: [ 0, 0, 0 ]
   - Name: Diffuse Green
@@ -76,10 +84,10 @@ Materials:
       Color: [ 0, 0, 0 ]
   - Name: Emitter
     Type: Emission
-    Color: # Texture for emission color.
+    Color:
       Type: Constant
       Color: [ 18.387, 10.9873, 2.75357 ]
-    Intensity: 1 # Intensity of the emission.
+    Intensity: 0.6
 
 # List of objects.
 Objects:
@@ -88,46 +96,46 @@ Objects:
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+      Scale: [ -1, 1, 1 ]
   - Geometry: Ceiling
     Material: Diffuse White
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+      Scale: [ -1, 1, 1 ]
   - Geometry: Back Wall
     Material: Diffuse White
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-  - Geometry: Left Wall
+      Scale: [ -1, 1, 1 ]
+  - Geometry: Red Wall
     Material: Diffuse Red
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
-  - Geometry: Right Wall
+      Scale: [ -1, 1, 1 ]
+  - Geometry: Green Wall
     Material: Diffuse Green
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+      Scale: [ -1, 1, 1 ]
   - Geometry: Large Box
-    Material: Diffuse White
+    Material: Box
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+      Scale: [ -1, 1, 1 ]
   - Geometry: Small Box
-    Material: Diffuse White
+    Material: Box
     Transform:
       Position: [ 0, 0, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+      Scale: [ -1, 1, 1 ]
   - Geometry: Light
     Material: Emitter
     Transform:
-      Position: [ 0, -0.1, 0 ]
+      Position: [ 0, -0.5, 0 ]
       Rotation: [ 0, 0, 0 ]
-      Scale: [ 1, 1, 1 ]
+      Scale: [ -1, 1, 1 ]

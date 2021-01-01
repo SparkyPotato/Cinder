@@ -55,10 +55,10 @@ bool Mesh::Parse(const YAML::Node& node)
 	const aiMesh* mesh = scene->mMeshes[0];
 	if (!mesh->HasNormals()) 
 	{ Error("Mesh does not have normals (line {})!", node.Mark().line + 1); return false; }
-	if (!mesh->HasTangentsAndBitangents()) 
-	{ Error("Mesh does not have tangents or bitangents (line {})!", node.Mark().line + 1); return false; }
-	if (!mesh->HasTextureCoords(0)) 
-	{ Error("Mesh does not have texture coordinates (line {})!", node.Mark().line + 1); return false; }
+	// if (!mesh->HasTangentsAndBitangents()) 
+	// { Error("Mesh does not have tangents or bitangents (line {})!", node.Mark().line + 1); return false; }
+	// if (!mesh->HasTextureCoords(0)) 
+	// { Error("Mesh does not have texture coordinates (line {})!", node.Mark().line + 1); return false; }
 
 	m_Bound = Bound(
 		{ mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z },
@@ -71,10 +71,28 @@ bool Mesh::Parse(const YAML::Node& node)
 		auto& v = m_Vertices.emplace_back();
 		v.Position = Point(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 		v.VNormal = Normal(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-		v.Tangent = Vector(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
-		v.Bitangent = Vector(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
-		v.U = mesh->mTextureCoords[0][i].x;
-		v.V = mesh->mTextureCoords[0][i].y;
+	}
+
+	if (mesh->HasTangentsAndBitangents())
+	{
+		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
+		{
+			auto& v = m_Vertices[i];
+			v.Tangent = Vector(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+			v.Bitangent = Vector(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
+			v.U = mesh->mTextureCoords[0][i].x;
+			v.V = mesh->mTextureCoords[0][i].y;
+		}
+	}
+
+	if (mesh->HasTextureCoords(0))
+	{
+		for (uint32_t i = 0; i < mesh->mNumVertices; i++)
+		{
+			auto& v = m_Vertices[i];
+			v.U = mesh->mTextureCoords[0][i].x;
+			v.V = mesh->mTextureCoords[0][i].y;
+		}
 	}
 
 	m_Area = 0.f;

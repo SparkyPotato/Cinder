@@ -59,7 +59,7 @@ Will be slow, set log level to 0 to see debug information.
 		if (logo)
 		{
 			fmt::print(fg(fmt::color::dark_orange), "Cinder (built {}, {})\n", __TIME__, __DATE__);
-			fmt::print(fg(fmt::color::dark_orange), "Copyright 2020 SparkyPotato (under the MIT License).\n");
+			fmt::print(fg(fmt::color::dark_orange), "Copyright 2021 SparkyPotato (under the Apache License).\n");
 		}
 		options = GenerateOptions(optionsInput);
 		options.VerboseCallback = &OutVerbose;

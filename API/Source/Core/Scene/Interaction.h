@@ -44,6 +44,9 @@ public:
 	/// Tangent and bitangent vectors at HitPoint.
 	Vector Tangent, Bitangent;
 
+	/// The view vector of the interaction.
+	Vector Outgoing;
+
 	/// Parametric value of HitPoint, for texture mapping.
 	float U = 0.f, V = 0.f;
 

@@ -3652,7 +3652,7 @@ button {
 
 .btn-neutral {
 	background-color: #333 !important;
-	color: #404040 !important
+	color: #ccc !important
 }
 
 	.btn-neutral:hover {

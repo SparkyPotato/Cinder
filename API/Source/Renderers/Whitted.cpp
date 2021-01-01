@@ -41,7 +41,7 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
 			* interaction.HitObject->GetMaterial()->GetEmissionIntensity(); 
 	}
 	const BSDF* bsdf = interaction.Bsdf;
-	Vector outgoing = -ray.Direction;
+	interaction.Outgoing = -ray.Direction;
 
 	for (auto& light : scene.GetLights())
 	{
@@ -56,11 +56,15 @@ Color WhittedRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena&
  
  			if (lightColor == Color() || pdf == 0.f) { continue; }
  
- 			Color c = bsdf->Evaluate(outgoing, incoming);
+ 			Color c = bsdf->Evaluate(interaction.Outgoing, incoming);
  			if (c != Color() && !occlusion(scene))
  			{
  				avg += c * lightColor * std::abs(Dot(incoming, interaction.SNormal)) / pdf;
  			}
+			else
+			{
+				Log("Occlusion");
+			}
  		}
 		out += avg / float(light->SampleCount);
 	}
