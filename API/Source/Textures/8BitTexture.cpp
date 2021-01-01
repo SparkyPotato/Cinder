@@ -86,6 +86,7 @@ bool EightBitTexture::Parse(const YAML::Node& node)
 
 	int width, height, comp;
 	uint8_t* data = stbi_load(file.c_str(), &width, &height, &comp, 3);
+	if (!data) { Error("Failed to load texture '{}'", file); return false; }
 
 	m_Width = width; m_Height = height;
 

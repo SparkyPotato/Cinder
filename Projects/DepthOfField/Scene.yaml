@@ -1,0 +1,89 @@
+---
+Acceleration:
+  Type: None
+
+Camera:
+  Type: ThinLens
+  Transform:
+    Position: [ 4, 4, 4 ]
+    Rotation: [ 30, 225, 0 ]
+    Scale: [ 1, 1, 1 ] 
+  FOV: 60
+  Focal Length: 5.2
+  Aperture: 0.15
+
+Geometry:
+  - Name: Floor
+    Type: Mesh
+    Source: Models/Floor.obj
+  - Name: Sphere
+    Type: Sphere
+    Radius: 0.5
+
+Materials:
+  - Name: Glass
+    Type: Glass
+    Color:
+      Type: Constant
+      Color: [ 1, 1, 1 ]
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+    Refractive Index:
+      Type: Constant
+      Color: [ 1.33, 1, 1 ]
+  - Name: Checkered
+    Type: Matte
+    Color:
+      Type: 8-bit
+      Source: Models/Checkers.png
+    Normal:
+      Type: Constant
+      Color: [ 0, 0, 1 ]
+    Roughness:
+      Type: Constant
+      Color: [ 0, 0, 0 ]
+
+Objects:
+  - Geometry: Floor
+    Material: Checkered
+    Transform:
+      Position: [ 0, 0, 0 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1.5, 1, 1.5 ]
+  - Geometry: Sphere
+    Material: Glass
+    Transform:
+      Position: [ 1, 1, 1 ]
+      Rotation: [ 0, 0, 0 ]
+      Scale: [ 1, 1, 1 ]
+
+Lights:
+  - Type: Environment
+    Transform:
+        Position: [ 0, 0, 0 ]
+        Rotation: [ 0, 0, 0 ]
+        Scale: [ 1, 1, 1 ]
+    Samples: 1
+    Radiance Map Resolution: 16
+    Front:
+      Type: Constant
+      Color: [ 0.2, 0.2, 0.2 ]
+    Back:
+      Type: Constant
+      Color: [ 0.2, 0.2, 0.2 ]
+    Left:
+      Type: Constant
+      Color: [ 0.2, 0.2, 0.2 ]
+    Right:
+      Type: Constant
+      Color: [ 0.2, 0.2, 0.2 ]
+    Top:
+      Type: Constant
+      Color: [ 0.2, 0.2, 0.2 ]
+    Bottom:
+      Type: Constant
+      Color: [ 0.2, 0.2, 0.2 ]

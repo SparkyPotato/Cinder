@@ -87,7 +87,7 @@ Materials:
     Color:
       Type: Constant
       Color: [ 18.387, 10.9873, 2.75357 ]
-    Intensity: 0.6
+    Intensity: 1
 
 # List of objects.
 Objects:

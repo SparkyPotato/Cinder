@@ -18,6 +18,8 @@
 BSDF::BSDF(const Interaction& interaction)
 	: m_GNormal(Vector(interaction.GNormal)), m_SNormal(Vector(interaction.SNormal))
 {
+	// Cannot use tangents and bitangents as they are with respect to
+	// the geometric normal, not shading normal
 	GenerateCoordinateSystem(m_SNormal, m_X, m_Z);
 }
 
@@ -83,11 +85,10 @@ Color BSDF::Sample(const Vector& outgoing, Vector& incoming, Sampler* sampler, f
 		if (sampled) { *sampled = BxDF::Type(0); }
 		return Color();
 	}
-	int comp = std::min(int(std::floor(sample.first * matching)), matching - 1);
+	uint16_t count = std::min<uint16_t>(uint16_t(std::floor(sample.first * matching)), matching - 1);
 
 	BxDF* bxdf = nullptr;
-	int count = comp;
-	for (int i = 0; i < m_BxDFCount; ++i)
+	for (int i = 0; i < m_BxDFCount; i++)
 	{
 		if (m_BxDFs[i]->IsType(type) && count-- == 0)
 		{

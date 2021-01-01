@@ -1,5 +1,6 @@
 # Cinder
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
+![GitHub](https://img.shields.io/github/license/SparkyPotato/Cinder)
+[![Documentation Status](https://readthedocs.org/projects/cinder/badge/?version=latest)](https://cinder.readthedocs.io/en/latest/?badge=latest)
 
 Cinder is a modular and extensible raytracer.
 

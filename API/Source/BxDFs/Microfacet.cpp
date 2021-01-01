@@ -22,15 +22,15 @@ MicrofacetReflection::MicrofacetReflection(const Color& base, Microfacet* microf
 Color MicrofacetReflection::Evaluate(const Vector& outgoing, const Vector& incoming) const
 {
 	float cosO = AbsCos(outgoing), cosI = AbsCos(incoming);
-	Normal normal = Normal(incoming + outgoing);
+	Normal normal = Normal(incoming + outgoing); // Since reflection is perfectly specular across microfacet.
 	if (cosI == 0.f || cosO == 0.f) { return Color(); }
 	if (normal.X() == 0.f && normal.Y() == 0.f && normal.Z() == 0.f) { return Color(); }
 
 	normal.Normalize();
 	Color fresnel = m_Fresnel->Evaluate(Dot(incoming, FlipAlong(normal, Vector(0.f, 1.f, 0.f))));
 
-	return m_Base * m_Microfacet->Evaluate(Vector(normal)) * m_Microfacet->Masking(outgoing, incoming) * 
-		fresnel / (4 * cosI * cosO);
+	return m_Base * m_Microfacet->Evaluate(Vector(normal)) * m_Microfacet->Masking(outgoing, incoming) 
+		* fresnel / (4 * cosI * cosO);
 }
 
 Color MicrofacetReflection::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
@@ -40,8 +40,8 @@ Color MicrofacetReflection::EvaluateSample(const Vector& outgoing, Vector& incom
 	Vector normal = m_Microfacet->SampleNormal(outgoing, sampler);
 	if (Dot(outgoing, normal) < 0.f) { return Color(); }
 
-	incoming = Reflect(outgoing, normal);
-	if (!SameHemisphere(outgoing, incoming)) { return Color(); }
+	incoming = Reflect(outgoing, normal); // Specular reflect across sampled normal, because Cook-Torrance
+	if (!SameHemisphere(outgoing, incoming)) { return Color(); } // No transmission
 
 	pdf = m_Microfacet->Pdf(outgoing, normal) / (4.f * Dot(outgoing, normal));
 	return Evaluate(outgoing, incoming);
@@ -79,10 +79,10 @@ Color MicrofacetTransmission::Evaluate(const Vector& outgoing, const Vector& inc
 	float sqrtDenom = Dot(outgoing, normal) + eta * Dot(incoming, normal);
 	float factor = 1.f / eta;
 
-	return (Color(1.f) - c) * m_Base *
-		std::abs(m_Microfacet->Evaluate(normal) * m_Microfacet->Masking(outgoing, incoming) * eta * eta *
-		std::abs(Dot(incoming, normal)) * std::abs(Dot(outgoing, normal)) * factor * factor /
-		(cosI * cosO * sqrtDenom * sqrtDenom));
+	return (Color(1.f) - c) * m_Base
+		* std::abs(m_Microfacet->Evaluate(normal) * m_Microfacet->Masking(outgoing, incoming) * eta * eta
+		* std::abs(Dot(incoming, normal)) * std::abs(Dot(outgoing, normal)) * factor * factor
+		/ (cosI * cosO * sqrtDenom * sqrtDenom));
 }
 
 Color MicrofacetTransmission::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
@@ -106,6 +106,6 @@ float MicrofacetTransmission::Pdf(const Vector& outgoing, const Vector& incoming
 	if (Dot(outgoing, normal) * Dot(incoming, normal) > 0.f) { return 0.f; }
 
 	float sqrtDenom = Dot(outgoing, normal) + eta * Dot(incoming, normal);
-	float dwhdwi = std::abs((eta * eta * Dot(incoming, normal)) / (sqrtDenom * sqrtDenom));
-	return m_Microfacet->Pdf(outgoing, normal) * dwhdwi;
+	float dNorm = std::abs((eta * eta * Dot(incoming, normal)) / (sqrtDenom * sqrtDenom));
+	return m_Microfacet->Pdf(outgoing, normal) * dNorm;
 }

@@ -29,7 +29,9 @@ Color AreaLight::Sample(const Interaction& interaction, Sampler* sampler, Vector
 	if (Dot(-d, i.GNormal) < 0.f) { pdf = 0.f; return Color(); }
 	incoming = d.GetNormalized();
 
-	return m_Color->Evaluate(i) * m_Intensity / d.GetLengthSquare();
+	pdf = d.GetLengthSquare() * pdf / std::abs(Dot(i.GNormal, -incoming));
+
+	return m_Color->Evaluate(i) * m_Intensity;
 }
 
 Color AreaLight::EvaluateAlong(const Ray& ray) const

@@ -132,7 +132,7 @@ void SamplerRenderer::Thread()
 
 					float xval = (float(x) + pair.first) / m_Framebuffer->Width;
 					float yval = (float(y) + pair.second) / m_Framebuffer->Height;
-					Ray ray = m_Scene->GetCamera().GetRay(xval, yval);
+					Ray ray = m_Scene->GetCamera().GetRay(xval, yval, sampler.get());
 
 					color += TraceRay(*m_Scene, ray, arena, sampler.get()) * 
 						m_Filter->Evaluate(Point(pair.first - 0.5f, pair.second - 0.5f, 0.f));

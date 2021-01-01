@@ -25,11 +25,11 @@ OrenNayar::OrenNayar(const Color& color, float roughness)
 
 Color OrenNayar::Evaluate(const Vector& outgoing, const Vector& incoming) const
 {
-	float sinThetaI = Sin(incoming);
-	float sinThetaO = Sin(outgoing);
+	float sinI = Sin(incoming);
+	float sinO = Sin(outgoing);
 
 	float cosPhi = 0;
-	if (sinThetaI > 1e-4 && sinThetaO > 1e-4) 
+	if (sinI > 1e-4 && sinO > 1e-4) 
 	{
 		float sinPhiI = SinPhi(incoming), cosPhiI = CosPhi(incoming);
 		float sinPhiO = SinPhi(outgoing), cosPhiO = CosPhi(outgoing);
@@ -40,13 +40,13 @@ Color OrenNayar::Evaluate(const Vector& outgoing, const Vector& incoming) const
 	float sinA, tanB;
 	if (AbsCos(incoming) > AbsCos(outgoing)) 
 	{
-		sinA = sinThetaO;
-		tanB = sinThetaI / AbsCos(incoming);
+		sinA = sinO;
+		tanB = sinI / AbsCos(incoming);
 	}
 	else 
 	{
-		sinA = sinThetaI;
-		tanB = sinThetaO / AbsCos(outgoing);
+		sinA = sinI;
+		tanB = sinO / AbsCos(outgoing);
 	}
 
 	return m_Color * InversePi * (m_A + m_B * cosPhi * sinA * tanB);

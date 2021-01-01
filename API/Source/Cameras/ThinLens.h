@@ -17,10 +17,10 @@
 #include "Core/Scene/Camera.h"
 
 /// Basic perspective camera, without any depth of field.
-class PerspectiveCamera : public Camera
+class ThinLensCamera : public Camera
 {
 public:
-	PerspectiveCamera(const Transform& transform);
+	ThinLensCamera(const Transform& transform);
 
 	virtual bool Parse(const YAML::Node& node) override;
 
@@ -28,4 +28,6 @@ public:
 
 private:
 	float m_FOV;
+	float m_FocalLength;
+	float m_Aperture;
 };

@@ -1,11 +1,11 @@
 ---
 Scenes:
   - File: Scene.yaml
-    Output: CornellBox.png
+    Output: DepthOfField.png
 
 # Renderer settings.
 Renderer:
-  Type: Path
+  Type: Whitted
   Sampler: Random
   Filter: Box
   Camera Samples: 128

@@ -48,7 +48,7 @@ Color SpecularTransmission::Evaluate(const Vector& outgoing, const Vector& incom
 
 Color SpecularTransmission::EvaluateSample(const Vector& outgoing, Vector& incoming, Sampler* sampler, float& pdf) const
 {
-	bool entering = Cos(outgoing) > 0;
+	bool entering = Cos(outgoing) > 0; // Since normals always point outwards
 	float etaI = entering ? m_EtaOut : m_EtaIn;
 	float etaT = entering ? m_EtaIn : m_EtaOut;
 	

@@ -13,15 +13,17 @@
 //    limitations under the License.
 
 #include "PCH.h"
-#include "Cameras/Perspective.h"
+#include "Cameras/ThinLens.h"
 
-CAMERA(Perspective, PerspectiveCamera)
+#include "Core/Math/Sampling.h"
 
-PerspectiveCamera::PerspectiveCamera(const Transform& transform)
+CAMERA(ThinLens, ThinLensCamera)
+
+ThinLensCamera::ThinLensCamera(const Transform& transform)
 	: Camera(transform)
 {}
 
-bool PerspectiveCamera::Parse(const YAML::Node& node)
+bool ThinLensCamera::Parse(const YAML::Node& node)
 {
 	if (!node["FOV"])
 	{
@@ -29,10 +31,36 @@ bool PerspectiveCamera::Parse(const YAML::Node& node)
 		return false;
 	}
 
+	if (!node["Focal Length"])
+	{
+		Error("Camera does not have a focal length (line {})!", node.Mark().line + 1);
+		return false;
+	}
+
+	if (!node["Aperture"])
+	{
+		Error("Camera does not have an aperture (line {})!", node.Mark().line + 1);
+		return false;
+	}
+
 	try { m_FOV = node["FOV"].as<float>(); }
 	catch (YAML::Exception& e)
 	{
 		Error("Camera FOV must be a float (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	try { m_FocalLength = node["Focal Length"].as<float>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Camera focal length must be a float (line {})!", e.mark.line + 1);
+		return false;
+	}
+
+	try { m_Aperture = node["Aperture"].as<float>(); }
+	catch (YAML::Exception& e)
+	{
+		Error("Camera aperture must be a float (line {})!", e.mark.line + 1);
 		return false;
 	}
 
@@ -48,10 +76,15 @@ bool PerspectiveCamera::Parse(const YAML::Node& node)
 	return true;
 }
 
-Ray PerspectiveCamera::GetRay(float u, float v, Sampler* sampler)
+Ray ThinLensCamera::GetRay(float u, float v, Sampler* sampler)
 {
 	float Px = (2.f * u - 1.f) * m_FOV * m_AspectRatio;
 	float Py = (1.f - 2.f * v) * m_FOV;
+	Point focus = Point() + Vector(Px, Py, 1.f) * m_FocalLength;
+	
+	Point sample = ConcentricSampleDisk(sampler->Get2D());
+	std::swap(sample.Y(), sample.Z());
+	Point origin = Point() + (sample - Point()) * m_Aperture;
 
-	return Ray(Point(), Vector(Px, Py, 1.f).GetNormalized());
+	return Ray(origin, (focus - origin).GetNormalized());
 }

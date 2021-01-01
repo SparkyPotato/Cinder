@@ -15,6 +15,7 @@
 #pragma once
 
 #include "Core/Components/Registry.h"
+#include "Core/Components/Sampler.h"
 #include "Core/Math/Ray.h"
 #include "Core/Math/Transform.h"
 
@@ -48,7 +49,10 @@ public:
 	///
 	/// \param u U-value of the viewport (horizontal).
 	/// \param v V-value of the viewport (vertical).
-	virtual Ray GetRay(float u, float v) = 0;
+	/// \param sampler Sampler to use for generating the ray.
+	/// 
+	/// \return The generated ray.
+	virtual Ray GetRay(float u, float v, Sampler* sampler) = 0;
 
 	Transform ToWorld;
 
