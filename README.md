@@ -5,6 +5,10 @@
 Cinder is a modular and extensible raytracer.
 
 ![](Docs/source/Static/CornellBox.png)
+Cornell Box rendered with Cinder, at a resolution of 1200x1200, with 128 samples per pixel.
+
+![](Docs/source/Static/MitsubaDepthOfField.png)
+Cornell Box rendered with [Mitsuba 2] (https://www.mitsuba-renderer.org), at a resolution of 1200x1200, with 128 samples per pixel.
 
 ## Features
 Implemented features include:
