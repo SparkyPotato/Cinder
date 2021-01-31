@@ -1,4 +1,4 @@
-//    Copyright 2021 SparkyPotato
+//    Copyright 2021 Shaye Garg
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -45,8 +45,9 @@ public:
 	///
 	/// \param samples The amount of samples to take for the light.
 	/// \param toCamera Local to camera transformation.
-	Light(uint32_t samples, const Transform& toCamera)
-		: SampleCount(samples), ToCamera(toCamera)
+	/// \param isDelta Whether the light is characterizes by a delta distribution in space or direction.
+	Light(uint32_t samples, const Transform& toCamera, bool isDelta)
+		: SampleCount(samples), ToCamera(toCamera), IsDelta(isDelta)
 	{}
 
 	/// Virtual destructor.
@@ -84,6 +85,7 @@ public:
 
 	Transform ToCamera;
 	uint32_t SampleCount;
+	bool IsDelta;
 };
 
 template<>

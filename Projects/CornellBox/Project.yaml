@@ -8,7 +8,7 @@ Renderer:
   Type: Path
   Sampler: Random
   Filter: Box
-  Camera Samples: 128
+  Camera Samples: 16
   Ray Depth: 8
 
 Framebuffer:

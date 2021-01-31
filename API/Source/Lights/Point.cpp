@@ -1,4 +1,4 @@
-//    Copyright 2021 SparkyPotato
+//    Copyright 2021 Shaye Garg
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 LIGHT(Point, PointLight)
 
 PointLight::PointLight(uint32_t samples, const Transform& transform)
-	: Light(samples, transform)
+	: Light(samples, transform, true)
 {}
 
 Color PointLight::Sample(const Interaction& interaction, Sampler* sampler, Vector& incoming, float& pdf, Occlusion& tester) const

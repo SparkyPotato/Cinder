@@ -18,13 +18,14 @@ Implemented features include:
 1. Framework for ray-intersection acceleration structures.
 2. Lambertian, Oren-Nayar, Cook-Torrance, and Specular BRDFs.
 3. Microfacet and Fresnel adapters for reflection and transmission.
-4. Camera framework, with a simple perspective camera.
+4. Camera framework, with a simple perspective camera and a thin lens approximated camera.
 5. Sampler framework, with a random sampler.
 6. Image reconstruction filter, with a box filter.
 7. Spheres and triangle mesh geometry.
 8. Point, directional, area, and environmental lights.
 9. Emissive, glass, matte, metal, mirror, and plastic materials.
-10. Recursive Whitted renderer, and unbiased Monte-Carlo path tracer.
+10. Recursive Whitted renderer, 
+and unbiased Monte-Carlo path tracer, with next event estimation and multiple importance sampling.
 11. 8-bit, HDR, and constant textures.
 
 ## Using Cinder

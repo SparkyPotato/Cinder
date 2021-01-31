@@ -1,4 +1,4 @@
-//    Copyright 2021 SparkyPotato
+//    Copyright 2021 Shaye Garg
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -55,12 +55,24 @@ public:
 	/// \param other Intersection to spawn ray to.
 	/// 
 	/// \return The spawned ray.
-	Ray SpawnRayTo(const Interaction& other)
+	Ray SpawnRayTo(const Interaction& other) const
 	{
 		Point origin = HitPoint + Vector(GNormal) * Epsilon;
 		Vector direction = other.HitPoint - origin;
 		float extent = direction.GetLength() - Epsilon;
 
 		return Ray(origin, direction.GetNormalized(), extent);
+	}
+
+	/// Spawn a ray along the direction.
+	///
+	/// \param direction Direction to spawn the ray.
+	/// 
+	/// \return The ray.
+	Ray SpawnRayAlong(const Vector& direction) const
+	{
+		Point origin = HitPoint + Vector(GNormal) * Epsilon;
+
+		return Ray(origin, direction.GetNormalized());
 	}
 };

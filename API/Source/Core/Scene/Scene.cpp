@@ -1,4 +1,4 @@
-//    Copyright 2021 SparkyPotato
+//    Copyright 2021 Shaye Garg
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -73,12 +73,15 @@ bool Scene::LinkReferences()
 				object.m_Material = material.get();
 				if (material->GetEmission())
 				{
-					m_Lights.push_back(std::make_unique<AreaLight>(
+					auto light = std::make_unique<AreaLight>(
 						1,
 						material->GetEmission(),
 						material->GetEmissionIntensity(),
 						&object
-					));
+					);
+					object.m_Material->EmissionLight = light.get();
+
+					m_Lights.push_back(std::move(light));
 				}
 				break;
 			}

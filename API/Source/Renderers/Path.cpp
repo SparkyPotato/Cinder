@@ -1,4 +1,4 @@
-//    Copyright 2021 SparkyPotato
+//    Copyright 2021 Shaye Garg
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -37,10 +37,10 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 					out += b * light->EvaluateAlong(r);
 				}
 			}
-			else if (i.HitObject->GetMaterial()->GetEmission()) 
+			else if (i.HitObject->GetMaterial()->EmissionLight) 
 			{ 
 				out += i.HitObject->GetMaterial()->GetEmission()->Evaluate(i)
-					* i.HitObject->GetMaterial()->GetEmissionIntensity(); 
+					* i.HitObject->GetMaterial()->GetEmissionIntensity();
 			}
 		}
 		if (!hit || bounces >= m_Depth) { break; }
@@ -53,15 +53,17 @@ Color PathRenderer::TraceRay(const Scene& scene, const Ray& ray, MemoryArena& ar
 		Vector incoming;
 		float pdf;
 		BxDF::Type type;
+
 		Color c = i.Bsdf->Sample(i.Outgoing, incoming, sampler, pdf, BxDF::All, &type);
+		specular = type & BxDF::Specular;
 
 		if (c == Color() || pdf == 0.f) { break; }
 
 		float dot = Dot(incoming, i.SNormal);
 		b *= c * std::abs(dot) / pdf;
-		specular = (type & BxDF::Specular) != 0;
 		r = Ray(i.HitPoint + (dot < 0.f ? -Vector(i.GNormal) : Vector(i.GNormal)) * Epsilon, incoming);
 
+		// Russian Roulette
 		if (bounces > 3) 
 		{
 			float q = std::max(0.05f, 1.f - b.Y());
@@ -93,6 +95,7 @@ bool PathRenderer::Parse(const YAML::Node& node)
 	return true;
 }
 
+// Light sampling - seems to provide the best results for a wide variety of scenes.
 Color PathRenderer::Estimate(const Scene& scene, const Interaction& i, Sampler* sampler, Light* light, MemoryArena& arena)
 {
 	Vector incoming;

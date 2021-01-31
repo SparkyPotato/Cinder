@@ -1,4 +1,4 @@
-//    Copyright 2021 SparkyPotato
+//    Copyright 2021 Shaye Garg
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ Will be slow, set log level to 0 to see debug information.
 		if (logo)
 		{
 			fmt::print(fg(fmt::color::dark_orange), "Cinder (built {}, {})\n", __TIME__, __DATE__);
-			fmt::print(fg(fmt::color::dark_orange), "Copyright 2021 SparkyPotato (under the Apache License).\n");
+			fmt::print(fg(fmt::color::dark_orange), "Copyright 2021 Shaye Garg (under the Apache License).\n");
 		}
 		options = GenerateOptions(optionsInput);
 		options.VerboseCallback = &OutVerbose;
